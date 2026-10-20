@@ -1,10 +1,10 @@
-﻿/* ============================================================
+/* ============================================================
    UGANDA NATIONAL WASTE MANAGEMENT - SERVICE WORKER
    Enables PWA functionality: offline support, caching, and
    install-to-homescreen capability.
    ============================================================ */
 
-const CACHE_NAME = 'unwm-v1';
+const CACHE_NAME = 'unwm-v3';
 const OFFLINE_URL = '/index.html';
 
 // Core assets to pre-cache for offline support

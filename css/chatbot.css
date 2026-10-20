@@ -445,3 +445,87 @@
   .chat-input { font-size: 16px; padding: 0.7rem 0.9rem; }
   .chat-send { width: 42px; height: 42px; }
 }
+
+/* ============================================================
+   DARK MODE OVERRIDES FOR CHATBOT
+   ============================================================ */
+[data-theme="dark"] .chat-window {
+  background: #142219;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="dark"] .chat-header {
+  background: linear-gradient(135deg, #10341e, #1a4f2c);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .chat-messages {
+  background: #0d1510;
+}
+
+[data-theme="dark"] .chat-messages::-webkit-scrollbar-thumb {
+  background: #2a3d31;
+}
+
+[data-theme="dark"] .chat-message-bot .chat-message-bubble {
+  background: #16241c;
+  border-color: rgba(255, 255, 255, 0.08);
+  color: #e2ede5;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+[data-theme="dark"] .chat-message-bubble strong {
+  color: #f5a623;
+}
+
+[data-theme="dark"] .chat-message-bubble em {
+  color: #a4b7ab;
+}
+
+[data-theme="dark"] .chat-link {
+  color: #4ade80;
+  border-bottom-color: #4ade80;
+}
+
+[data-theme="dark"] .chat-link:hover {
+  color: #86efac;
+}
+
+[data-theme="dark"] .chat-suggestions {
+  background: #0d1510;
+  border-top-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .chat-suggestion {
+  background: #18281f;
+  border-color: rgba(74, 222, 128, 0.25);
+  color: #7ee787;
+}
+
+[data-theme="dark"] .chat-suggestion:hover {
+  background: #1e6b3b;
+  border-color: #4ade80;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .chat-input-form {
+  background: #142219;
+  border-top-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .chat-input {
+  background: #0d1510;
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+[data-theme="dark"] .chat-input:focus {
+  border-color: #4ade80;
+  background: #111b14;
+  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.15);
+}
+
+[data-theme="dark"] .chat-input::placeholder {
+  color: #6e8576;
+}
