@@ -1,0 +1,2349 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Worker Dashboard - Uganda National Waste Management">
+  <title>Worker Dashboard | UNWM</title>
+  <!-- ===== Favicon & App Icons ===== -->
+  <link rel="icon" type="image/svg+xml" href="../assets/logo.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png">
+
+  <!-- ===== PWA Meta Tags ===== -->
+  <meta name="theme-color" content="#1e6b3b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="UNWM">
+  <link rel="manifest" href="../manifest.json">
+
+  <!-- ===== Fonts & Styles ===== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    /* ================= WORKER DASHBOARD STYLES ================= */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body.worker-body {
+      background: #eef4f0;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ================= LOGIN SCREEN ================= */
+    .worker-login {
+      position: fixed;
+      inset: 0;
+      z-index: 5000;
+      background: linear-gradient(135deg, #0f4a28 0%, #1e6b3b 60%, #2e8b57 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      transition: opacity 0.4s, visibility 0.4s;
+    }
+
+    .worker-login.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .worker-login::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 25% 20%, rgba(245, 166, 35, 0.18) 0%, transparent 50%),
+        radial-gradient(circle at 75% 80%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .worker-login-card {
+      background: white;
+      border-radius: 22px;
+      padding: 3rem 2.5rem;
+      width: 100%;
+      max-width: 460px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+      position: relative;
+      z-index: 2;
+    }
+
+    .worker-login-logo {
+      width: 76px;
+      height: 76px;
+      background: linear-gradient(135deg, #f5a623, #e0951c);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 2.2rem;
+      margin: 0 auto 1.25rem;
+      box-shadow: 0 12px 30px rgba(245, 166, 35, 0.4);
+    }
+
+    .worker-login-card h1 {
+      text-align: center;
+      font-size: 1.6rem;
+      color: #0f4a28;
+      margin-bottom: 0.35rem;
+    }
+
+    .worker-login-card .login-sub {
+      text-align: center;
+      color: #6b7680;
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+    }
+
+    .worker-login-field {
+      margin-bottom: 1.15rem;
+      position: relative;
+    }
+
+    .worker-login-field label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #0f4a28;
+      margin-bottom: 0.4rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .worker-login-field input,
+    .worker-login-field select {
+      width: 100%;
+      padding: 0.9rem 1rem 0.9rem 2.75rem;
+      border: 2px solid #e5e8eb;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+      background: #f9fafb;
+    }
+
+    .worker-login-field input:focus,
+    .worker-login-field select:focus {
+      outline: none;
+      border-color: #1e6b3b;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(30, 107, 59, 0.08);
+    }
+
+    .worker-login-field i {
+      position: absolute;
+      left: 1rem;
+      bottom: 0.95rem;
+      color: #9aa5ad;
+      font-size: 1rem;
+    }
+
+    .worker-login-btn {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(135deg, #1e6b3b, #2e8b57);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      box-shadow: 0 6px 20px rgba(30, 107, 59, 0.3);
+    }
+
+    .worker-login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(30, 107, 59, 0.4);
+    }
+
+    .worker-login-error {
+      background: #fbe8e6;
+      border-left: 4px solid #c0392b;
+      color: #7a1f15;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .worker-login-error.show { display: flex; }
+
+    .worker-login-hint {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #9aa5ad;
+      margin-top: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .worker-login-hint code {
+      background: #f0f4f1;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      color: #1e6b3b;
+    }
+
+    /* ================= TOP BAR ================= */
+    .worker-topbar {
+      background: #0f4a28;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    }
+
+    .worker-topbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: white;
+      text-decoration: none;
+    }
+
+    .worker-topbar-brand i {
+      background: #f5a623;
+      color: #0f4a28;
+      padding: 0.5rem;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    .worker-topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    /* Status indicator in topbar */
+    .worker-status-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255,255,255,0.12);
+      padding: 0.4rem 0.9rem;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #27ae60;
+      box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.25);
+      animation: pulse 2s infinite;
+    }
+
+    .status-dot.busy { background: #f5a623; box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.25); }
+    .status-dot.away { background: #c0392b; box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.25); animation: none; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .worker-topbar-right .worker-user {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.95);
+    }
+
+    .worker-topbar-right .worker-user img,
+    .worker-topbar-right .worker-user .worker-avatar-sm {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #2e8b57;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .worker-topbar-right .btn-logout {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      text-decoration: none;
+    }
+
+    .worker-topbar-right .btn-logout:hover {
+      background: #c0392b;
+      border-color: #c0392b;
+    }
+
+    /* ================= LAYOUT ================= */
+    .worker-layout {
+      display: flex;
+      flex: 1;
+      min-height: calc(100vh - 60px);
+    }
+
+    /* ================= SIDEBAR ================= */
+    .worker-sidebar {
+      width: 250px;
+      background: white;
+      border-right: 1px solid #e5e8eb;
+      padding: 1.5rem 1rem;
+      flex-shrink: 0;
+      overflow-y: auto;
+    }
+
+    .worker-sidebar-title {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #9aa5ad;
+      font-weight: 700;
+      padding: 0 0.75rem;
+      margin-bottom: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .worker-sidebar-title:first-child { margin-top: 0; }
+
+    .worker-nav-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.7rem 0.75rem;
+      border-radius: 8px;
+      color: #4a545e;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      font-family: inherit;
+      margin-bottom: 0.15rem;
+    }
+
+    .worker-nav-link:hover { background: #e6f4ea; color: #0f4a28; }
+    .worker-nav-link.active { background: #1e6b3b; color: white; font-weight: 600; }
+    .worker-nav-link i { width: 20px; text-align: center; font-size: 0.95rem; }
+
+    .worker-nav-link .badge-count {
+      margin-left: auto;
+      background: #f5a623;
+      color: #0f4a28;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.15rem 0.5rem;
+      border-radius: 10px;
+    }
+
+    .worker-nav-link.active .badge-count { background: white; color: #0f4a28; }
+
+    /* ================= MAIN ================= */
+    .worker-main {
+      flex: 1;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+
+    .worker-page { display: none; animation: fadeIn 0.25s ease; }
+    .worker-page.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .worker-page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .worker-page-header h1 {
+      font-size: 1.65rem;
+      color: #0f4a28;
+      margin: 0;
+    }
+
+    .worker-page-header p {
+      color: #6b7680;
+      font-size: 0.9rem;
+      margin: 0.25rem 0 0;
+    }
+
+    /* ================= STATS ================= */
+    .worker-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .worker-stat {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+      border-left: 4px solid #1e6b3b;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .worker-stat-content h3 {
+      font-size: 1.7rem;
+      margin: 0;
+      color: #0f4a28;
+      font-weight: 800;
+    }
+
+    .worker-stat-content p {
+      color: #6b7680;
+      font-size: 0.82rem;
+      margin: 0.25rem 0 0;
+      font-weight: 500;
+    }
+
+    .worker-stat-icon {
+      width: 46px;
+      height: 46px;
+      background: #e6f4ea;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      color: #1e6b3b;
+    }
+
+    .worker-stat.accent { border-left-color: #f5a623; }
+    .worker-stat.accent .worker-stat-icon { background: #fef3e0; color: #d48806; }
+    .worker-stat.info { border-left-color: #2980b9; }
+    .worker-stat.info .worker-stat-icon { background: #e3f0fa; color: #2980b9; }
+    .worker-stat.danger { border-left-color: #c0392b; }
+    .worker-stat.danger .worker-stat-icon { background: #fbe8e6; color: #c0392b; }
+
+    /* ================= PANELS ================= */
+    .worker-panel {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+    }
+
+    .worker-panel-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid #f1f3f4;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .worker-panel-header h3 {
+      font-size: 1.05rem;
+      margin: 0;
+      color: #0f4a28;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .worker-panel-body { padding: 1.5rem; }
+
+    /* ================= STATUS BUTTONS ================= */
+    .status-buttons-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .status-btn {
+      background: white;
+      border: 3px solid #e5e8eb;
+      border-radius: 14px;
+      padding: 1.25rem 1rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .status-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+
+    .status-btn .status-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: white;
+    }
+
+    .status-btn.available .status-icon { background: linear-gradient(135deg, #27ae60, #2ecc71); }
+    .status-btn.available.active { border-color: #27ae60; background: #e7f7ee; }
+
+    .status-btn.at-work .status-icon { background: linear-gradient(135deg, #2980b9, #3498db); }
+    .status-btn.at-work.active { border-color: #2980b9; background: #e3f0fa; }
+
+    .status-btn.busy .status-icon { background: linear-gradient(135deg, #f5a623, #f39c12); }
+    .status-btn.busy.active { border-color: #f5a623; background: #fef3e0; }
+
+    .status-btn.done .status-icon { background: linear-gradient(135deg, #8e44ad, #9b59b6); }
+    .status-btn.done.active { border-color: #8e44ad; background: #f0e6fa; }
+
+    .status-btn.on-break .status-icon { background: linear-gradient(135deg, #16a085, #1abc9c); }
+    .status-btn.on-break.active { border-color: #16a085; background: #e6f7fa; }
+
+    .status-btn.off-duty .status-icon { background: linear-gradient(135deg, #7f8c8d, #95a5a6); }
+    .status-btn.off-duty.active { border-color: #7f8c8d; background: #f0f2f3; }
+
+    .status-btn strong {
+      font-size: 0.95rem;
+      color: #1f262b;
+      font-weight: 700;
+    }
+
+    .status-btn small {
+      font-size: 0.75rem;
+      color: #9aa5ad;
+    }
+
+    .status-btn.active strong { color: #0f4a28; }
+    .status-btn.active::after {
+      content: '\f00c';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      color: #1e6b3b;
+      font-size: 0.9rem;
+    }
+
+    /* Current status banner */
+    .current-status-banner {
+      background: linear-gradient(135deg, #1e6b3b, #2e8b57);
+      color: white;
+      border-radius: 14px;
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 30px rgba(30, 107, 59, 0.25);
+    }
+
+    .current-status-banner h2 {
+      color: white;
+      margin: 0 0 0.25rem;
+      font-size: 1.15rem;
+    }
+
+    .current-status-banner p {
+      color: rgba(255,255,255,0.85);
+      margin: 0;
+      font-size: 0.88rem;
+    }
+
+    .current-status-badge {
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(10px);
+      padding: 0.75rem 1.5rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      border: 1px solid rgba(255,255,255,0.25);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      white-space: nowrap;
+    }
+
+    /* ================= ANNOUNCEMENTS ================= */
+    .announcement {
+      background: white;
+      border-left: 5px solid #1e6b3b;
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+      position: relative;
+      transition: all 0.2s;
+    }
+
+    .announcement:hover { box-shadow: 0 6px 18px rgba(0,0,0,0.08); }
+
+    .announcement.unread {
+      background: #f7fdf9;
+      border-left-color: #f5a623;
+    }
+
+    .announcement.unread::after {
+      content: 'NEW';
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: #f5a623;
+      color: #0f4a28;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 0.25rem 0.6rem;
+      border-radius: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    .announcement-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .announcement-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #0f4a28;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .announcement-meta {
+      font-size: 0.78rem;
+      color: #9aa5ad;
+      white-space: nowrap;
+    }
+
+    .announcement-body {
+      color: #4a545e;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      margin: 0.5rem 0 0;
+    }
+
+    .announcement-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid #f1f3f4;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .announcement-priority {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .priority-urgent { background: #fbe8e6; color: #c0392b; }
+    .priority-high { background: #fef3e0; color: #d48806; }
+    .priority-normal { background: #e3f0fa; color: #2980b9; }
+    .priority-info { background: #e6f4ea; color: #1e6b3b; }
+
+    .announcement-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    /* ================= JOBS ================= */
+    .job-item {
+      background: white;
+      border-radius: 10px;
+      border-left: 5px solid #1e6b3b;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+      transition: all 0.2s;
+    }
+
+    .job-item:hover { box-shadow: 0 6px 18px rgba(0,0,0,0.08); }
+
+    .job-item.status-in-progress { border-left-color: #2980b9; }
+    .job-item.status-completed { border-left-color: #27ae60; background: #f7fdf9; }
+    .job-item.status-cancelled { border-left-color: #c0392b; opacity: 0.7; }
+
+    .job-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .job-item-title {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #0f4a28;
+      margin: 0 0 0.25rem;
+    }
+
+    .job-item-meta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      font-size: 0.82rem;
+      color: #6b7680;
+      margin-top: 0.5rem;
+    }
+
+    .job-item-meta span {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .job-item-desc {
+      color: #4a545e;
+      font-size: 0.9rem;
+      line-height: 1.55;
+      margin: 0.5rem 0 1rem;
+    }
+
+    .job-item-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      padding-top: 0.75rem;
+      border-top: 1px solid #f1f3f4;
+    }
+
+    /* ================= BADGES ================= */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .badge-success { background: #e7f7ee; color: #155d36; }
+    .badge-warning { background: #fef3e0; color: #7a4a00; }
+    .badge-danger { background: #fbe8e6; color: #7a1f15; }
+    .badge-info { background: #e3f0fa; color: #1a5a85; }
+    .badge-primary { background: #e6f4ea; color: #0f4a28; }
+
+    /* ================= BUTTONS ================= */
+    .worker-btn {
+      background: #1e6b3b;
+      color: white;
+      border: none;
+      padding: 0.65rem 1.25rem;
+      border-radius: 8px;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      text-decoration: none;
+    }
+
+    .worker-btn:hover { background: #0f4a28; transform: translateY(-1px); }
+
+    .worker-btn-success { background: #27ae60; }
+    .worker-btn-success:hover { background: #155d36; }
+
+    .worker-btn-danger { background: #c0392b; }
+    .worker-btn-danger:hover { background: #a93226; }
+
+    .worker-btn-outline {
+      background: transparent;
+      color: #1e6b3b;
+      border: 2px solid #1e6b3b;
+    }
+    .worker-btn-outline:hover { background: #1e6b3b; color: white; }
+
+    .worker-btn-sm { padding: 0.45rem 0.9rem; font-size: 0.8rem; }
+
+    /* ================= PROFILE ================= */
+    .worker-profile-header {
+      background: linear-gradient(135deg, #0f4a28, #2e8b57);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      box-shadow: 0 12px 40px rgba(15, 74, 40, 0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .worker-profile-header::before {
+      content: '';
+      position: absolute;
+      top: -80px;
+      right: -80px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(245, 166, 35, 0.2), transparent 70%);
+      border-radius: 50%;
+    }
+
+    .worker-profile-avatar-wrapper {
+      position: relative;
+      width: 130px;
+      height: 130px;
+      flex-shrink: 0;
+      z-index: 2;
+    }
+
+    .worker-profile-avatar {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      background: #2e8b57;
+      border: 4px solid rgba(255,255,255,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      font-weight: 700;
+      color: white;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .worker-profile-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .worker-avatar-upload {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #f5a623;
+      color: #0f4a28;
+      border: 3px solid white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.9rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: all 0.2s;
+    }
+
+    .worker-avatar-upload:hover { background: #d48806; transform: scale(1.1); }
+
+    .worker-profile-info {
+      flex: 1;
+      min-width: 200px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .worker-profile-info h2 {
+      color: white;
+      margin: 0 0 0.35rem;
+      font-size: 1.6rem;
+    }
+
+    .worker-profile-info p {
+      color: rgba(255,255,255,0.85);
+      margin: 0 0 1rem;
+      font-size: 0.95rem;
+    }
+
+    .worker-profile-badges {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .worker-profile-badge {
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(10px);
+      padding: 0.4rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border: 1px solid rgba(255,255,255,0.25);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* Info sections */
+    .worker-info-section {
+      background: white;
+      border-radius: 12px;
+      padding: 1.75rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+      margin-bottom: 1.5rem;
+    }
+
+    .worker-info-section h3 {
+      font-size: 1.05rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid #f1f3f4;
+      color: #0f4a28;
+    }
+
+    .worker-info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    @media (max-width: 600px) {
+      .worker-info-grid { grid-template-columns: 1fr; }
+    }
+
+    .worker-form-group { margin-bottom: 1.25rem; }
+
+    .worker-form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #0f4a28;
+      margin-bottom: 0.4rem;
+    }
+
+    .worker-form-group input,
+    .worker-form-group select,
+    .worker-form-group textarea {
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      border: 2px solid #e5e8eb;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.92rem;
+      transition: border 0.2s;
+      background: white;
+    }
+
+    .worker-form-group input:focus,
+    .worker-form-group select:focus,
+    .worker-form-group textarea:focus {
+      outline: none;
+      border-color: #1e6b3b;
+      box-shadow: 0 0 0 4px rgba(30, 107, 59, 0.08);
+    }
+
+    .worker-form-group input:disabled {
+      background: #f0f4f1;
+      cursor: not-allowed;
+    }
+
+    /* ================= AVATAR MODAL ================= */
+    .avatar-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 20, 0, 0.75);
+      backdrop-filter: blur(6px);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .avatar-modal-overlay.active { display: flex; }
+
+    .avatar-modal {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      max-width: 460px;
+      width: 100%;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+      animation: modalIn 0.3s ease;
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .avatar-modal h3 {
+      text-align: center;
+      margin-bottom: 0.5rem;
+      color: #0f4a28;
+    }
+
+    .avatar-modal p {
+      text-align: center;
+      color: #6b7680;
+      font-size: 0.88rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .avatar-preview-large {
+      width: 170px;
+      height: 170px;
+      border-radius: 50%;
+      background: #e6f4ea;
+      margin: 0 auto 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      color: #1e6b3b;
+      font-weight: 700;
+      overflow: hidden;
+      border: 4px solid #e5e8eb;
+    }
+
+    .avatar-preview-large img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .avatar-color-grid {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    .avatar-color-swatch {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 1.25rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+
+    .avatar-color-swatch:hover { transform: scale(1.1); }
+    .avatar-color-swatch.selected { border-color: #f5a623; transform: scale(1.1); }
+
+    .avatar-actions { display: flex; gap: 0.75rem; justify-content: center; }
+    .avatar-actions .worker-btn { flex: 1; justify-content: center; }
+
+    .file-input-hidden { display: none; }
+
+    /* ================= TOAST ================= */
+    .worker-toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: #0f4a28;
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      z-index: 10000;
+      transform: translateY(150%);
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      max-width: 380px;
+    }
+
+    .worker-toast.show { transform: translateY(0); }
+    .worker-toast i { font-size: 1.2rem; }
+    .worker-toast.error { background: #c0392b; }
+    .worker-toast.success { background: #27ae60; }
+
+    /* ================= EMPTY STATE ================= */
+    .worker-empty {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: #9aa5ad;
+    }
+
+    .worker-empty i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.4;
+    }
+
+    .worker-empty p { font-size: 0.95rem; }
+
+    /* ================= RESPONSIVE ================= */
+    @media (max-width: 900px) {
+      .worker-sidebar {
+        position: fixed;
+        left: -280px;
+        top: 60px;
+        bottom: 0;
+        z-index: 999;
+        transition: left 0.3s ease;
+        box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+        width: 270px;
+      }
+      .worker-sidebar.open { left: 0; }
+      .worker-main { padding: 1.25rem; }
+      .worker-menu-toggle { display: flex !important; }
+    }
+
+    .worker-menu-toggle {
+      display: none;
+      background: rgba(255,255,255,0.15);
+      border: none;
+      color: white;
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      cursor: pointer;
+      margin-right: 1rem;
+    }
+
+    @media (max-width: 600px) {
+      .worker-topbar-brand span { display: none; }
+      .worker-topbar-right .worker-user span { display: none; }
+      .worker-status-pill span { display: none; }
+      .worker-page-header h1 { font-size: 1.3rem; }
+      .worker-profile-header { padding: 1.75rem 1.25rem; text-align: center; flex-direction: column; }
+      .worker-profile-info h2 { font-size: 1.3rem; }
+      .current-status-banner { padding: 1.25rem; }
+      .current-status-badge { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body class="worker-body">
+
+  <!-- ================= WORKER LOGIN SCREEN ================= -->
+  <div class="worker-login" id="workerLogin">
+    <div class="worker-login-card">
+      <div class="worker-login-logo"><i class="fas fa-hard-hat"></i></div>
+      <h1>Worker Portal</h1>
+      <p class="login-sub">Sign in with your ID and email</p>
+
+      <div class="worker-login-error" id="workerLoginError">
+        <i class="fas fa-exclamation-circle"></i>
+        <span id="workerLoginErrorText">Invalid credentials.</span>
+      </div>
+
+      <form id="workerLoginForm">
+        <div class="worker-login-field">
+          <label for="wlIdNumber">National ID Number</label>
+          <i class="fas fa-id-card"></i>
+          <input type="text" id="wlIdNumber" placeholder="e.g. CM90012345678AB" autocomplete="off" required>
+        </div>
+        <div class="worker-login-field">
+          <label for="wlEmail">Email Address</label>
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="wlEmail" placeholder="worker@unwm.ug" autocomplete="off" required>
+        </div>
+        <button type="submit" class="worker-login-btn">
+          <i class="fas fa-sign-in-alt"></i> Login to Dashboard
+        </button>
+      </form>
+
+      <p class="worker-login-hint">
+        <i class="fas fa-info-circle"></i> Your login credentials are provided by the admin.<br>
+        Contact <code>admin@unwm.ug</code> if you need help.
+      </p>
+    </div>
+  </div>
+
+  <!-- ================= WORKER APP ================= -->
+  <div id="workerApp" style="display: none;">
+
+    <!-- ========== TOP BAR ========== -->
+    <header class="worker-topbar">
+      <div style="display: flex; align-items: center;">
+        <button class="worker-menu-toggle" id="workerMenuToggle">
+          <i class="fas fa-bars"></i>
+        </button>
+        <a href="#" class="worker-topbar-brand">
+          <i class="fas fa-hard-hat"></i>
+          <span>UNWM Worker Portal</span>
+        </a>
+      </div>
+      <div class="worker-topbar-right">
+        <div class="worker-status-pill">
+          <div class="status-dot" id="topStatusDot"></div>
+          <span id="topStatusText">Available</span>
+        </div>
+        <div class="worker-user">
+          <div class="worker-avatar-sm" id="topAvatarSm">W</div>
+          <span id="topWorkerName">Worker</span>
+        </div>
+        <a href="#" class="btn-logout" onclick="workerLogout(event)">
+          <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- ========== LAYOUT ========== -->
+    <div class="worker-layout">
+
+      <!-- ========== SIDEBAR ========== -->
+      <aside class="worker-sidebar" id="workerSidebar">
+        <div class="worker-sidebar-title">Main</div>
+        <button class="worker-nav-link active" data-page="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</button>
+        <button class="worker-nav-link" data-page="announcements"><i class="fas fa-bullhorn"></i> Announcements <span class="badge-count" id="annCount">0</span></button>
+        <button class="worker-nav-link" data-page="jobs"><i class="fas fa-clipboard-list"></i> My Jobs <span class="badge-count" id="jobsCount">0</span></button>
+
+        <div class="worker-sidebar-title">Account</div>
+        <button class="worker-nav-link" data-page="profile"><i class="fas fa-user-circle"></i> My Profile</button>
+        <button class="worker-nav-link" data-page="history"><i class="fas fa-history"></i> Work History</button>
+      </aside>
+
+      <!-- ========== MAIN CONTENT ========== -->
+      <main class="worker-main">
+
+        <!-- ============ DASHBOARD ============ -->
+        <div class="worker-page active" id="page-dashboard">
+          <div class="worker-page-header">
+            <div>
+              <h1>Welcome back, <span id="welcomeWorkerName">Worker</span>! 👷</h1>
+              <p>Here's your work overview and today's assignments.</p>
+            </div>
+          </div>
+
+          <!-- Current Status Banner -->
+          <div class="current-status-banner">
+            <div>
+              <h2><i class="fas fa-broadcast-tower"></i> Your Current Status</h2>
+              <p>Let the admin know what you're up to right now</p>
+            </div>
+            <div class="current-status-badge" id="currentStatusBadge">
+              <i class="fas fa-circle" style="color: #2ecc71; font-size: 0.7rem;"></i> Available
+            </div>
+          </div>
+
+          <!-- Status Buttons -->
+          <div class="worker-panel">
+            <div class="worker-panel-header">
+              <h3><i class="fas fa-toggle-on" style="color: #1e6b3b;"></i> Update Your Status</h3>
+              <span style="font-size: 0.82rem; color: #9aa5ad;">Click a status to broadcast it to the admin</span>
+            </div>
+            <div class="worker-panel-body">
+              <div class="status-buttons-grid">
+                <button class="status-btn available" data-status="Available" onclick="setWorkerStatus('Available', this)">
+                  <div class="status-icon"><i class="fas fa-check"></i></div>
+                  <strong>Available</strong>
+                  <small>Ready for new tasks</small>
+                </button>
+                <button class="status-btn at-work" data-status="At Work" onclick="setWorkerStatus('At Work', this)">
+                  <div class="status-icon"><i class="fas fa-hard-hat"></i></div>
+                  <strong>At Work</strong>
+                  <small>Currently on a job</small>
+                </button>
+                <button class="status-btn busy" data-status="Currently Busy" onclick="setWorkerStatus('Currently Busy', this)">
+                  <div class="status-icon"><i class="fas fa-hourglass-half"></i></div>
+                  <strong>Currently Busy</strong>
+                  <small>Working on something</small>
+                </button>
+                <button class="status-btn on-break" data-status="On Break" onclick="setWorkerStatus('On Break', this)">
+                  <div class="status-icon"><i class="fas fa-mug-hot"></i></div>
+                  <strong>On Break</strong>
+                  <small>Short break</small>
+                </button>
+                <button class="status-btn done" data-status="Done" onclick="setWorkerStatus('Done', this)">
+                  <div class="status-icon"><i class="fas fa-flag-checkered"></i></div>
+                  <strong>Done</strong>
+                  <small>Finished a task</small>
+                </button>
+                <button class="status-btn off-duty" data-status="Off Duty" onclick="setWorkerStatus('Off Duty', this)">
+                  <div class="status-icon"><i class="fas fa-moon"></i></div>
+                  <strong>Off Duty</strong>
+                  <small>Not working now</small>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stats -->
+          <div class="worker-stats">
+            <div class="worker-stat">
+              <div class="worker-stat-content">
+                <h3 id="wStatJobs">0</h3>
+                <p>Active Jobs</p>
+              </div>
+              <div class="worker-stat-icon"><i class="fas fa-clipboard-list"></i></div>
+            </div>
+            <div class="worker-stat accent">
+              <div class="worker-stat-content">
+                <h3 id="wStatAnnouncements">0</h3>
+                <p>New Announcements</p>
+              </div>
+              <div class="worker-stat-icon"><i class="fas fa-bullhorn"></i></div>
+            </div>
+            <div class="worker-stat info">
+              <div class="worker-stat-content">
+                <h3 id="wStatCompleted">0</h3>
+                <p>Completed Jobs</p>
+              </div>
+              <div class="worker-stat-icon"><i class="fas fa-check-circle"></i></div>
+            </div>
+            <div class="worker-stat danger">
+              <div class="worker-stat-content">
+                <h3 id="wStatDays">0</h3>
+                <p>Days Active</p>
+              </div>
+              <div class="worker-stat-icon"><i class="fas fa-calendar"></i></div>
+            </div>
+          </div>
+
+          <!-- Recent Announcements Preview -->
+          <div class="worker-panel">
+            <div class="worker-panel-header">
+              <h3><i class="fas fa-bullhorn" style="color: #f5a623;"></i> Latest Announcements</h3>
+              <button class="worker-btn worker-btn-outline worker-btn-sm" onclick="switchWorkerPage('announcements')">View All</button>
+            </div>
+            <div class="worker-panel-body" id="recentAnnouncements">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Current Jobs Preview -->
+          <div class="worker-panel">
+            <div class="worker-panel-header">
+              <h3><i class="fas fa-clipboard-list" style="color: #2980b9;"></i> My Active Jobs</h3>
+              <button class="worker-btn worker-btn-outline worker-btn-sm" onclick="switchWorkerPage('jobs')">View All</button>
+            </div>
+            <div class="worker-panel-body" id="recentJobs">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ ANNOUNCEMENTS ============ -->
+        <div class="worker-page" id="page-announcements">
+          <div class="worker-page-header">
+            <div>
+              <h1>Announcements</h1>
+              <p>Messages, updates, and job alerts from the admin.</p>
+            </div>
+            <button class="worker-btn worker-btn-outline worker-btn-sm" onclick="markAllAsRead()">
+              <i class="fas fa-check-double"></i> Mark All as Read
+            </button>
+          </div>
+
+          <div id="announcementsList">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- ============ MY JOBS ============ -->
+        <div class="worker-page" id="page-jobs">
+          <div class="worker-page-header">
+            <div>
+              <h1>My Jobs</h1>
+              <p>All the jobs you've been assigned. Update your progress here.</p>
+            </div>
+          </div>
+
+          <div id="jobsList">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- ============ PROFILE ============ -->
+        <div class="worker-page" id="page-profile">
+          <div class="worker-page-header">
+            <div>
+              <h1>My Profile</h1>
+              <p>View and update your personal information.</p>
+            </div>
+          </div>
+
+          <!-- Profile Header -->
+          <div class="worker-profile-header">
+            <div class="worker-profile-avatar-wrapper">
+              <div class="worker-profile-avatar" id="workerProfileAvatar">W</div>
+              <button class="worker-avatar-upload" onclick="openWorkerAvatarModal()" title="Change photo">
+                <i class="fas fa-camera"></i>
+              </button>
+            </div>
+            <div class="worker-profile-info">
+              <h2 id="workerProfileName">Worker Name</h2>
+              <p id="workerProfileEmail">worker@unwm.ug</p>
+              <div class="worker-profile-badges">
+                <span class="worker-profile-badge" id="workerProfileCategory">
+                  <i class="fas fa-tag"></i> Category
+                </span>
+                <span class="worker-profile-badge" id="workerProfileRegion">
+                  <i class="fas fa-map-marker-alt"></i> Region
+                </span>
+                <span class="worker-profile-badge" id="workerProfileDistrict">
+                  <i class="fas fa-city"></i> District
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Personal Info -->
+          <div class="worker-info-section">
+            <h3><i class="fas fa-user-edit" style="color: #1e6b3b;"></i> Personal Information</h3>
+            <form id="workerProfileForm">
+              <div class="worker-info-grid">
+                <div class="worker-form-group">
+                  <label>National ID Number</label>
+                  <input type="text" id="wpIdNumber" disabled>
+                </div>
+                <div class="worker-form-group">
+                  <label>Full Name</label>
+                  <input type="text" id="wpName" disabled>
+                </div>
+                <div class="worker-form-group">
+                  <label>Category</label>
+                  <input type="text" id="wpCategory" disabled>
+                </div>
+                <div class="worker-form-group">
+                  <label>Date of Birth</label>
+                  <input type="date" id="wpDob">
+                </div>
+                <div class="worker-form-group">
+                  <label>Phone Number</label>
+                  <input type="tel" id="wpPhone" required>
+                </div>
+                <div class="worker-form-group">
+                  <label>Email</label>
+                  <input type="email" id="wpEmail" disabled>
+                </div>
+                <div class="worker-form-group">
+                  <label>Region</label>
+                  <input type="text" id="wpRegion" disabled>
+                </div>
+                <div class="worker-form-group">
+                  <label>District</label>
+                  <input type="text" id="wpDistrict" disabled>
+                </div>
+              </div>
+              <div class="worker-form-group">
+                <label>Place of Residence</label>
+                <input type="text" id="wpResidence" placeholder="e.g. Kisenyi Zone 3" required>
+              </div>
+              <div class="worker-form-group">
+                <label>Specialization / Skills</label>
+                <input type="text" id="wpSkills" placeholder="e.g. Hazardous Waste Handling">
+              </div>
+              <div class="worker-form-group">
+                <label>Bio / About Me</label>
+                <textarea id="wpBio" rows="3" placeholder="Tell us about yourself..."></textarea>
+              </div>
+              <button type="submit" class="worker-btn">
+                <i class="fas fa-save"></i> Save Changes
+              </button>
+            </form>
+          </div>
+
+          <!-- Emergency Contact -->
+          <div class="worker-info-section">
+            <h3><i class="fas fa-phone-alt" style="color: #c0392b;"></i> Emergency Contact</h3>
+            <div class="worker-info-grid">
+              <div class="worker-form-group">
+                <label>Contact Name</label>
+                <input type="text" id="wpEmergencyName" placeholder="e.g. Mary Okello">
+              </div>
+              <div class="worker-form-group">
+                <label>Contact Phone</label>
+                <input type="tel" id="wpEmergencyPhone" placeholder="+256 700 000 000">
+              </div>
+            </div>
+            <div class="worker-form-group">
+              <label>Relationship</label>
+              <input type="text" id="wpEmergencyRelation" placeholder="e.g. Spouse, Parent, Sibling">
+            </div>
+            <button class="worker-btn worker-btn-outline" onclick="saveEmergencyContact()">
+              <i class="fas fa-save"></i> Save Emergency Contact
+            </button>
+          </div>
+        </div>
+
+        <!-- ============ WORK HISTORY ============ -->
+        <div class="worker-page" id="page-history">
+          <div class="worker-page-header">
+            <div>
+              <h1>Work History</h1>
+              <p>All jobs you have completed in the past.</p>
+            </div>
+          </div>
+
+          <div id="historyList">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ========== AVATAR MODAL ========== -->
+  <div class="avatar-modal-overlay" id="workerAvatarModal">
+    <div class="avatar-modal">
+      <h3><i class="fas fa-camera" style="color: #1e6b3b;"></i> Update Profile Photo</h3>
+      <p>Upload your own photo or pick a colored avatar</p>
+
+      <div class="avatar-preview-large" id="workerAvatarPreview">W</div>
+
+      <div class="avatar-color-grid" id="workerAvatarColors">
+        <div class="avatar-color-swatch" style="background: #1e6b3b;" onclick="selectWorkerColor('#1e6b3b', this)">A</div>
+        <div class="avatar-color-swatch" style="background: #2980b9;" onclick="selectWorkerColor('#2980b9', this)">B</div>
+        <div class="avatar-color-swatch" style="background: #f5a623;" onclick="selectWorkerColor('#f5a623', this)">C</div>
+        <div class="avatar-color-swatch" style="background: #c0392b;" onclick="selectWorkerColor('#c0392b', this)">D</div>
+        <div class="avatar-color-swatch" style="background: #8e44ad;" onclick="selectWorkerColor('#8e44ad', this)">E</div>
+        <div class="avatar-color-swatch" style="background: #16a085;" onclick="selectWorkerColor('#16a085', this)">F</div>
+      </div>
+
+      <input type="file" id="workerAvatarFile" class="file-input-hidden" accept="image/*" onchange="handleWorkerAvatarUpload(event)">
+
+      <div class="avatar-actions">
+        <button class="worker-btn worker-btn-outline" onclick="document.getElementById('workerAvatarFile').click()">
+          <i class="fas fa-upload"></i> Upload
+        </button>
+        <button class="worker-btn" onclick="saveWorkerAvatar()">
+          <i class="fas fa-check"></i> Save
+        </button>
+      </div>
+
+      <button class="worker-btn worker-btn-outline" style="width: 100%; margin-top: 0.75rem; justify-content: center;" onclick="closeWorkerAvatarModal()">
+        <i class="fas fa-times"></i> Cancel
+      </button>
+    </div>
+  </div>
+
+  <!-- ========== TOAST ========== -->
+  <div class="worker-toast" id="workerToast">
+    <i class="fas fa-check-circle"></i>
+    <span id="workerToastText">Saved</span>
+  </div>
+
+  <script>
+    /* ============================================================
+       WORKER DASHBOARD JAVASCRIPT
+       ============================================================ */
+
+    const W_STORAGE = {
+      workers: 'unwm_admin_workers',
+      announcements: 'unwm_announcements',
+      assignments: 'unwm_admin_assignments',
+      statusUpdates: 'unwm_worker_status',
+      auth: 'unwm_worker_auth'
+    };
+
+    let loggedWorker = null;
+    let workerStatusHistory = {};
+    let pendingWorkerAvatarData = null;
+
+    // ---------- INIT ----------
+    document.addEventListener('DOMContentLoaded', function () {
+      // Check session
+      const auth = sessionStorage.getItem('unwm_worker_auth');
+      if (auth) {
+        try {
+          const data = JSON.parse(auth);
+          const worker = findWorker(data.idNumber, data.email);
+          if (worker) {
+            loggedWorker = worker;
+            showWorkerApp();
+          }
+        } catch (e) { /* ignore */ }
+      }
+    });
+
+    // ---------- LOGIN ----------
+    document.getElementById('workerLoginForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const idNumber = document.getElementById('wlIdNumber').value.trim();
+      const email = document.getElementById('wlEmail').value.trim().toLowerCase();
+      const errorBox = document.getElementById('workerLoginError');
+      const errorText = document.getElementById('workerLoginErrorText');
+
+      const worker = findWorker(idNumber, email);
+
+      if (!worker) {
+        errorBox.classList.add('show');
+        errorText.textContent = 'Invalid ID Number or Email. Please check with your admin.';
+        return;
+      }
+
+      if (worker.status === 'Inactive') {
+        errorBox.classList.add('show');
+        errorText.textContent = 'Your account has been deactivated. Contact the admin.';
+        return;
+      }
+
+      errorBox.classList.remove('show');
+      loggedWorker = worker;
+
+      // Save session
+      sessionStorage.setItem('unwm_worker_auth', JSON.stringify({
+        idNumber: worker.idNumber,
+        email: worker.email,
+        loginTime: new Date().toISOString()
+      }));
+
+      showWorkerApp();
+      showWorkerToast('Welcome back, ' + worker.name + '!', 'success');
+    });
+
+    function findWorker(idNumber, email) {
+      const workers = getWorkers();
+      return workers.find(w =>
+        w.idNumber.toLowerCase() === idNumber.toLowerCase() &&
+        w.email.toLowerCase() === email.toLowerCase()
+      );
+    }
+
+    function getWorkers() {
+      try {
+        return JSON.parse(localStorage.getItem(W_STORAGE.workers) || '[]');
+      } catch (e) { return []; }
+    }
+
+    function getAnnouncements() {
+      try {
+        return JSON.parse(localStorage.getItem(W_STORAGE.announcements) || '[]');
+      } catch (e) { return []; }
+    }
+
+    function getAssignments() {
+      try {
+        return JSON.parse(localStorage.getItem(W_STORAGE.assignments) || '[]');
+      } catch (e) { return []; }
+    }
+
+    function getStatusUpdates() {
+      try {
+        return JSON.parse(localStorage.getItem(W_STORAGE.statusUpdates) || '{}');
+      } catch (e) { return {}; }
+    }
+
+    function setStatusUpdates(data) {
+      localStorage.setItem(W_STORAGE.statusUpdates, JSON.stringify(data));
+    }
+
+    function showWorkerApp() {
+      document.getElementById('workerLogin').classList.add('hidden');
+      document.getElementById('workerApp').style.display = 'block';
+
+      // Populate header
+      document.getElementById('topWorkerName').textContent = loggedWorker.name;
+      document.getElementById('welcomeWorkerName').textContent = loggedWorker.name.split(' ')[0];
+
+      renderTopAvatar();
+      loadWorkerStatus();
+      setupWorkerNavigation();
+      setupWorkerSidebarToggle();
+      setupWorkerForms();
+      setupAvatarModal();
+
+      // Initial render
+      renderWorkerDashboard();
+      renderAnnouncements();
+      renderJobs();
+      renderHistory();
+      renderWorkerProfile();
+      updateWorkerCounts();
+    }
+
+    function renderTopAvatar() {
+      const el = document.getElementById('topAvatarSm');
+      const initial = (loggedWorker.name || 'W').charAt(0).toUpperCase();
+
+      if (loggedWorker.avatar) {
+        el.innerHTML = `<img src="${loggedWorker.avatar}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
+      } else if (loggedWorker.avatarColor) {
+        el.style.background = loggedWorker.avatarColor;
+        el.style.color = 'white';
+        el.textContent = initial;
+      } else {
+        el.textContent = initial;
+      }
+    }
+
+    function workerLogout(e) {
+      e.preventDefault();
+      if (!confirm('Are you sure you want to logout?')) return;
+      sessionStorage.removeItem('unwm_worker_auth');
+      location.reload();
+    }
+
+    // ---------- NAVIGATION ----------
+    function setupWorkerNavigation() {
+      document.querySelectorAll('.worker-nav-link').forEach(link => {
+        link.addEventListener('click', function () {
+          const page = this.dataset.page;
+          switchWorkerPage(page);
+          document.getElementById('workerSidebar').classList.remove('open');
+        });
+      });
+    }
+
+    function switchWorkerPage(page) {
+      document.querySelectorAll('.worker-page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.worker-nav-link').forEach(l => l.classList.remove('active'));
+
+      document.getElementById('page-' + page).classList.add('active');
+      document.querySelector(`.worker-nav-link[data-page="${page}"]`).classList.add('active');
+
+      // Refresh page content
+      if (page === 'dashboard') renderWorkerDashboard();
+      if (page === 'announcements') { renderAnnouncements(); markAllAsRead(false); }
+      if (page === 'jobs') renderJobs();
+      if (page === 'profile') renderWorkerProfile();
+      if (page === 'history') renderHistory();
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function setupWorkerSidebarToggle() {
+      const toggle = document.getElementById('workerMenuToggle');
+      const sidebar = document.getElementById('workerSidebar');
+      if (toggle) toggle.addEventListener('click', () => sidebar.classList.toggle('open'));
+    }
+
+    // ---------- WORKER STATUS ----------
+    function loadWorkerStatus() {
+      const updates = getStatusUpdates();
+      const current = updates[loggedWorker.id] || { status: 'Available', updatedAt: null };
+
+      document.getElementById('currentStatusBadge').innerHTML =
+        `<i class="fas fa-circle" style="color: ${statusColor(current.status)}; font-size: 0.7rem;"></i> ${current.status}`;
+
+      document.getElementById('topStatusText').textContent = current.status;
+      const dot = document.getElementById('topStatusDot');
+      dot.className = 'status-dot ' + statusDotClass(current.status);
+
+      // Highlight active button
+      document.querySelectorAll('.status-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.status === current.status);
+      });
+    }
+
+    function statusColor(status) {
+      const map = {
+        'Available': '#2ecc71',
+        'At Work': '#3498db',
+        'Currently Busy': '#f5a623',
+        'On Break': '#1abc9c',
+        'Done': '#9b59b6',
+        'Off Duty': '#95a5a6'
+      };
+      return map[status] || '#2ecc71';
+    }
+
+    function statusDotClass(status) {
+      if (status === 'Currently Busy' || status === 'On Break') return 'busy';
+      if (status === 'Off Duty') return 'away';
+      return '';
+    }
+
+    function setWorkerStatus(status, btn) {
+      const updates = getStatusUpdates();
+      updates[loggedWorker.id] = {
+        status: status,
+        updatedAt: new Date().toISOString(),
+        workerId: loggedWorker.id,
+        workerName: loggedWorker.name
+      };
+      setStatusUpdates(updates);
+
+      // Update UI
+      document.querySelectorAll('.status-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      document.getElementById('currentStatusBadge').innerHTML =
+        `<i class="fas fa-circle" style="color: ${statusColor(status)}; font-size: 0.7rem;"></i> ${status}`;
+      document.getElementById('topStatusText').textContent = status;
+      document.getElementById('topStatusDot').className = 'status-dot ' + statusDotClass(status);
+
+      showWorkerToast(`Status updated to "${status}"`, 'success');
+    }
+
+    // ---------- DASHBOARD ----------
+    function renderWorkerDashboard() {
+      const assignments = getAssignments();
+      const announcements = getAnnouncements();
+
+      const myJobs = assignments.filter(a => (a.workerIds || []).includes(loggedWorker.id));
+      const activeJobs = myJobs.filter(a => a.status !== 'Completed' && a.status !== 'Cancelled');
+      const completedJobs = myJobs.filter(a => a.status === 'Completed');
+
+      document.getElementById('wStatJobs').textContent = activeJobs.length;
+      document.getElementById('wStatCompleted').textContent = completedJobs.length;
+
+      // Days active
+      const join = loggedWorker.joinDate ? new Date(loggedWorker.joinDate) : new Date();
+      const daysActive = Math.max(1, Math.floor((Date.now() - join.getTime()) / 86400000));
+      document.getElementById('wStatDays').textContent = daysActive;
+
+      // Unread announcements
+      const readKey = 'unwm_worker_read_' + loggedWorker.id;
+      let readIds = [];
+      try { readIds = JSON.parse(localStorage.getItem(readKey) || '[]'); } catch(e) {}
+      const unread = announcements.filter(a => !readIds.includes(a.id)).length;
+      document.getElementById('wStatAnnouncements').textContent = unread;
+      document.getElementById('annCount').textContent = unread;
+
+      // Recent announcements
+      const recentAnn = announcements.slice(-2).reverse();
+      const annContainer = document.getElementById('recentAnnouncements');
+      if (!recentAnn.length) {
+        annContainer.innerHTML = '<div class="worker-empty"><i class="fas fa-bullhorn"></i><p>No announcements yet.</p></div>';
+      } else {
+        annContainer.innerHTML = recentAnn.map(a => renderAnnouncementHtml(a, readIds)).join('');
+      }
+
+      // Recent jobs
+      const recentJobs = activeJobs.slice(0, 2);
+      const jobContainer = document.getElementById('recentJobs');
+      if (!recentJobs.length) {
+        jobContainer.innerHTML = '<div class="worker-empty"><i class="fas fa-clipboard-check"></i><p>No active jobs. Great work!</p></div>';
+      } else {
+        jobContainer.innerHTML = recentJobs.map(j => renderJobHtml(j)).join('');
+      }
+    }
+
+    // ---------- ANNOUNCEMENTS ----------
+    function renderAnnouncements() {
+      const container = document.getElementById('announcementsList');
+      const announcements = getAnnouncements().slice().reverse();
+
+      const readKey = 'unwm_worker_read_' + loggedWorker.id;
+      let readIds = [];
+      try { readIds = JSON.parse(localStorage.getItem(readKey) || '[]'); } catch(e) {}
+
+      if (!announcements.length) {
+        container.innerHTML = '<div class="worker-empty"><i class="fas fa-bullhorn"></i><p>No announcements yet. Check back soon!</p></div>';
+        return;
+      }
+
+      container.innerHTML = announcements.map(a => renderAnnouncementHtml(a, readIds, true)).join('');
+    }
+
+    function renderAnnouncementHtml(a, readIds, full = false) {
+      const isUnread = !readIds.includes(a.id);
+      const priorityClass = 'priority-' + (a.priority || 'normal').toLowerCase();
+      const dateStr = a.createdAt ? new Date(a.createdAt).toLocaleString('en-GB', {
+        day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
+      }) : '';
+
+      return `
+        <div class="announcement ${isUnread ? 'unread' : ''}" id="ann-${a.id}">
+          <div class="announcement-header">
+            <h4 class="announcement-title">
+              <i class="fas fa-bullhorn" style="color: #f5a623;"></i> ${escapeHtml(a.title)}
+            </h4>
+            <span class="announcement-meta">${dateStr}</span>
+          </div>
+          <p class="announcement-body">${escapeHtml(a.message).replace(/\n/g, '<br>')}</p>
+          <div class="announcement-footer">
+            <span class="announcement-priority ${priorityClass}">
+              <i class="fas fa-flag"></i> ${escapeHtml(a.priority || 'Normal')}
+            </span>
+            ${isUnread ? `<button class="worker-btn worker-btn-outline worker-btn-sm" onclick="markAsRead('${a.id}')"><i class="fas fa-check"></i> Mark Read</button>` : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    function markAsRead(annId) {
+      const readKey = 'unwm_worker_read_' + loggedWorker.id;
+      let readIds = [];
+      try { readIds = JSON.parse(localStorage.getItem(readKey) || '[]'); } catch(e) {}
+
+      if (!readIds.includes(annId)) {
+        readIds.push(annId);
+        localStorage.setItem(readKey, JSON.stringify(readIds));
+      }
+
+      renderAnnouncements();
+      renderWorkerDashboard();
+      updateWorkerCounts();
+    }
+
+    function markAllAsRead(showToast = true) {
+      const announcements = getAnnouncements();
+      const readKey = 'unwm_worker_read_' + loggedWorker.id;
+      const allIds = announcements.map(a => a.id);
+      localStorage.setItem(readKey, JSON.stringify(allIds));
+      renderAnnouncements();
+      renderWorkerDashboard();
+      updateWorkerCounts();
+      if (showToast) showWorkerToast('All announcements marked as read', 'success');
+    }
+
+    // ---------- JOBS ----------
+    function renderJobs() {
+      const container = document.getElementById('jobsList');
+      const assignments = getAssignments();
+      const myJobs = assignments.filter(a => (a.workerIds || []).includes(loggedWorker.id));
+      const activeJobs = myJobs.filter(a => a.status !== 'Completed' && a.status !== 'Cancelled');
+
+      if (!activeJobs.length) {
+        container.innerHTML = '<div class="worker-empty"><i class="fas fa-clipboard-check"></i><p>No active jobs right now. Check the Announcements for new assignments.</p></div>';
+        return;
+      }
+
+      container.innerHTML = activeJobs.map(j => renderJobHtml(j)).join('');
+    }
+
+    function renderJobHtml(job) {
+      const statusClass = job.status === 'In Progress' ? 'status-in-progress' : job.status === 'Completed' ? 'status-completed' : '';
+      const statusBadge = job.status === 'Completed' ? 'badge-success' : job.status === 'In Progress' ? 'badge-info' : 'badge-warning';
+      const priorityClass = job.priority === 'Urgent' ? 'badge-danger' : job.priority === 'High' ? 'badge-warning' : 'badge-info';
+      const deadlineStr = job.deadline ? new Date(job.deadline).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : 'No deadline';
+
+      // Status update from admin/worker
+      const updates = getStatusUpdates();
+      const jobStatus = updates['job_' + job.id] || {};
+
+      return `
+        <div class="job-item ${statusClass}">
+          <div class="job-item-header">
+            <div>
+              <h4 class="job-item-title">${escapeHtml(job.title)}</h4>
+              <div class="job-item-meta">
+                <span><i class="fas fa-map-marker-alt"></i> ${escapeHtml(job.district)}, ${escapeHtml(job.region)}</span>
+                <span><i class="fas fa-calendar-alt"></i> Due: ${deadlineStr}</span>
+                <span><i class="fas fa-flag"></i> <span class="badge ${priorityClass}">${escapeHtml(job.priority)}</span></span>
+                <span class="badge ${statusBadge}">${escapeHtml(job.status || 'Pending')}</span>
+              </div>
+            </div>
+          </div>
+          <p class="job-item-desc">${escapeHtml(job.description)}</p>
+          ${jobStatus.workerNote ? `<div style="background: #f7fdf9; border-left: 3px solid #27ae60; padding: 0.6rem 1rem; border-radius: 6px; font-size: 0.85rem; color: #155d36; margin-bottom: 0.75rem;"><strong>Your note:</strong> ${escapeHtml(jobStatus.workerNote)}</div>` : ''}
+          <div class="job-item-actions">
+            ${job.status !== 'In Progress' && job.status !== 'Completed' ? `
+              <button class="worker-btn worker-btn-success worker-btn-sm" onclick="startJob('${job.id}')">
+                <i class="fas fa-play"></i> Start Job
+              </button>` : ''}
+            ${job.status === 'In Progress' ? `
+              <button class="worker-btn worker-btn-success worker-btn-sm" onclick="markJobDone('${job.id}')">
+                <i class="fas fa-check"></i> Mark Done
+              </button>
+              <button class="worker-btn worker-btn-outline worker-btn-sm" onclick="addJobNote('${job.id}')">
+                <i class="fas fa-comment"></i> Add Note
+              </button>` : ''}
+            <button class="worker-btn worker-btn-outline worker-btn-sm" onclick="viewJobDetails('${job.id}')">
+              <i class="fas fa-info-circle"></i> Details
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function startJob(jobId) {
+      const assignments = getAssignments();
+      const job = assignments.find(a => a.id === jobId);
+      if (!job) return;
+
+      job.status = 'In Progress';
+      job.startedAt = new Date().toISOString();
+      localStorage.setItem(W_STORAGE.assignments, JSON.stringify(assignments));
+
+      // Auto-set worker status
+      setWorkerStatus('At Work', document.querySelector('.status-btn[data-status="At Work"]'));
+
+      renderJobs();
+      renderWorkerDashboard();
+      showWorkerToast('Job started! Admin has been notified.', 'success');
+    }
+
+    function markJobDone(jobId) {
+      if (!confirm('Are you sure you have finished this job? The admin will be notified.')) return;
+
+      const assignments = getAssignments();
+      const job = assignments.find(a => a.id === jobId);
+      if (!job) return;
+
+      job.status = 'Completed';
+      job.completedAt = new Date().toISOString();
+      localStorage.setItem(W_STORAGE.assignments, JSON.stringify(assignments));
+
+      // Set worker status to Done
+      setWorkerStatus('Done', document.querySelector('.status-btn[data-status="Done"]'));
+
+      renderJobs();
+      renderHistory();
+      renderWorkerDashboard();
+      showWorkerToast('Job marked as done! Admin notified.', 'success');
+    }
+
+    function addJobNote(jobId) {
+      const note = prompt('Add a note about this job (visible to admin):');
+      if (!note) return;
+
+      const updates = getStatusUpdates();
+      updates['job_' + jobId] = { workerNote: note, workerId: loggedWorker.id, updatedAt: new Date().toISOString() };
+      setStatusUpdates(updates);
+
+      renderJobs();
+      showWorkerToast('Note added and sent to admin', 'success');
+    }
+
+    function viewJobDetails(jobId) {
+      const assignments = getAssignments();
+      const job = assignments.find(a => a.id === jobId);
+      if (!job) return;
+
+      alert(
+        `JOB DETAILS\n` +
+        `━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+        `Title: ${job.title}\n` +
+        `Description: ${job.description}\n` +
+        `District: ${job.district}\n` +
+        `Region: ${job.region}\n` +
+        `Priority: ${job.priority}\n` +
+        `Deadline: ${job.deadline}\n` +
+        `Status: ${job.status}\n` +
+        `Created: ${new Date(job.createdAt).toLocaleString()}\n` +
+        `Started: ${job.startedAt ? new Date(job.startedAt).toLocaleString() : 'Not started'}\n` +
+        `Completed: ${job.completedAt ? new Date(job.completedAt).toLocaleString() : 'Not completed'}`
+      );
+    }
+
+    // ---------- WORK HISTORY ----------
+    function renderHistory() {
+      const container = document.getElementById('historyList');
+      const assignments = getAssignments();
+      const myHistory = assignments
+        .filter(a => (a.workerIds || []).includes(loggedWorker.id) && (a.status === 'Completed' || a.status === 'Cancelled'))
+        .sort((a, b) => new Date(b.completedAt || b.createdAt) - new Date(a.completedAt || a.createdAt));
+
+      if (!myHistory.length) {
+        container.innerHTML = '<div class="worker-empty"><i class="fas fa-history"></i><p>No completed jobs yet. Your work history will appear here.</p></div>';
+        return;
+      }
+
+      container.innerHTML = myHistory.map(job => {
+        const completedDate = job.completedAt ? new Date(job.completedAt).toLocaleString('en-GB', {
+          day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+        }) : '-';
+
+        return `
+          <div class="job-item status-completed">
+            <div class="job-item-header">
+              <div>
+                <h4 class="job-item-title">${escapeHtml(job.title)}</h4>
+                <div class="job-item-meta">
+                  <span><i class="fas fa-map-marker-alt"></i> ${escapeHtml(job.district)}</span>
+                  <span><i class="fas fa-check-circle" style="color: #27ae60;"></i> Completed: ${completedDate}</span>
+                  <span class="badge badge-success">Completed</span>
+                </div>
+              </div>
+            </div>
+            <p class="job-item-desc">${escapeHtml(job.description)}</p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ---------- PROFILE ----------
+    function renderWorkerProfile() {
+      const initial = (loggedWorker.name || 'W').charAt(0).toUpperCase();
+
+      // Avatar
+      const av = document.getElementById('workerProfileAvatar');
+      if (loggedWorker.avatar) {
+        av.innerHTML = `<img src="${loggedWorker.avatar}" alt="Profile">`;
+      } else if (loggedWorker.avatarColor) {
+        av.style.background = loggedWorker.avatarColor;
+        av.style.color = 'white';
+        av.textContent = initial;
+      } else {
+        av.textContent = initial;
+      }
+
+      // Header info
+      document.getElementById('workerProfileName').textContent = loggedWorker.name;
+      document.getElementById('workerProfileEmail').textContent = loggedWorker.email;
+      document.getElementById('workerProfileCategory').innerHTML = '<i class="fas fa-tag"></i> ' + (loggedWorker.category || 'Worker');
+      document.getElementById('workerProfileRegion').innerHTML = '<i class="fas fa-map-marker-alt"></i> ' + (loggedWorker.region || '-');
+      document.getElementById('workerProfileDistrict').innerHTML = '<i class="fas fa-city"></i> ' + (loggedWorker.district || '-');
+
+      // Form fields
+      document.getElementById('wpIdNumber').value = loggedWorker.idNumber || '';
+      document.getElementById('wpName').value = loggedWorker.name || '';
+      document.getElementById('wpCategory').value = loggedWorker.category || '';
+      document.getElementById('wpDob').value = loggedWorker.dob || '';
+      document.getElementById('wpPhone').value = loggedWorker.phone || '';
+      document.getElementById('wpEmail').value = loggedWorker.email || '';
+      document.getElementById('wpRegion').value = loggedWorker.region || '';
+      document.getElementById('wpDistrict').value = loggedWorker.district || '';
+      document.getElementById('wpResidence').value = loggedWorker.residence || '';
+      document.getElementById('wpSkills').value = loggedWorker.skills || '';
+      document.getElementById('wpBio').value = loggedWorker.bio || '';
+
+      // Emergency contact
+      document.getElementById('wpEmergencyName').value = loggedWorker.emergencyName || '';
+      document.getElementById('wpEmergencyPhone').value = loggedWorker.emergencyPhone || '';
+      document.getElementById('wpEmergencyRelation').value = loggedWorker.emergencyRelation || '';
+    }
+
+    function setupWorkerForms() {
+      document.getElementById('workerProfileForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const workers = getWorkers();
+        const idx = workers.findIndex(w => w.id === loggedWorker.id);
+        if (idx === -1) return;
+
+        workers[idx].dob = document.getElementById('wpDob').value;
+        workers[idx].phone = document.getElementById('wpPhone').value.trim();
+        workers[idx].residence = document.getElementById('wpResidence').value.trim();
+        workers[idx].skills = document.getElementById('wpSkills').value.trim();
+        workers[idx].bio = document.getElementById('wpBio').value.trim();
+
+        localStorage.setItem(W_STORAGE.workers, JSON.stringify(workers));
+        loggedWorker = workers[idx];
+
+        showWorkerToast('Profile updated successfully!', 'success');
+      });
+    }
+
+    function saveEmergencyContact() {
+      const workers = getWorkers();
+      const idx = workers.findIndex(w => w.id === loggedWorker.id);
+      if (idx === -1) return;
+
+      workers[idx].emergencyName = document.getElementById('wpEmergencyName').value.trim();
+      workers[idx].emergencyPhone = document.getElementById('wpEmergencyPhone').value.trim();
+      workers[idx].emergencyRelation = document.getElementById('wpEmergencyRelation').value.trim();
+
+      localStorage.setItem(W_STORAGE.workers, JSON.stringify(workers));
+      loggedWorker = workers[idx];
+
+      showWorkerToast('Emergency contact saved!', 'success');
+    }
+
+    // ---------- AVATAR MODAL ----------
+    function setupAvatarModal() {
+      const modal = document.getElementById('workerAvatarModal');
+      modal.addEventListener('click', function (e) {
+        if (e.target === this) closeWorkerAvatarModal();
+      });
+    }
+
+    function openWorkerAvatarModal() {
+      pendingWorkerAvatarData = null;
+      const initial = (loggedWorker.name || 'W').charAt(0).toUpperCase();
+      const preview = document.getElementById('workerAvatarPreview');
+
+      if (loggedWorker.avatar) {
+        preview.innerHTML = `<img src="${loggedWorker.avatar}" alt="Profile">`;
+      } else if (loggedWorker.avatarColor) {
+        preview.style.background = loggedWorker.avatarColor;
+        preview.style.color = 'white';
+        preview.textContent = initial;
+      } else {
+        preview.style.background = '#e6f4ea';
+        preview.style.color = '#1e6b3b';
+        preview.textContent = initial;
+      }
+
+      document.querySelectorAll('.avatar-color-swatch').forEach(o => o.classList.remove('selected'));
+      document.getElementById('workerAvatarModal').classList.add('active');
+    }
+
+    function closeWorkerAvatarModal() {
+      document.getElementById('workerAvatarModal').classList.remove('active');
+      pendingWorkerAvatarData = null;
+    }
+
+    function selectWorkerColor(color, el) {
+      pendingWorkerAvatarData = 'color:' + color;
+      const initial = (loggedWorker.name || 'W').charAt(0).toUpperCase();
+      const preview = document.getElementById('workerAvatarPreview');
+      preview.innerHTML = initial;
+      preview.style.background = color;
+      preview.style.color = 'white';
+
+      document.querySelectorAll('.avatar-color-swatch').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+
+    function handleWorkerAvatarUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      if (file.size > 2 * 1024 * 1024) {
+        showWorkerToast('Image too large. Max 2MB.', 'error');
+        return;
+      }
+      if (!file.type.startsWith('image/')) {
+        showWorkerToast('Please select an image file.', 'error');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        pendingWorkerAvatarData = e.target.result;
+        const preview = document.getElementById('workerAvatarPreview');
+        preview.innerHTML = `<img src="${e.target.result}" alt="Profile">`;
+        preview.style.background = '';
+        document.querySelectorAll('.avatar-color-swatch').forEach(o => o.classList.remove('selected'));
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function saveWorkerAvatar() {
+      if (pendingWorkerAvatarData === null) {
+        showWorkerToast('No changes made.', 'error');
+        return;
+      }
+
+      const workers = getWorkers();
+      const idx = workers.findIndex(w => w.id === loggedWorker.id);
+      if (idx === -1) return;
+
+      if (pendingWorkerAvatarData.startsWith('color:')) {
+        workers[idx].avatarColor = pendingWorkerAvatarData.replace('color:', '');
+        workers[idx].avatar = null;
+      } else {
+        workers[idx].avatar = pendingWorkerAvatarData;
+        workers[idx].avatarColor = null;
+      }
+
+      localStorage.setItem(W_STORAGE.workers, JSON.stringify(workers));
+      loggedWorker = workers[idx];
+
+      renderTopAvatar();
+      renderWorkerProfile();
+      closeWorkerAvatarModal();
+      showWorkerToast('Profile photo updated!', 'success');
+    }
+
+    // ---------- COUNTS ----------
+    function updateWorkerCounts() {
+      const assignments = getAssignments();
+      const announcements = getAnnouncements();
+      const readKey = 'unwm_worker_read_' + loggedWorker.id;
+      let readIds = [];
+      try { readIds = JSON.parse(localStorage.getItem(readKey) || '[]'); } catch(e) {}
+
+      const activeJobs = assignments.filter(a =>
+        (a.workerIds || []).includes(loggedWorker.id) &&
+        a.status !== 'Completed' && a.status !== 'Cancelled'
+      );
+
+      const unread = announcements.filter(a => !readIds.includes(a.id)).length;
+
+      document.getElementById('jobsCount').textContent = activeJobs.length;
+      document.getElementById('annCount').textContent = unread;
+    }
+
+    // ---------- TOAST ----------
+    function showWorkerToast(message, type = 'success') {
+      const toast = document.getElementById('workerToast');
+      const text = document.getElementById('workerToastText');
+      text.textContent = message;
+      toast.className = 'worker-toast ' + type;
+      toast.querySelector('i').className = type === 'error' ? 'fas fa-exclamation-circle' : 'fas fa-check-circle';
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3200);
+    }
+
+    // ---------- UTILITY ----------
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text == null ? '' : String(text);
+      return div.innerHTML;
+    }
+  </script>
+
+  <!-- ===== Service Worker Registration ===== -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((reg) => console.log('[PWA] Service Worker registered:', reg.scope))
+          .catch((err) => console.warn('[PWA] Service Worker registration failed:', err));
+      });
+    }
+  </script>
+</body>
+</html>

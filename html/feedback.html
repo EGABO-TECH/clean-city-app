@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Share your feedback and read reviews about UNWM's waste management services across Uganda.">
+  <title>Feedback & Reviews | Uganda National Waste Management</title>
+  <!-- ===== Favicon & App Icons ===== -->
+  <link rel="icon" type="image/svg+xml" href="../assets/logo.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png">
+
+  <!-- ===== PWA Meta Tags ===== -->
+  <meta name="theme-color" content="#1e6b3b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="UNWM">
+  <link rel="manifest" href="../manifest.json">
+
+  <!-- ===== Fonts & Styles ===== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="navbar">
+      <a href="../index.html" class="brand">
+        <div class="brand-icon"><img src="../assets/logo.svg" alt="UNWM Logo" width="48" height="48"></div>
+        <div class="brand-text">
+          <span class="brand-title">Uganda National</span>
+          <span class="brand-sub">Waste Management</span>
+        </div>
+      </a>
+            <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="nav-drawer-backdrop" id="navDrawerBackdrop"></div>
+      <ul class="nav-menu" id="navMenu">
+        <li class="drawer-header-item">
+          <div class="drawer-logo-badge">
+            <img src="../assets/logo.svg" alt="UNWM Logo">
+          </div>
+          <button type="button" class="drawer-close-btn" id="drawerCloseBtn" aria-label="Close navigation">
+            <i class="fas fa-times"></i>
+          </button>
+        </li>
+        <li><a href="../index.html" class="nav-link">Home</a></li>
+        <li><a href="services.html" class="nav-link">Services</a></li>
+        <li>
+          <a href="districts.html" class="nav-link">Districts</a>
+          <span class="drawer-subtext">All 135+ Municipalities</span>
+        </li>
+        <li>
+          <a href="booking.html" class="nav-link">Book Pickup</a>
+          <span class="drawer-subtext">Instant ETA · Quick Dispatch</span>
+        </li>
+        <li>
+          <a href="track.html" class="nav-link">Track</a>
+          <span class="drawer-subtext">Live Truck GPS · Status</span>
+        </li>
+        <li><a href="learn.html" class="nav-link">Learn</a></li>
+        <li><a href="feedback.html" class="nav-link active">Feedback</a></li>
+        <li><a href="contact.html" class="nav-link">Contact</a></li>
+        <li class="drawer-footer-item">
+          <hr class="drawer-divider">
+          <a href="contact.html" class="drawer-contact-btn">Contact</a>
+          <div class="drawer-social-row">
+            <a href="https://linkedin.com/company/unwm-uganda" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="https://x.com/unwm_uganda" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="https://youtube.com/@unwmuganda" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+            <a href="https://wa.me/256700000000" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+          </div>
+        </li>
+        <li class="nav-cta" id="navAuthBtn"><a href="login.html" class="btn btn-sm"><i class="fas fa-user"></i> Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="page-header">
+    <div class="container">
+      <h1>Feedback & Reviews</h1>
+      <p>Your voice matters. Tell us how we're doing and help us improve waste management in your area.</p>
+      <div class="breadcrumb"><a href="../index.html">Home</a> <span>/</span> <span>Feedback</span></div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="section-sm">
+    <div class="container">
+      <div class="grid grid-4">
+        <div class="stat-card"><div class="stat-number" data-counter="4.7" data-suffix="/5">0</div><div class="stat-label">Average Rating</div></div>
+        <div class="stat-card"><div class="stat-number" data-counter="2500" data-suffix="+">0</div><div class="stat-label">Total Reviews</div></div>
+        <div class="stat-card"><div class="stat-number" data-counter="98" data-suffix="%">0</div><div class="stat-label">Would Recommend</div></div>
+        <div class="stat-card"><div class="stat-number" data-counter="120" data-suffix="+">0</div><div class="stat-label">Districts Reviewed</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Feedback Form -->
+  <section class="section">
+    <div class="container-narrow">
+      <div class="form-card">
+        <h2 style="margin-bottom: 0.5rem;"><i class="fas fa-comment-dots" style="color: var(--primary);"></i> Share Your Feedback</h2>
+        <p style="color: var(--gray-500); margin-bottom: 2rem;">Your honest review helps us serve Uganda better. All feedback is moderated.</p>
+
+        <form id="feedbackForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="fbName">Your Name</label>
+              <input type="text" id="fbName" class="form-control" placeholder="e.g. Sarah Nakato">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="fbDistrict">District <span class="required">*</span></label>
+              <input type="text" id="fbDistrict" class="form-control" placeholder="e.g. Kampala" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="fbEmail">Email (optional)</label>
+              <input type="email" id="fbEmail" class="form-control" placeholder="you@example.com">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="fbRating">Rating <span class="required">*</span></label>
+              <select id="fbRating" class="form-select" required>
+                <option value="">-- Select Rating --</option>
+                <option value="5">★★★★★ Excellent</option>
+                <option value="4">★★★★☆ Good</option>
+                <option value="3">★★★☆☆ Average</option>
+                <option value="2">★★☆☆☆ Poor</option>
+                <option value="1">★☆☆☆☆ Very Poor</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="fbCategory">Category</label>
+            <select id="fbCategory" class="form-select">
+              <option value="General">General Feedback</option>
+              <option value="Pickup Speed">Pickup Speed</option>
+              <option value="Staff Conduct">Staff Conduct</option>
+              <option value="Pricing">Pricing</option>
+              <option value="Recycling">Recycling Program</option>
+              <option value="Website">Website / App</option>
+              <option value="Suggestion">Suggestion</option>
+              <option value="Complaint">Complaint</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="fbMessage">Your Feedback <span class="required">*</span></label>
+            <textarea id="fbMessage" class="form-textarea" placeholder="Share your experience with UNWM..." required></textarea>
+          </div>
+          <div class="form-group" style="display: flex; align-items: flex-start; gap: 0.6rem;">
+            <input type="checkbox" id="fbConsent" style="margin-top: 5px;" required>
+            <label for="fbConsent" style="font-size: 0.9rem; color: var(--gray-600);">I consent to my review being published on this website.</label>
+          </div>
+          <button type="submit" class="btn btn-lg btn-block"><i class="fas fa-paper-plane"></i> Submit Feedback</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reviews List -->
+  <section class="section" style="background: var(--gray-50);">
+    <div class="container">
+      <div class="section-title">
+        <h2>What People Are Saying</h2>
+        <p>Real reviews from communities across Uganda.</p>
+      </div>
+
+      <div class="grid grid-2" id="reviewGrid">
+        <div class="review-item">
+          <div class="review-header">
+            <div><div class="review-author">Sarah Nakato</div><div class="review-location">Kampala, Kisenyi</div></div>
+            <div class="review-stars">★★★★★</div>
+          </div>
+          <p class="review-text">"UNWM has transformed our neighborhood. The pickup is fast and the team is always professional. Our streets are finally clean!"</p>
+          <span class="review-date">2 days ago</span>
+        </div>
+        <div class="review-item">
+          <div class="review-header">
+            <div><div class="review-author">John Okello</div><div class="review-location">Gulu, Layibi</div></div>
+            <div class="review-stars">★★★★☆</div>
+          </div>
+          <p class="review-text">"Very reliable service. I report via the website and get an ETA immediately. Sometimes delays during rain, but they communicate well."</p>
+          <span class="review-date">1 week ago</span>
+        </div>
+        <div class="review-item">
+          <div class="review-header">
+            <div><div class="review-author">Grace Atim</div><div class="review-location">Mbarara, Kakoba</div></div>
+            <div class="review-stars">★★★★★</div>
+          </div>
+          <p class="review-text">"Excellent service! They collected a large amount of construction waste within 4 hours of my report. Highly recommend."</p>
+          <span class="review-date">5 days ago</span>
+        </div>
+        <div class="review-item">
+          <div class="review-header">
+            <div><div class="review-author">Moses Kizza</div><div class="review-location">Jinja, Mpumudde</div></div>
+            <div class="review-stars">★★★★★</div>
+          </div>
+          <p class="review-text">"The recycling program is fantastic. They separate plastics and organics right at collection. Very impressed."</p>
+          <span class="review-date">3 days ago</span>
+        </div>
+        <div class="review-item">
+          <div class="review-header">
+            <div><div class="review-author">Rebecca Achieng</div><div class="review-location">Lira, Central</div></div>
+            <div class="review-stars">★★★★☆</div>
+          </div>
+          <p class="review-text">"Good service in Lira. The team is polite and quick. I wish they had more trucks during peak seasons."</p>
+          <span class="review-date">2 weeks ago</span>
+        </div>
+        <div class="review-item">
+          <div class="review-header">
+            <div><div class="review-author">Peter Ssentongo</div><div class="review-location">Masaka, Nyendo</div></div>
+            <div class="review-stars">★★★★★</div>
+          </div>
+          <p class="review-text">"Signed up for the Family Plus package. Worth every shilling. My compound has never been cleaner."</p>
+          <span class="review-date">1 week ago</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="container">
+    <div class="cta-section">
+      <h2>Have a Suggestion or Complaint?</h2>
+      <p>We take all feedback seriously. Reach out directly and we'll respond within 24 hours.</p>
+      <a href="contact.html" class="btn btn-lg"><i class="fas fa-envelope"></i> Contact Us</a>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <div class="footer-brand">
+          <div class="footer-brand-icon"><img src="../assets/logo.svg" alt="UNWM Logo" width="44" height="44"></div>
+          <div class="footer-brand-title">Uganda National<br>Waste Management</div>
+        </div>
+        <p>Committed to a clean, green Uganda through innovation, community participation, and responsible waste management.</p>
+                <div class="footer-social">
+          <a href="https://x.com/unwm_uganda" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="https://youtube.com/@unwmuganda" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+          <a href="https://instagram.com/unwm_uganda" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://linkedin.com/company/unwm-uganda" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+          <a href="https://facebook.com/unwmuganda" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        </div>
+      </div>
+      <div class="footer-col"><h4>Quick Links</h4><a href="../index.html">Home</a><a href="services.html">Services</a><a href="districts.html">Districts</a><a href="booking.html">Book Pickup</a><a href="learn.html">Learn</a></div>
+      <div class="footer-col"><h4>Support</h4><a href="feedback.html">Feedback</a><a href="contact.html">Contact Us</a><a href="login.html">Login</a><a href="register.html">Register</a></div>
+      <div class="footer-col"><h4>Contact Info</h4><p><i class="fas fa-phone"></i> +256 800 100 200</p><p><i class="fas fa-envelope"></i> info@unwm.ug</p><p><i class="fas fa-map-marker-alt"></i> Plot 12, Kampala Road</p></div>
+    </div>
+    <div class="footer-bottom"><div class="container">© <span id="currentYear">2025</span> UNWM. All rights reserved.</div></div>
+  </footer>
+
+  <script src="../js/script.js"></script>
+  <script>
+    document.getElementById('feedbackForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById('fbName').value.trim() || 'Anonymous';
+      const district = document.getElementById('fbDistrict').value.trim();
+      const rating = parseInt(document.getElementById('fbRating').value, 10);
+      const message = document.getElementById('fbMessage').value.trim();
+      const category = document.getElementById('fbCategory').value;
+
+      const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+      const starColor = rating >= 4 ? '' : rating === 3 ? 'color: #f39c12;' : 'color: #c0392b;';
+
+      const reviewDiv = document.createElement('div');
+      reviewDiv.className = 'review-item animate-in';
+      reviewDiv.innerHTML = `
+        <div class="review-header">
+          <div>
+            <div class="review-author">${escapeHtml(name)}</div>
+            <div class="review-location">${escapeHtml(district)} · ${escapeHtml(category)}</div>
+          </div>
+          <div class="review-stars" style="${starColor}">${stars}</div>
+        </div>
+        <p class="review-text">"${escapeHtml(message)}"</p>
+        <span class="review-date">Just now</span>
+      `;
+
+      const grid = document.getElementById('reviewGrid');
+      grid.insertBefore(reviewDiv, grid.firstChild);
+
+      // Save to storage
+      const reviews = UNWM.storage.get('reviews', []);
+      reviews.push({ name, district, rating, message, category, date: new Date().toISOString() });
+      UNWM.storage.set('reviews', reviews);
+
+      UNWM.showToast('Thank you! Your feedback has been posted.', 'success');
+      this.reset();
+      reviewDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+  </script>
+
+  <!-- ===== Service Worker Registration ===== -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((reg) => console.log('[PWA] Service Worker registered:', reg.scope))
+          .catch((err) => console.warn('[PWA] Service Worker registration failed:', err));
+      });
+    }
+  </script>
+</body>
+</html>

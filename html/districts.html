@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Find UNWM district contacts and collection stations across Uganda. All 146 districts in Central, Eastern, Northern, and Western regions.">
+  <title>Districts & Stations | Uganda National Waste Management</title>
+  <!-- ===== Favicon & App Icons ===== -->
+  <link rel="icon" type="image/svg+xml" href="../assets/logo.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png">
+
+  <!-- ===== PWA Meta Tags ===== -->
+  <meta name="theme-color" content="#1e6b3b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="UNWM">
+  <link rel="manifest" href="../manifest.json">
+
+  <!-- ===== Fonts & Styles ===== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="navbar">
+      <a href="../index.html" class="brand">
+        <div class="brand-icon"><img src="../assets/logo.svg" alt="UNWM Logo" width="48" height="48"></div>
+        <div class="brand-text">
+          <span class="brand-title">Uganda National</span>
+          <span class="brand-sub">Waste Management</span>
+        </div>
+      </a>
+            <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="nav-drawer-backdrop" id="navDrawerBackdrop"></div>
+      <ul class="nav-menu" id="navMenu">
+        <li class="drawer-header-item">
+          <div class="drawer-logo-badge">
+            <img src="../assets/logo.svg" alt="UNWM Logo">
+          </div>
+          <button type="button" class="drawer-close-btn" id="drawerCloseBtn" aria-label="Close navigation">
+            <i class="fas fa-times"></i>
+          </button>
+        </li>
+        <li><a href="../index.html" class="nav-link">Home</a></li>
+        <li><a href="services.html" class="nav-link">Services</a></li>
+        <li>
+          <a href="districts.html" class="nav-link active">Districts</a>
+          <span class="drawer-subtext">All 135+ Municipalities</span>
+        </li>
+        <li>
+          <a href="booking.html" class="nav-link">Book Pickup</a>
+          <span class="drawer-subtext">Instant ETA · Quick Dispatch</span>
+        </li>
+        <li>
+          <a href="track.html" class="nav-link">Track</a>
+          <span class="drawer-subtext">Live Truck GPS · Status</span>
+        </li>
+        <li><a href="learn.html" class="nav-link">Learn</a></li>
+        <li><a href="feedback.html" class="nav-link">Feedback</a></li>
+        <li><a href="contact.html" class="nav-link">Contact</a></li>
+        <li class="drawer-footer-item">
+          <hr class="drawer-divider">
+          <a href="contact.html" class="drawer-contact-btn">Contact</a>
+          <div class="drawer-social-row">
+            <a href="https://linkedin.com/company/unwm-uganda" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="https://x.com/unwm_uganda" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="https://youtube.com/@unwmuganda" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+            <a href="https://wa.me/256700000000" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+          </div>
+        </li>
+        <li class="nav-cta" id="navAuthBtn"><a href="login.html" class="btn btn-sm"><i class="fas fa-user"></i> Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="page-header">
+    <div class="container">
+      <h1>Districts & Stations</h1>
+      <p>Find your nearest collection station and contact our district teams directly. All 146 districts covered.</p>
+      <div class="breadcrumb"><a href="../index.html">Home</a> <span>/</span> <span>Districts</span></div>
+    </div>
+  </section>
+
+  <!-- Interactive Map -->
+  <section class="section-sm">
+    <div class="container">
+      <div class="map-wrapper">
+        <iframe class="map-frame" style="height: 400px;"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d39809.27898185907!2d32.5825197!3d0.3475964!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x177dbb0c6c6b7f1f%3A0x8b5c5b5b5b5b5b5b!2sKampala!5e0!3m2!1sen!2sug!4v1700000000000!5m2!1sen!2sug"
+          allowfullscreen="" loading="lazy" title="UNWM Station Map"></iframe>
+        <div class="map-caption"><i class="fas fa-map-pin" style="color: var(--primary);"></i> Interactive map of UNWM collection stations nationwide</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filter Tabs -->
+  <section class="container">
+    <div class="pill-tabs">
+      <button class="pill-tab active" data-filter="all">All Districts</button>
+      <button class="pill-tab" data-filter="central">Central</button>
+      <button class="pill-tab" data-filter="eastern">Eastern</button>
+      <button class="pill-tab" data-filter="northern">Northern</button>
+      <button class="pill-tab" data-filter="western">Western</button>
+    </div>
+  </section>
+
+  <!-- ================= CENTRAL REGION ================= -->
+  <section class="section-sm" data-region="central">
+    <div class="container">
+      <h2 style="margin-bottom: 1.5rem;"><i class="fas fa-map-marked-alt" style="color: var(--primary);"></i> Central Region</h2>
+      <div class="district-grid">
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Buikwe</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 500 001</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Bukomansimbi</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 500 002</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Butambala</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 500 003</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Buvuma</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 500 004</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Gomba</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 500 005</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Kalangala</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 500 006</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Kalungu</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 500 007</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Kampala</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 111 001</div><div class="station-meta">5 stations: Kisenyi, Kamwokya, Nakawa, Rubaga, Makindye</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Kayunga</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 500 009</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Kiboga</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 500 010</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Kyankwanzi</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 500 011</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Luweero</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 500 012</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Lwengo</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 500 013</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Lyantonde</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 500 014</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Masaka</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 500 015</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Mityana</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 500 016</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Mpigi</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 500 017</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Mubende</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 500 018</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Mukono</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 500 019</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Nakaseke</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 500 020</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Nakasongola</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 500 021</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Rakai</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 500 022</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Sembabule</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 500 023</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Wakiso</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 500 024</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= EASTERN REGION ================= -->
+  <section class="section-sm" data-region="eastern">
+    <div class="container">
+      <h2 style="margin-bottom: 1.5rem;"><i class="fas fa-map-marked-alt" style="color: var(--primary);"></i> Eastern Region</h2>
+      <div class="district-grid">
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Amuria</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 600 001</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Budaka</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 600 002</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Bududa</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 600 003</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Bugiri</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 600 004</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Bugweri</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 600 005</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Bukedea</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 600 006</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Bukwo</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 600 007</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Bulambuli</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 600 008</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Busia</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 600 009</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Butaleja</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 600 010</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Buyende</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 600 011</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Iganga</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 600 012</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Jinja</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 444 101</div><div class="station-meta">5 stations: Central, Mpumudde, Bugembe, Kiira, Njeru</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Kaberamaido</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 600 014</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Kalaki</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 600 015</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Kaliro</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 600 016</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Kamuli</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 600 017</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Kapchorwa</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 600 018</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Katakwi</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 600 019</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Kibuku</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 600 020</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Kumi</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 600 021</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Kween</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 600 022</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Luuka</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 600 023</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Manafwa</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 600 024</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Mayuge</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 600 025</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Mbale</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 600 026</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Namayingo</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 600 027</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Namutumba</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 600 028</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Ngora</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 600 029</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Pallisa</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 600 030</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Serere</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 600 031</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Sironko</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 600 032</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Soroti</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 600 033</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Tororo</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 600 034</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= NORTHERN REGION ================= -->
+  <section class="section-sm" data-region="northern">
+    <div class="container">
+      <h2 style="margin-bottom: 1.5rem;"><i class="fas fa-map-marked-alt" style="color: var(--primary);"></i> Northern Region</h2>
+      <div class="district-grid">
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Abim</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 700 001</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Adjumani</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 700 002</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Agago</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 700 003</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Alebtong</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 700 004</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Amolatar</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 700 005</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Amudat</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 700 006</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Amuru</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 700 007</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Apac</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 700 008</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Arua</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 700 009</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Dokolo</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 700 010</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Gulu</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 222 001</div><div class="station-meta">5 stations: Layibi, Pece, Bardege, Kasubi, Koro</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Kaabong</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 700 012</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Kitgum</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 700 013</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Koboko</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 700 014</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Kole</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 700 015</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Kotido</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 700 016</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Lamwo</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 700 017</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Lira</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 700 018</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Maracha</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 700 019</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Moroto</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 700 020</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Moyo</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 700 021</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Nakapiripirit</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 700 022</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Napak</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 700 023</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Nebbi</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 700 024</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Nwoya</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 700 025</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Otuke</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 700 026</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Oyam</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 700 027</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Pader</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 700 028</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Yumbe</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 700 029</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Zombo</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 700 030</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= WESTERN REGION ================= -->
+  <section class="section-sm" data-region="western">
+    <div class="container">
+      <h2 style="margin-bottom: 1.5rem;"><i class="fas fa-map-marked-alt" style="color: var(--primary);"></i> Western Region</h2>
+      <div class="district-grid">
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Buhweju</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 800 001</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Buliisa</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 800 002</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Bundibugyo</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 800 003</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Bushenyi</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 800 004</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Hoima</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 800 005</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Ibanda</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 800 006</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Isingiro</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 800 007</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Kabale</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 800 008</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Kabarole</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 800 009</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Kamwenge</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 800 010</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Kanungu</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 800 011</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Kasese</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 800 012</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Kibaale</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 800 013</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Kiruhura</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 800 014</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Kiryandongo</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 800 015</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Kisoro</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 800 016</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Kyegegwa</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 800 017</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Kyenjojo</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 800 018</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Masindi</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 800 019</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Mbarara</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 333 001</div><div class="station-meta">5 stations: Kakoba, Kamukuzi, Nyamitanga, Ruti, Biharwe</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Mitooma</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 800 021</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Ntoroko</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 800 022</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Ntungamo</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 800 023</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Rubirizi</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 800 024</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Rukungiri</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 800 025</div></div>
+        <div class="district-card"><h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Sheema</h4><div class="station-contact"><i class="fas fa-phone-alt"></i> +256 700 800 026</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="container">
+    <div class="cta-section">
+      <h2>Can't Find Your District?</h2>
+      <p>We're expanding every month. Call our toll-free line and we'll arrange a pickup or direct you to the nearest station.</p>
+      <a href="contact.html" class="btn btn-lg"><i class="fas fa-phone"></i> Call +256 800 100 200</a>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <div class="footer-brand">
+          <div class="footer-brand-icon"><img src="../assets/logo.svg" alt="UNWM Logo" width="44" height="44"></div>
+          <div class="footer-brand-title">Uganda National<br>Waste Management</div>
+        </div>
+        <p>Committed to a clean, green Uganda through innovation, community participation, and responsible waste management.</p>
+                <div class="footer-social">
+          <a href="https://x.com/unwm_uganda" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="https://youtube.com/@unwmuganda" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+          <a href="https://instagram.com/unwm_uganda" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://linkedin.com/company/unwm-uganda" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+          <a href="https://facebook.com/unwmuganda" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        </div>
+      </div>
+      <div class="footer-col"><h4>Quick Links</h4><a href="../index.html">Home</a><a href="services.html">Services</a><a href="districts.html">Districts</a><a href="booking.html">Book Pickup</a><a href="learn.html">Learn</a></div>
+      <div class="footer-col"><h4>Support</h4><a href="feedback.html">Feedback</a><a href="contact.html">Contact Us</a><a href="login.html">Login</a><a href="register.html">Register</a></div>
+      <div class="footer-col"><h4>Contact Info</h4><p><i class="fas fa-phone"></i> +256 800 100 200</p><p><i class="fas fa-envelope"></i> info@unwm.ug</p><p><i class="fas fa-map-marker-alt"></i> Plot 12, Kampala Road</p></div>
+    </div>
+    <div class="footer-bottom"><div class="container">© <span id="currentYear">2025</span> UNWM. All rights reserved.</div></div>
+  </footer>
+
+  <script src="../js/script.js"></script>
+  <script>
+    // District filter tabs
+    document.querySelectorAll('.pill-tab').forEach(tab => {
+      tab.addEventListener('click', function () {
+        document.querySelectorAll('.pill-tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        const filter = this.dataset.filter;
+        document.querySelectorAll('section[data-region]').forEach(section => {
+          if (filter === 'all' || section.dataset.region === filter) {
+            section.style.display = 'block';
+          } else {
+            section.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
+
+  <!-- ===== Service Worker Registration ===== -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((reg) => console.log('[PWA] Service Worker registered:', reg.scope))
+          .catch((err) => console.warn('[PWA] Service Worker registration failed:', err));
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,1133 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Track your waste pickup in real time. Enter your Tracking ID to see live status updates.">
+  <title>Track Your Pickup | Uganda National Waste Management</title>
+  <!-- ===== Favicon & App Icons ===== -->
+  <link rel="icon" type="image/svg+xml" href="../assets/logo.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png">
+
+  <!-- ===== PWA Meta Tags ===== -->
+  <meta name="theme-color" content="#1e6b3b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="UNWM">
+  <link rel="manifest" href="../manifest.json">
+
+  <!-- ===== Fonts & Styles ===== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    /* ================= TRACKING PAGE STYLES ================= */
+    .track-hero {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      padding: 3.5rem 0;
+      color: white;
+      text-align: center;
+      border-radius: 0 0 28px 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .track-hero::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(245, 166, 35, 0.2), transparent 70%);
+      border-radius: 50%;
+    }
+
+    .track-hero h1 {
+      color: white;
+      margin-bottom: 0.75rem;
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      position: relative;
+      z-index: 2;
+    }
+
+    .track-hero p {
+      color: rgba(255, 255, 255, 0.85);
+      max-width: 560px;
+      margin: 0 auto;
+      font-size: 1.05rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ---------- SEARCH BOX ---------- */
+    .track-search-box {
+      max-width: 640px;
+      margin: -2.5rem auto 3rem;
+      background: white;
+      border-radius: 18px;
+      padding: 1.75rem;
+      box-shadow: 0 20px 50px rgba(15, 74, 40, 0.18);
+      position: relative;
+      z-index: 3;
+      border: 1px solid var(--gray-200);
+    }
+
+    .track-search-box h3 {
+      font-size: 1.05rem;
+      margin-bottom: 0.35rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--primary-dark);
+    }
+
+    .track-search-box p {
+      color: var(--gray-500);
+      font-size: 0.88rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .track-search-form {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .track-input-wrapper {
+      flex: 1;
+      min-width: 200px;
+      position: relative;
+    }
+
+    .track-input-wrapper i {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray-400);
+      font-size: 1rem;
+    }
+
+    .track-input {
+      width: 100%;
+      padding: 0.95rem 1rem 0.95rem 2.75rem;
+      border: 2px solid var(--gray-200);
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      background: var(--gray-50);
+      transition: all 0.2s;
+    }
+
+    .track-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: white;
+      box-shadow: 0 0 0 4px rgba(30, 107, 59, 0.1);
+    }
+
+    .track-input::placeholder {
+      text-transform: none;
+      letter-spacing: normal;
+      font-weight: 400;
+      color: var(--gray-400);
+    }
+
+    .track-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.95rem 1.75rem;
+      border-radius: 12px;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      white-space: nowrap;
+      box-shadow: 0 6px 18px rgba(30, 107, 59, 0.28);
+    }
+
+    .track-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(30, 107, 59, 0.35);
+    }
+
+    .track-hint {
+      font-size: 0.78rem;
+      color: var(--gray-500);
+      margin-top: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* ---------- ERROR / NOT FOUND ---------- */
+    .track-not-found {
+      max-width: 640px;
+      margin: 0 auto 3rem;
+      background: #fbe8e6;
+      border-left: 5px solid var(--danger);
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: none;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .track-not-found.show { display: flex; }
+
+    .track-not-found i {
+      font-size: 2rem;
+      color: var(--danger);
+    }
+
+    .track-not-found h4 {
+      margin: 0 0 0.25rem;
+      color: #7a1f15;
+      font-size: 1rem;
+    }
+
+    .track-not-found p {
+      margin: 0;
+      color: #7a1f15;
+      font-size: 0.9rem;
+    }
+
+    /* ---------- RESULT PANEL ---------- */
+    .track-result {
+      max-width: 900px;
+      margin: 0 auto 4rem;
+      display: none;
+    }
+
+    .track-result.show { display: block; }
+
+    /* ---------- PICKUP CARD ---------- */
+    .pickup-card {
+      background: white;
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(15, 74, 40, 0.08);
+      border: 1px solid var(--gray-200);
+      padding: 2rem;
+      margin-bottom: 1.75rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pickup-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary), var(--primary-light), var(--accent));
+    }
+
+    .pickup-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    .pickup-id-block h2 {
+      font-size: 1.4rem;
+      margin: 0 0 0.25rem;
+      color: var(--primary-dark);
+      font-family: 'Courier New', monospace;
+      letter-spacing: 1px;
+    }
+
+    .pickup-id-block p {
+      font-size: 0.85rem;
+      color: var(--gray-500);
+      margin: 0;
+    }
+
+    .pickup-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.25rem;
+      border-radius: 24px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .status-received { background: #e3f0fa; color: #1a5a85; }
+    .status-confirmed { background: #fef3e0; color: #7a4a00; }
+    .status-dispatched { background: #e6f4ea; color: #0f4a28; }
+    .status-transit { background: #f0e6fa; color: #5a2d85; }
+    .status-collected { background: #d4f3e0; color: #155d36; }
+    .status-completed { background: #27ae60; color: white; }
+    .status-cancelled { background: #fbe8e6; color: #7a1f15; }
+
+    .pickup-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .pickup-detail-item {
+      background: var(--gray-50);
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
+      border: 1px solid var(--gray-100);
+    }
+
+    .pickup-detail-label {
+      font-size: 0.7rem;
+      color: var(--gray-500);
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      display: block;
+      margin-bottom: 0.35rem;
+    }
+
+    .pickup-detail-value {
+      font-size: 0.95rem;
+      color: var(--gray-800);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .pickup-detail-value i {
+      color: var(--primary);
+      font-size: 0.9rem;
+    }
+
+    /* ---------- ETA BANNER ---------- */
+    .eta-banner {
+      background: linear-gradient(135deg, #eaf7ee, #d0e9d9);
+      border-left: 5px solid var(--primary);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .eta-banner i {
+      font-size: 2rem;
+      color: var(--primary);
+    }
+
+    .eta-banner-text {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .eta-banner-text strong {
+      display: block;
+      font-size: 1.1rem;
+      color: var(--primary-dark);
+      margin-bottom: 0.2rem;
+    }
+
+    .eta-banner-text small {
+      color: var(--gray-600);
+      font-size: 0.85rem;
+    }
+
+    /* ---------- PROGRESS TIMELINE ---------- */
+    .progress-panel {
+      background: white;
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(15, 74, 40, 0.08);
+      border: 1px solid var(--gray-200);
+      padding: 2rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .progress-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.75rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .progress-panel-header h3 {
+      margin: 0;
+      font-size: 1.15rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .live-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .live-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--primary);
+      box-shadow: 0 0 0 4px rgba(30, 107, 59, 0.2);
+      animation: livePulse 1.5s infinite;
+    }
+
+    @keyframes livePulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.15); }
+    }
+
+    /* Vertical stepper */
+    .stepper {
+      position: relative;
+      padding-left: 3rem;
+    }
+
+    .stepper::before {
+      content: '';
+      position: absolute;
+      left: 20px;
+      top: 20px;
+      bottom: 20px;
+      width: 3px;
+      background: var(--gray-200);
+      border-radius: 3px;
+    }
+
+    .step-item {
+      position: relative;
+      padding-bottom: 2rem;
+      opacity: 0.45;
+      transition: opacity 0.3s;
+    }
+
+    .step-item:last-child { padding-bottom: 0; }
+
+    .step-item.done,
+    .step-item.active {
+      opacity: 1;
+    }
+
+    .step-marker {
+      position: absolute;
+      left: -3rem;
+      top: 0;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: white;
+      border: 3px solid var(--gray-300);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gray-400);
+      font-size: 1rem;
+      transition: all 0.3s;
+      z-index: 2;
+      box-shadow: 0 0 0 6px white;
+    }
+
+    .step-item.done .step-marker {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+
+    .step-item.active .step-marker {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--primary-dark);
+      animation: activeMarker 1.8s infinite;
+    }
+
+    @keyframes activeMarker {
+      0%, 100% { box-shadow: 0 0 0 6px white, 0 0 0 6px rgba(245, 166, 35, 0.4); }
+      50% { box-shadow: 0 0 0 6px white, 0 0 0 14px rgba(245, 166, 35, 0); }
+    }
+
+    .step-content h4 {
+      font-size: 1rem;
+      margin: 0 0 0.25rem;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .step-content p {
+      font-size: 0.88rem;
+      color: var(--gray-600);
+      margin: 0.25rem 0 0;
+    }
+
+    .step-time {
+      font-size: 0.75rem;
+      color: var(--gray-400);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      margin-top: 0.35rem;
+    }
+
+    .step-current-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.68rem;
+      font-weight: 800;
+      background: var(--accent);
+      color: var(--primary-dark);
+      padding: 0.15rem 0.55rem;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* ---------- MAP SECTION ---------- */
+    .track-map {
+      background: white;
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(15, 74, 40, 0.08);
+      border: 1px solid var(--gray-200);
+      overflow: hidden;
+      margin-bottom: 1.75rem;
+    }
+
+    .track-map-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--gray-100);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .track-map-header h3 {
+      margin: 0;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .track-map-iframe {
+      width: 100%;
+      height: 320px;
+      border: none;
+      display: block;
+    }
+
+    /* ---------- ACTION BUTTONS ---------- */
+    .track-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    .track-actions .btn {
+      flex: 1;
+      min-width: 160px;
+      justify-content: center;
+    }
+
+    /* ---------- HISTORY LIST ---------- */
+    .history-list {
+      max-width: 900px;
+      margin: 0 auto 4rem;
+      display: none;
+    }
+
+    .history-list.show { display: block; }
+
+    .history-list h3 {
+      margin-bottom: 1.25rem;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .history-item {
+      background: white;
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 0.75rem;
+      box-shadow: 0 2px 10px rgba(15, 74, 40, 0.06);
+      border: 1px solid var(--gray-200);
+      border-left: 4px solid var(--primary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .history-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(15, 74, 40, 0.1);
+    }
+
+    .history-item-id {
+      font-family: 'Courier New', monospace;
+      font-weight: 700;
+      color: var(--primary-dark);
+      font-size: 0.95rem;
+      letter-spacing: 1px;
+    }
+
+    .history-item-meta {
+      font-size: 0.82rem;
+      color: var(--gray-500);
+      margin-top: 0.2rem;
+    }
+
+    .history-item-status {
+      padding: 0.35rem 0.85rem;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    /* ---------- HELP SECTION ---------- */
+    .track-help {
+      max-width: 900px;
+      margin: 0 auto 4rem;
+      background: white;
+      border-radius: 18px;
+      padding: 2rem;
+      border: 1px solid var(--gray-200);
+      box-shadow: 0 4px 14px rgba(15, 74, 40, 0.05);
+    }
+
+    .track-help h3 {
+      margin-bottom: 1.25rem;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .track-help-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .track-help-card {
+      background: var(--primary-pale);
+      border-radius: 12px;
+      padding: 1.25rem;
+      border-left: 4px solid var(--primary);
+    }
+
+    .track-help-card i {
+      font-size: 1.4rem;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .track-help-card h4 {
+      font-size: 0.95rem;
+      margin-bottom: 0.35rem;
+      color: var(--primary-dark);
+    }
+
+    .track-help-card p {
+      font-size: 0.85rem;
+      color: var(--gray-600);
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 640px) {
+      .track-search-box { padding: 1.25rem; margin-top: -1.5rem; }
+      .track-search-form { flex-direction: column; }
+      .track-btn { width: 100%; justify-content: center; }
+      .pickup-card, .progress-panel, .track-help { padding: 1.25rem; }
+      .pickup-header { flex-direction: column; align-items: flex-start; }
+      .stepper { padding-left: 2.5rem; }
+      .step-marker { left: -2.5rem; width: 38px; height: 38px; }
+      .track-map-iframe { height: 240px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="navbar">
+      <a href="../index.html" class="brand">
+        <div class="brand-icon"><img src="../assets/logo.svg" alt="UNWM Logo" width="48" height="48"></div>
+        <div class="brand-text">
+          <span class="brand-title">Uganda National</span>
+          <span class="brand-sub">Waste Management</span>
+        </div>
+      </a>
+            <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="nav-drawer-backdrop" id="navDrawerBackdrop"></div>
+      <ul class="nav-menu" id="navMenu">
+        <li class="drawer-header-item">
+          <div class="drawer-logo-badge">
+            <img src="../assets/logo.svg" alt="UNWM Logo">
+          </div>
+          <button type="button" class="drawer-close-btn" id="drawerCloseBtn" aria-label="Close navigation">
+            <i class="fas fa-times"></i>
+          </button>
+        </li>
+        <li><a href="../index.html" class="nav-link">Home</a></li>
+        <li><a href="services.html" class="nav-link">Services</a></li>
+        <li>
+          <a href="districts.html" class="nav-link">Districts</a>
+          <span class="drawer-subtext">All 135+ Municipalities</span>
+        </li>
+        <li>
+          <a href="booking.html" class="nav-link">Book Pickup</a>
+          <span class="drawer-subtext">Instant ETA · Quick Dispatch</span>
+        </li>
+        <li>
+          <a href="track.html" class="nav-link active">Track</a>
+          <span class="drawer-subtext">Live Truck GPS · Status</span>
+        </li>
+        <li><a href="learn.html" class="nav-link">Learn</a></li>
+        <li><a href="feedback.html" class="nav-link">Feedback</a></li>
+        <li><a href="contact.html" class="nav-link">Contact</a></li>
+        <li class="drawer-footer-item">
+          <hr class="drawer-divider">
+          <a href="contact.html" class="drawer-contact-btn">Contact</a>
+          <div class="drawer-social-row">
+            <a href="https://linkedin.com/company/unwm-uganda" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="https://x.com/unwm_uganda" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="https://youtube.com/@unwmuganda" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+            <a href="https://wa.me/256700000000" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+          </div>
+        </li>
+        <li class="nav-cta" id="navAuthBtn"><a href="login.html" class="btn btn-sm"><i class="fas fa-user"></i> Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ========== HERO ========== -->
+  <section class="track-hero">
+    <div class="container">
+      <h1><i class="fas fa-map-marked-alt"></i> Track Your Pickup</h1>
+      <p>Enter your Tracking ID below to see real-time updates on your waste collection.</p>
+    </div>
+  </section>
+
+  <!-- ========== SEARCH BOX ========== -->
+  <div class="container">
+    <div class="track-search-box">
+      <h3><i class="fas fa-search" style="color: var(--primary);"></i> Enter Tracking ID</h3>
+      <p>Your Tracking ID was sent to you after you booked a pickup.</p>
+
+      <form class="track-search-form" id="trackSearchForm">
+        <div class="track-input-wrapper">
+          <i class="fas fa-hashtag"></i>
+          <input type="text" id="trackInput" class="track-input" placeholder="e.g. UNWM-2025-4821" maxlength="20">
+        </div>
+        <button type="submit" class="track-btn">
+          <i class="fas fa-search"></i> Track
+        </button>
+      </form>
+
+      <div class="track-hint">
+        <i class="fas fa-info-circle"></i> Don't have a Tracking ID? <a href="booking.html" style="font-weight: 600; margin-left: 4px;">Book a pickup</a> and we'll send you one.
+      </div>
+    </div>
+
+    <!-- Error message -->
+    <div class="track-not-found" id="trackNotFound">
+      <i class="fas fa-search-minus"></i>
+      <div>
+        <h4>Tracking ID not found</h4>
+        <p>Please double-check the ID and try again. IDs are formatted like <strong>UNWM-2025-XXXX</strong>.</p>
+      </div>
+    </div>
+
+    <!-- Result panel -->
+    <div class="track-result" id="trackResult">
+      <!-- Populated by JS -->
+    </div>
+
+    <!-- History (recent pickups from this browser) -->
+    <div class="history-list" id="historyList">
+      <h3><i class="fas fa-history" style="color: var(--primary);"></i> Your Recent Pickups</h3>
+      <div id="historyItems"></div>
+    </div>
+
+    <!-- Help section -->
+    <div class="track-help">
+      <h3><i class="fas fa-question-circle" style="color: var(--primary);"></i> Frequently Asked</h3>
+      <div class="track-help-grid">
+        <div class="track-help-card">
+          <i class="fas fa-ticket-alt"></i>
+          <h4>Where's my Tracking ID?</h4>
+          <p>It's sent via SMS and shown right after you complete a booking. Check your phone or the confirmation screen.</p>
+        </div>
+        <div class="track-help-card">
+          <i class="fas fa-sync-alt"></i>
+          <h4>Status not updating?</h4>
+          <p>Refresh this page. Our teams update the status at each major milestone (dispatch, transit, collected).</p>
+        </div>
+        <div class="track-help-card">
+          <i class="fas fa-phone-alt"></i>
+          <h4>Need urgent help?</h4>
+          <p>Call our 24/7 hotline at <strong>+256 800 100 200</strong> or visit the <a href="contact.html" style="color: var(--primary); font-weight: 600;">Contact page</a>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <div class="footer-brand">
+          <div class="footer-brand-icon"><img src="../assets/logo.svg" alt="UNWM Logo" width="44" height="44"></div>
+          <div class="footer-brand-title">Uganda National<br>Waste Management</div>
+        </div>
+        <p>Committed to a clean, green Uganda through innovation, community participation, and responsible waste management.</p>
+                <div class="footer-social">
+          <a href="https://x.com/unwm_uganda" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="https://youtube.com/@unwmuganda" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+          <a href="https://instagram.com/unwm_uganda" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://linkedin.com/company/unwm-uganda" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+          <a href="https://facebook.com/unwmuganda" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        </div>
+      </div>
+      <div class="footer-col"><h4>Quick Links</h4><a href="../index.html">Home</a><a href="services.html">Services</a><a href="districts.html">Districts</a><a href="booking.html">Book Pickup</a><a href="track.html">Track Pickup</a></div>
+      <div class="footer-col"><h4>Support</h4><a href="feedback.html">Feedback</a><a href="contact.html">Contact Us</a><a href="login.html">Login</a><a href="register.html">Register</a></div>
+      <div class="footer-col"><h4>Contact Info</h4><p><i class="fas fa-phone"></i> +256 800 100 200</p><p><i class="fas fa-envelope"></i> info@unwm.ug</p><p><i class="fas fa-map-marker-alt"></i> Plot 12, Kampala Road</p></div>
+    </div>
+    <div class="footer-bottom"><div class="container">© <span id="currentYear">2025</span> UNWM. All rights reserved.</div></div>
+  </footer>
+
+  <script src="../js/script.js"></script>
+  <script>
+    /* ============================================================
+       TRACKING PAGE LOGIC
+       ============================================================ */
+
+    const TRACKING_STAGES = [
+      { key: 'received', label: 'Report Received', icon: 'fa-file-alt', desc: 'We received your pickup request.' },
+      { key: 'confirmed', label: 'Confirmed by Team', icon: 'fa-check-circle', desc: 'Our team has reviewed and confirmed your request.' },
+      { key: 'dispatched', label: 'Truck Dispatched', icon: 'fa-truck', desc: 'A collection truck is on the way to your location.' },
+      { key: 'transit', label: 'In Transit', icon: 'fa-route', desc: 'Our team is en route to your pickup point.' },
+      { key: 'collected', label: 'Collected', icon: 'fa-box', desc: 'Waste has been successfully collected.' },
+      { key: 'completed', label: 'Disposed / Recycled', icon: 'fa-recycle', desc: 'Waste has been responsibly disposed of or recycled.' }
+    ];
+
+    document.addEventListener('DOMContentLoaded', function () {
+      // Restore any previously tracked ID from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const prefill = urlParams.get('id');
+      if (prefill) {
+        document.getElementById('trackInput').value = prefill.toUpperCase();
+        setTimeout(() => document.getElementById('trackSearchForm').dispatchEvent(new Event('submit', { cancelable: true })), 300);
+      }
+
+      setupTrackForm();
+      renderHistory();
+    });
+
+    function setupTrackForm() {
+      document.getElementById('trackSearchForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const raw = document.getElementById('trackInput').value.trim().toUpperCase();
+        if (!raw) return;
+
+        const record = findPickup(raw);
+
+        if (!record) {
+          document.getElementById('trackResult').classList.remove('show');
+          document.getElementById('trackNotFound').classList.add('show');
+          return;
+        }
+
+        document.getElementById('trackNotFound').classList.remove('show');
+        renderTrackingResult(record);
+        saveToHistory(raw);
+        // Update URL so it can be shared
+        window.history.replaceState({}, '', 'track.html?id=' + encodeURIComponent(raw));
+      });
+    }
+
+    function findPickup(id) {
+      try {
+        const bookings = JSON.parse(localStorage.getItem('unwm_reports') || '[]');
+        // Match either by trackingId OR by exact raw ID
+        return bookings.find(b =>
+          (b.trackingId && b.trackingId.toUpperCase() === id) ||
+          (b.id && b.id.toUpperCase() === id)
+        ) || null;
+      } catch (e) { return null; }
+    }
+
+    // ============================================================
+    // RENDER
+    // ============================================================
+    function renderTrackingResult(record) {
+      const container = document.getElementById('trackResult');
+      const currentStageKey = (record.trackingStage || 'received').toLowerCase();
+
+      const currentIndex = TRACKING_STAGES.findIndex(s => s.key === currentStageKey);
+
+      // Header
+      const statusClass = 'status-' + currentStageKey;
+      const statusLabel = TRACKING_STAGES[Math.max(0, currentIndex)].label;
+
+      // Details
+      const createdDate = record.date ? new Date(record.date).toLocaleString('en-GB', {
+        day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+      }) : '-';
+
+      // ETA
+      const etaText = record.eta || 'Calculating...';
+
+      // Timeline HTML
+      const timelineHtml = TRACKING_STAGES.map((stage, i) => {
+        const isDone = i < currentIndex;
+        const isActive = i === currentIndex;
+        const cls = isDone ? 'done' : isActive ? 'active' : '';
+
+        // Find timestamp for this stage from trackingHistory
+        let timeStr = '';
+        if (record.trackingHistory && record.trackingHistory[stage.key]) {
+          timeStr = new Date(record.trackingHistory[stage.key]).toLocaleString('en-GB', {
+            day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
+          });
+        } else if (isDone && record.date) {
+          // Fallback estimate for past stages
+          timeStr = 'Completed';
+        }
+
+        return `
+          <div class="step-item ${cls}">
+            <div class="step-marker"><i class="fas ${stage.icon}"></i></div>
+            <div class="step-content">
+              <h4>
+                ${stage.label}
+                ${isActive ? '<span class="step-current-tag"><i class="fas fa-circle" style="font-size:0.5rem;"></i> Current</span>' : ''}
+              </h4>
+              <p>${stage.desc}</p>
+              ${timeStr ? `<div class="step-time"><i class="fas fa-clock"></i> ${timeStr}</div>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      container.innerHTML = `
+        <!-- Pickup card -->
+        <div class="pickup-card">
+          <div class="pickup-header">
+            <div class="pickup-id-block">
+              <h2><i class="fas fa-hashtag" style="font-size: 1rem; color: var(--gray-400);"></i> ${escapeHtml(record.trackingId || record.id)}</h2>
+              <p>Created ${createdDate}</p>
+            </div>
+            <div class="pickup-status-badge ${statusClass}">
+              <i class="fas ${TRACKING_STAGES[Math.max(0, currentIndex)].icon}"></i>
+              ${statusLabel}
+            </div>
+          </div>
+
+          <div class="pickup-details">
+            <div class="pickup-detail-item">
+              <span class="pickup-detail-label">Customer</span>
+              <div class="pickup-detail-value"><i class="fas fa-user"></i> ${escapeHtml(record.name || '-')}</div>
+            </div>
+            <div class="pickup-detail-item">
+              <span class="pickup-detail-label">Location</span>
+              <div class="pickup-detail-value"><i class="fas fa-map-marker-alt"></i> ${escapeHtml(record.area || '-')}, ${escapeHtml(record.district || '-')}</div>
+            </div>
+            <div class="pickup-detail-item">
+              <span class="pickup-detail-label">Waste Type</span>
+              <div class="pickup-detail-value"><i class="fas fa-dumpster"></i> ${escapeHtml(record.wasteType || '-')}</div>
+            </div>
+            <div class="pickup-detail-item">
+              <span class="pickup-detail-label">Volume</span>
+              <div class="pickup-detail-value"><i class="fas fa-weight-hanging"></i> ${escapeHtml(record.volume || '-')}</div>
+            </div>
+          </div>
+
+          <div class="eta-banner">
+            <i class="fas fa-clock"></i>
+            <div class="eta-banner-text">
+              <strong>Estimated Pickup: ${escapeHtml(etaText)}</strong>
+              <small>Our team will call you to confirm before arrival. Please keep your phone accessible.</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Progress timeline -->
+        <div class="progress-panel">
+          <div class="progress-panel-header">
+            <h3><i class="fas fa-stream" style="color: var(--primary);"></i> Progress Timeline</h3>
+            <span class="live-indicator"><span class="live-dot"></span> Live Updates</span>
+          </div>
+          <div class="stepper">
+            ${timelineHtml}
+          </div>
+        </div>
+
+        <!-- Map -->
+        <div class="track-map">
+          <div class="track-map-header">
+            <h3><i class="fas fa-map-marked-alt" style="color: var(--primary);"></i> Pickup Location</h3>
+            <span style="font-size: 0.82rem; color: var(--gray-500);">
+              <i class="fas fa-info-circle"></i> Showing ${escapeHtml(record.district || 'Uganda')} area
+            </span>
+          </div>
+          <iframe
+            class="track-map-iframe"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps?q=${encodeURIComponent((record.area || '') + ' ' + (record.district || 'Uganda'))}&output=embed"
+            title="Pickup location map"></iframe>
+        </div>
+
+        <!-- Actions -->
+        <div class="track-actions">
+          <a href="contact.html" class="btn btn-outline"><i class="fas fa-phone"></i> Contact Support</a>
+          <a href="booking.html" class="btn"><i class="fas fa-plus"></i> Book Another Pickup</a>
+          <button class="btn btn-outline" onclick="shareTrackingId('${escapeHtml(record.trackingId || record.id)}')">
+            <i class="fas fa-share-alt"></i> Share Tracking
+          </button>
+        </div>
+      `;
+
+      container.classList.add('show');
+      container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // ============================================================
+    // HISTORY
+    // ============================================================
+    function saveToHistory(id) {
+      try {
+        let list = JSON.parse(localStorage.getItem('unwm_tracked_ids') || '[]');
+        list = list.filter(x => x !== id);
+        list.unshift(id);
+        list = list.slice(0, 5); // Keep last 5
+        localStorage.setItem('unwm_tracked_ids', JSON.stringify(list));
+      } catch (e) { /* ignore */ }
+      renderHistory();
+    }
+
+    function renderHistory() {
+      const listEl = document.getElementById('historyItems');
+      const wrapper = document.getElementById('historyList');
+      let ids = [];
+      try { ids = JSON.parse(localStorage.getItem('unwm_tracked_ids') || '[]'); } catch (e) {}
+
+      if (!ids.length) {
+        wrapper.classList.remove('show');
+        return;
+      }
+
+      const bookings = JSON.parse(localStorage.getItem('unwm_reports') || '[]');
+
+      const items = ids.map(id => {
+        const b = bookings.find(x => (x.trackingId || '').toUpperCase() === id || (x.id || '').toUpperCase() === id);
+        if (!b) return null;
+        const stageKey = (b.trackingStage || 'received').toLowerCase();
+        const stage = TRACKING_STAGES.find(s => s.key === stageKey) || TRACKING_STAGES[0];
+        return `
+          <div class="history-item" onclick="quickTrack('${id}')">
+            <div>
+              <div class="history-item-id">${escapeHtml(b.trackingId || b.id)}</div>
+              <div class="history-item-meta">${escapeHtml(b.district || '')} · ${b.date ? new Date(b.date).toLocaleDateString() : ''}</div>
+            </div>
+            <span class="history-item-status status-${stageKey}">${stage.label}</span>
+          </div>
+        `;
+      }).filter(Boolean);
+
+      if (!items.length) {
+        wrapper.classList.remove('show');
+        return;
+      }
+
+      listEl.innerHTML = items.join('');
+      wrapper.classList.add('show');
+    }
+
+    function quickTrack(id) {
+      document.getElementById('trackInput').value = id;
+      document.getElementById('trackSearchForm').dispatchEvent(new Event('submit', { cancelable: true }));
+    }
+
+    // ============================================================
+    // SHARE
+    // ============================================================
+    function shareTrackingId(id) {
+      const url = window.location.origin + window.location.pathname + '?id=' + encodeURIComponent(id);
+      if (navigator.share) {
+        navigator.share({ title: 'Track My UNWM Pickup', text: 'Track pickup ' + id, url: url }).catch(() => {});
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(url).then(() => {
+          alert('Tracking link copied to clipboard!');
+        }).catch(() => {
+          prompt('Copy this link:', url);
+        });
+      } else {
+        prompt('Copy this link:', url);
+      }
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text == null ? '' : String(text);
+      return div.innerHTML;
+    }
+  </script>
+
+  <!-- ===== Service Worker Registration ===== -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((reg) => console.log('[PWA] Service Worker registered:', reg.scope))
+          .catch((err) => console.warn('[PWA] Service Worker registration failed:', err));
+      });
+    }
+  </script>
+</body>
+</html>

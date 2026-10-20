@@ -1,0 +1,680 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Learn about waste management, recycling, composting, and environmental protection in Uganda.">
+  <title>Learn | Uganda National Waste Management</title>
+  <!-- ===== Favicon & App Icons ===== -->
+  <link rel="icon" type="image/svg+xml" href="../assets/logo.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png">
+
+  <!-- ===== PWA Meta Tags ===== -->
+  <meta name="theme-color" content="#1e6b3b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="UNWM">
+  <link rel="manifest" href="../manifest.json">
+
+  <!-- ===== Fonts & Styles ===== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+  
+  <!-- Extra styles specifically for the Learn Modals -->
+  <style>
+    /* Make the cards look clickable */
+    .learn-card {
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .learn-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 30px rgba(30, 107, 59, 0.15);
+      border-color: var(--primary);
+    }
+
+    .learn-card::after {
+      content: 'Read More \f061'; /* FontAwesome arrow */
+      font-family: 'Font Awesome 6 Free', sans-serif;
+      font-weight: 900;
+      font-size: 0.85rem;
+      color: var(--primary);
+      position: absolute;
+      bottom: 1.5rem;
+      right: 1.75rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .learn-card:hover::after {
+      opacity: 1;
+    }
+
+    /* ================= MODAL STYLES ================= */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 20, 0, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-content {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 750px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+      transform: translateY(30px) scale(0.95);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .modal-overlay.active .modal-content {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-header {
+      padding: 2rem 2.5rem 1.5rem;
+      border-bottom: 1px solid var(--gray-200);
+      position: relative;
+      background: var(--primary-pale);
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    }
+
+    .modal-header .card-icon {
+      margin-bottom: 1rem;
+    }
+
+    .modal-header h2 {
+      font-size: 1.75rem;
+      margin: 0;
+      color: var(--primary-dark);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: var(--gray-600);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .modal-close:hover {
+      background: var(--danger);
+      color: var(--white);
+      border-color: var(--danger);
+      transform: rotate(90deg);
+    }
+
+    .modal-body {
+      padding: 2rem 2.5rem 2.5rem;
+      color: var(--gray-700);
+      line-height: 1.7;
+    }
+
+    .modal-body h4 {
+      font-size: 1.1rem;
+      color: var(--primary-dark);
+      margin: 1.5rem 0 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .modal-body h4:first-child {
+      margin-top: 0;
+    }
+
+    .modal-body ul {
+      padding-left: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .modal-body ul li {
+      margin-bottom: 0.5rem;
+    }
+
+    .modal-body .highlight-box {
+      background: var(--primary-pale);
+      border-left: 4px solid var(--primary);
+      padding: 1rem 1.25rem;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      margin: 1.5rem 0;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 640px) {
+      .modal-header, .modal-body {
+        padding: 1.5rem;
+      }
+      .modal-header h2 {
+        font-size: 1.35rem;
+        padding-right: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="navbar">
+      <a href="../index.html" class="brand">
+        <div class="brand-icon"><img src="../assets/logo.svg" alt="UNWM Logo" width="48" height="48"></div>
+        <div class="brand-text">
+          <span class="brand-title">Uganda National</span>
+          <span class="brand-sub">Waste Management</span>
+        </div>
+      </a>
+            <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="nav-drawer-backdrop" id="navDrawerBackdrop"></div>
+      <ul class="nav-menu" id="navMenu">
+        <li class="drawer-header-item">
+          <div class="drawer-logo-badge">
+            <img src="../assets/logo.svg" alt="UNWM Logo">
+          </div>
+          <button type="button" class="drawer-close-btn" id="drawerCloseBtn" aria-label="Close navigation">
+            <i class="fas fa-times"></i>
+          </button>
+        </li>
+        <li><a href="../index.html" class="nav-link">Home</a></li>
+        <li><a href="services.html" class="nav-link">Services</a></li>
+        <li>
+          <a href="districts.html" class="nav-link">Districts</a>
+          <span class="drawer-subtext">All 135+ Municipalities</span>
+        </li>
+        <li>
+          <a href="booking.html" class="nav-link">Book Pickup</a>
+          <span class="drawer-subtext">Instant ETA · Quick Dispatch</span>
+        </li>
+        <li>
+          <a href="track.html" class="nav-link">Track</a>
+          <span class="drawer-subtext">Live Truck GPS · Status</span>
+        </li>
+        <li><a href="learn.html" class="nav-link active">Learn</a></li>
+        <li><a href="feedback.html" class="nav-link">Feedback</a></li>
+        <li><a href="contact.html" class="nav-link">Contact</a></li>
+        <li class="drawer-footer-item">
+          <hr class="drawer-divider">
+          <a href="contact.html" class="drawer-contact-btn">Contact</a>
+          <div class="drawer-social-row">
+            <a href="https://linkedin.com/company/unwm-uganda" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="https://x.com/unwm_uganda" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="https://youtube.com/@unwmuganda" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+            <a href="https://wa.me/256700000000" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+          </div>
+        </li>
+        <li class="nav-cta" id="navAuthBtn"><a href="login.html" class="btn btn-sm"><i class="fas fa-user"></i> Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="page-header">
+    <div class="container">
+      <h1>Learn & Grow</h1>
+      <p>Knowledge is the first step to a cleaner Uganda. Click on any card below to read detailed guides.</p>
+      <div class="breadcrumb"><a href="../index.html">Home</a> <span>/</span> <span>Learn</span></div>
+    </div>
+  </section>
+
+  <!-- Educational Cards -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <h2>Waste Management Basics</h2>
+        <p>Click any card to read detailed information and practical tips.</p>
+      </div>
+      <div class="grid grid-3">
+        
+        <!-- CARD 1: Types of Waste -->
+        <div class="card learn-card animate-on-scroll" onclick="openModal('modal-types')">
+          <div class="card-icon"><i class="fas fa-trash"></i></div>
+          <h3>Types of Waste</h3>
+          <p>Uganda generates several types of waste. Each requires different handling and disposal methods.</p>
+        </div>
+
+        <!-- CARD 2: Waste Segregation -->
+        <div class="card learn-card animate-on-scroll" onclick="openModal('modal-segregation')">
+          <div class="card-icon accent"><i class="fas fa-sort"></i></div>
+          <h3>Waste Segregation</h3>
+          <p>Separating waste at the source makes recycling easier and reduces the burden on landfills.</p>
+        </div>
+
+        <!-- CARD 3: Recycling -->
+        <div class="card learn-card animate-on-scroll" onclick="openModal('modal-recycling')">
+          <div class="card-icon info"><i class="fas fa-recycle"></i></div>
+          <h3>Recycling</h3>
+          <p>Recycling converts waste materials into new products, creating jobs and reducing pollution.</p>
+        </div>
+
+        <!-- CARD 4: Composting -->
+        <div class="card learn-card animate-on-scroll" onclick="openModal('modal-composting')">
+          <div class="card-icon"><i class="fas fa-seedling"></i></div>
+          <h3>Composting</h3>
+          <p>Organic waste like food scraps and garden trimmings can become nutrient-rich compost for farming.</p>
+        </div>
+
+        <!-- CARD 5: Hazardous Waste -->
+        <div class="card learn-card animate-on-scroll" onclick="openModal('modal-hazardous')">
+          <div class="card-icon danger"><i class="fas fa-biohazard"></i></div>
+          <h3>Hazardous Waste</h3>
+          <p>Medical, chemical, and electronic waste require special handling. Never mix them with regular waste.</p>
+        </div>
+
+        <!-- CARD 6: Environmental Impact -->
+        <div class="card learn-card animate-on-scroll" onclick="openModal('modal-environment')">
+          <div class="card-icon info"><i class="fas fa-globe-africa"></i></div>
+          <h3>Environmental Impact</h3>
+          <p>Improper waste disposal pollutes soil, water, and air. Proper management protects Uganda's ecosystems.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- The 3Rs -->
+  <section class="section" style="background: var(--primary-pale);">
+    <div class="container">
+      <div class="section-title">
+        <h2>The 3 Rs of Waste Management</h2>
+        <p>Reduce, Reuse, Recycle - the foundation of sustainable waste management.</p>
+      </div>
+      <div class="grid grid-3">
+        <div class="card text-center animate-on-scroll">
+          <div class="card-icon" style="margin: 0 auto 1.25rem; width: 80px; height: 80px; font-size: 2.2rem;"><i class="fas fa-minus-circle"></i></div>
+          <h3>Reduce</h3>
+          <p>Buy less, choose products with minimal packaging, and avoid single-use plastics. The best waste is the waste we never create.</p>
+        </div>
+        <div class="card text-center animate-on-scroll">
+          <div class="card-icon accent" style="margin: 0 auto 1.25rem; width: 80px; height: 80px; font-size: 2.2rem;"><i class="fas fa-sync-alt"></i></div>
+          <h3>Reuse</h3>
+          <p>Repurpose containers, donate items, repair instead of replace. Reusing extends product life and saves resources.</p>
+        </div>
+        <div class="card text-center animate-on-scroll">
+          <div class="card-icon info" style="margin: 0 auto 1.25rem; width: 80px; height: 80px; font-size: 2.2rem;"><i class="fas fa-recycle"></i></div>
+          <h3>Recycle</h3>
+          <p>Sort and recycle paper, plastic, glass, and metal. Recycling saves energy, reduces pollution, and creates green jobs.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How to Segregate -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <h2>How to Segregate Waste at Home</h2>
+        <p>A simple guide to sorting your waste properly.</p>
+      </div>
+      <div class="grid grid-4">
+        <div class="card text-center"><div class="card-icon" style="margin: 0 auto 1rem; background: #e3f0fa; color: #2980b9;"><i class="fas fa-wine-bottle"></i></div><h4>Plastics</h4><p style="font-size: 0.9rem;">Bottles, bags, containers - rinse and place in the blue bin.</p></div>
+        <div class="card text-center"><div class="card-icon" style="margin: 0 auto 1rem; background: #e7f7ee; color: #27ae60;"><i class="fas fa-apple-alt"></i></div><h4>Organics</h4><p style="font-size: 0.9rem;">Food scraps, leaves, garden waste - green bin for composting.</p></div>
+        <div class="card text-center"><div class="card-icon" style="margin: 0 auto 1rem; background: #fef3e0; color: #d48806;"><i class="fas fa-newspaper"></i></div><h4>Paper</h4><p style="font-size: 0.9rem;">Newspapers, cardboard, office paper - keep dry in the yellow bin.</p></div>
+        <div class="card text-center"><div class="card-icon" style="margin: 0 auto 1rem; background: #fbe8e6; color: #c0392b;"><i class="fas fa-battery-full"></i></div><h4>Hazardous</h4><p style="font-size: 0.9rem;">Batteries, chemicals, medical - separate and call UNWM.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" style="background: var(--gray-50);">
+    <div class="container-narrow">
+      <div class="section-title">
+        <h2>Frequently Asked Questions</h2>
+        <p>Common questions about waste management in Uganda.</p>
+      </div>
+      <div class="card" style="margin-bottom: 1rem; cursor: pointer;" onclick="this.querySelector('p').style.display = this.querySelector('p').style.display === 'none' ? 'block' : 'none'">
+        <h4><i class="fas fa-question-circle" style="color: var(--primary);"></i> How often should I expect waste collection?</h4>
+        <p style="margin: 0.75rem 0 0; color: var(--gray-600);">Household customers receive weekly or twice-weekly pickups depending on their package. Commercial clients get custom schedules.</p>
+      </div>
+      <div class="card" style="margin-bottom: 1rem; cursor: pointer;" onclick="this.querySelector('p').style.display = this.querySelector('p').style.display === 'none' ? 'block' : 'none'">
+        <h4><i class="fas fa-question-circle" style="color: var(--primary);"></i> What should I do with hazardous waste?</h4>
+        <p style="margin: 0.75rem 0 0; color: var(--gray-600);">Never place hazardous waste in regular bins. Call our emergency line +256 772 999 000 for safe collection and disposal.</p>
+      </div>
+      <div class="card" style="margin-bottom: 1rem; cursor: pointer;" onclick="this.querySelector('p').style.display = this.querySelector('p').style.display === 'none' ? 'block' : 'none'">
+        <h4><i class="fas fa-question-circle" style="color: var(--primary);"></i> Is there a fee for waste collection?</h4>
+        <p style="margin: 0.75rem 0 0; color: var(--gray-600);">Yes, we charge affordable monthly rates for households and custom quotes for businesses. See our Services page for pricing.</p>
+      </div>
+      <div class="card" style="margin-bottom: 1rem; cursor: pointer;" onclick="this.querySelector('p').style.display = this.querySelector('p').style.display === 'none' ? 'block' : 'none'">
+        <h4><i class="fas fa-question-circle" style="color: var(--primary);"></i> Do you operate outside Kampala?</h4>
+        <p style="margin: 0.75rem 0 0; color: var(--gray-600);">Yes! We operate in over 120 districts across Uganda. Visit our Districts page to find your nearest station.</p>
+      </div>
+      <div class="card" style="margin-bottom: 1rem; cursor: pointer;" onclick="this.querySelector('p').style.display = this.querySelector('p').style.display === 'none' ? 'block' : 'none'">
+        <h4><i class="fas fa-question-circle" style="color: var(--primary);"></i> How can I start recycling?</h4>
+        <p style="margin: 0.75rem 0 0; color: var(--gray-600);">Separate plastics, paper, and organics at home. Sign up for our recycling package and we'll provide labeled bins and collection.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="container">
+    <div class="cta-section">
+      <h2>Want to Learn More?</h2>
+      <p>We offer free community workshops on waste management, recycling, and composting. Contact us to schedule one for your school or organization.</p>
+      <a href="contact.html" class="btn btn-lg"><i class="fas fa-chalkboard-teacher"></i> Request a Workshop</a>
+    </div>
+  </section>
+
+  <!-- ================= MODALS (Hidden by default) ================= -->
+
+  <!-- Modal 1: Types of Waste -->
+  <div class="modal-overlay" id="modal-types">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="card-icon"><i class="fas fa-trash"></i></div>
+        <h2>Types of Waste</h2>
+        <button class="modal-close" onclick="closeModal('modal-types')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <p>Uganda generates a diverse range of waste streams. Understanding these categories is the first step toward proper management.</p>
+        <h4><i class="fas fa-home" style="color: var(--primary);"></i> Household Waste</h4>
+        <p>Also known as municipal solid waste, this includes everyday items discarded by homes - food scraps, packaging, paper, plastics, and broken items. It forms the largest portion of waste in Ugandan cities.</p>
+        <h4><i class="fas fa-store" style="color: var(--primary);"></i> Commercial Waste</h4>
+        <p>Generated by businesses such as markets, shops, hotels, and offices. Often similar to household waste but produced in larger volumes and with more packaging materials.</p>
+        <h4><i class="fas fa-industry" style="color: var(--primary);"></i> Industrial Waste</h4>
+        <p>Produced by manufacturing and processing plants. May include chemicals, metals, solvents, and other by-products. Requires careful handling and often specialized disposal.</p>
+        <h4><i class="fas fa-heartbeat" style="color: var(--primary);"></i> Medical Waste</h4>
+        <p>Generated by hospitals, clinics, and pharmacies. Includes used needles, bandages, expired medicines, and biological materials. Extremely hazardous and must be incinerated or treated.</p>
+        <h4><i class="fas fa-laptop" style="color: var(--primary);"></i> Electronic Waste (E-Waste)</h4>
+        <p>Discarded computers, phones, TVs, and appliances. Contains valuable metals but also toxic substances like lead and mercury. Requires specialized recycling.</p>
+        <h4><i class="fas fa-tractor" style="color: var(--primary);"></i> Agricultural Waste</h4>
+        <p>Includes crop residues, animal manure, and agrochemical containers. Can often be composted or converted into energy.</p>
+        <div class="highlight-box">
+          <strong>Did you know?</strong> Kampala alone generates over 2,000 tonnes of waste every day. Proper segregation at the source can divert up to 60% of this from landfills.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Waste Segregation -->
+  <div class="modal-overlay" id="modal-segregation">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="card-icon accent"><i class="fas fa-sort"></i></div>
+        <h2>Waste Segregation</h2>
+        <button class="modal-close" onclick="closeModal('modal-segregation')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <p>Waste segregation is the practice of separating waste into different categories at the point of generation. It is the single most effective way to improve recycling rates.</p>
+        <h4><i class="fas fa-palette" style="color: var(--primary);"></i> The Color-Coding System</h4>
+        <ul>
+          <li><strong>Blue Bin:</strong> Dry recyclables - plastics, paper, cardboard, glass, metals.</li>
+          <li><strong>Green Bin:</strong> Organic waste - food scraps, garden waste, leaves.</li>
+          <li><strong>Yellow Bin:</strong> Paper and cardboard (sometimes separate for cleanliness).</li>
+          <li><strong>Red Bin:</strong> Hazardous waste - batteries, chemicals, medical waste.</li>
+          <li><strong>Black/Grey Bin:</strong> General non-recyclable waste.</li>
+        </ul>
+        <h4><i class="fas fa-check-circle" style="color: var(--primary);"></i> Benefits of Segregation</h4>
+        <ul>
+          <li>Increases the quality and quantity of recyclables.</li>
+          <li>Reduces the amount of waste sent to landfills.</li>
+          <li>Lowers greenhouse gas emissions from decomposing organic waste.</li>
+          <li>Creates cleaner composting streams.</li>
+          <li>Reduces collection and sorting costs.</li>
+        </ul>
+        <h4><i class="fas fa-lightbulb" style="color: var(--primary);"></i> Practical Tips</h4>
+        <ul>
+          <li>Rinse containers before recycling to avoid contamination.</li>
+          <li>Keep a small bin in each room for easy sorting.</li>
+          <li>Label your bins clearly for family members and visitors.</li>
+          <li>Compost organic waste if you have a garden.</li>
+        </ul>
+        <div class="highlight-box">
+          <strong>Remember:</strong> If you mix recyclables with general waste, the entire batch often ends up in a landfill. Segregation starts with you.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Recycling -->
+  <div class="modal-overlay" id="modal-recycling">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="card-icon info"><i class="fas fa-recycle"></i></div>
+        <h2>Recycling</h2>
+        <button class="modal-close" onclick="closeModal('modal-recycling')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <p>Recycling is the process of collecting and processing materials that would otherwise be thrown away as trash and turning them into new products.</p>
+        <h4><i class="fas fa-cogs" style="color: var(--primary);"></i> How Recycling Works</h4>
+        <ol style="padding-left: 1.25rem;">
+          <li><strong>Collection:</strong> Recyclables are picked up from homes, businesses, or drop-off centers.</li>
+          <li><strong>Sorting:</strong> Materials are sorted by type (plastic, paper, glass, metal).</li>
+          <li><strong>Processing:</strong> Sorted materials are cleaned, shredded, and melted or pulped.</li>
+          <li><strong>Manufacturing:</strong> Processed materials become raw material for new products.</li>
+          <li><strong>Purchase:</strong> Consumers buy products made from recycled content, completing the loop.</li>
+        </ol>
+        <h4><i class="fas fa-star" style="color: var(--primary);"></i> What Can Be Recycled?</h4>
+        <ul>
+          <li><strong>Plastics:</strong> PET bottles, HDPE containers, plastic bags (where facilities exist).</li>
+          <li><strong>Paper:</strong> Newspapers, magazines, office paper, cardboard.</li>
+          <li><strong>Glass:</strong> Bottles and jars (clear, green, brown).</li>
+          <li><strong>Metals:</strong> Aluminum cans, steel cans, scrap metal.</li>
+        </ul>
+        <h4><i class="fas fa-chart-line" style="color: var(--primary);"></i> Recycling in Uganda</h4>
+        <p>Uganda's recycling industry is growing. Informal waste pickers, known as "bayaye," collect a significant portion of recyclables. Formal recycling companies are now emerging, focusing on plastics and metals. However, only about 10-15% of waste is currently recycled nationwide - a huge opportunity for growth.</p>
+        <div class="highlight-box">
+          <strong>Environmental Impact:</strong> Recycling one aluminum can saves enough energy to power a TV for 3 hours. Recycling one tonne of paper saves 17 trees.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4: Composting -->
+  <div class="modal-overlay" id="modal-composting">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="card-icon"><i class="fas fa-seedling"></i></div>
+        <h2>Composting</h2>
+        <button class="modal-close" onclick="closeModal('modal-composting')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <p>Composting is the natural process of recycling organic matter, such as leaves and food scraps, into a valuable fertilizer that can enrich soil and plants.</p>
+        <h4><i class="fas fa-leaf" style="color: var(--primary);"></i> What to Compost</h4>
+        <ul>
+          <li><strong>Greens (Nitrogen-rich):</strong> Fruit and vegetable scraps, coffee grounds, grass clippings, plant trimmings.</li>
+          <li><strong>Browns (Carbon-rich):</strong> Dry leaves, straw, cardboard, sawdust, paper.</li>
+          <li><strong>Water:</strong> Maintain moisture like a wrung-out sponge.</li>
+          <li><strong>Air:</strong> Turn the pile regularly to aerate.</li>
+        </ul>
+        <h4><i class="fas fa-ban" style="color: var(--danger);"></i> What NOT to Compost</h4>
+        <ul>
+          <li>Meat, fish, and dairy products (attract pests, cause odors).</li>
+          <li>Pet waste (may contain harmful pathogens).</li>
+          <li>Diseased plants (can spread disease).</li>
+          <li>Chemically treated wood or coal ash.</li>
+        </ul>
+        <h4><i class="fas fa-trophy" style="color: var(--primary);"></i> Benefits of Composting</h4>
+        <ul>
+          <li>Reduces waste sent to landfills.</li>
+          <li>Produces free, nutrient-rich fertilizer.</li>
+          <li>Improves soil structure and water retention.</li>
+          <li>Reduces methane emissions from landfills.</li>
+          <li>Supports sustainable agriculture.</li>
+        </ul>
+        <div class="highlight-box">
+          <strong>Quick Start:</strong> Find a dry, shady spot. Alternate layers of greens and browns. Keep it moist and turn it every 1-2 weeks. In 2-3 months, you'll have rich compost!
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 5: Hazardous Waste -->
+  <div class="modal-overlay" id="modal-hazardous">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="card-icon danger"><i class="fas fa-biohazard"></i></div>
+        <h2>Hazardous Waste</h2>
+        <button class="modal-close" onclick="closeModal('modal-hazardous')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <p>Hazardous waste is any waste that poses a substantial threat to human health or the environment. It requires special handling, treatment, and disposal.</p>
+        <h4><i class="fas fa-exclamation-triangle" style="color: var(--danger);"></i> Types of Hazardous Waste</h4>
+        <ul>
+          <li><strong>Medical Waste:</strong> Needles, syringes, bandages, expired medicines, human tissue.</li>
+          <li><strong>Chemical Waste:</strong> Pesticides, solvents, acids, paints, cleaning agents.</li>
+          <li><strong>Electronic Waste:</strong> Batteries, circuit boards, monitors, fluorescent bulbs.</li>
+          <li><strong>Industrial Waste:</strong> Heavy metals, oils, sludges from manufacturing.</li>
+        </ul>
+        <h4><i class="fas fa-shield-alt" style="color: var(--primary);"></i> Safe Handling Guidelines</h4>
+        <ul>
+          <li>Never place hazardous waste in regular bins.</li>
+          <li>Keep items in their original containers if possible.</li>
+          <li>Do not mix different types of hazardous waste.</li>
+          <li>Wear gloves and masks when handling.</li>
+          <li>Contact UNWM for proper collection and disposal.</li>
+        </ul>
+        <h4><i class="fas fa-phone" style="color: var(--primary);"></i> Emergency Contacts</h4>
+        <p>For urgent hazardous waste disposal, call our 24/7 emergency line: <strong>+256 772 999 000</strong>.</p>
+        <div class="highlight-box">
+          <strong>Warning:</strong> Improper disposal of hazardous waste can contaminate soil, water sources, and cause serious health problems. Always seek professional help.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 6: Environmental Impact -->
+  <div class="modal-overlay" id="modal-environment">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="card-icon info"><i class="fas fa-globe-africa"></i></div>
+        <h2>Environmental Impact of Waste</h2>
+        <button class="modal-close" onclick="closeModal('modal-environment')"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <p>Improper waste management has far-reaching consequences for Uganda's environment, economy, and public health.</p>
+        <h4><i class="fas fa-water" style="color: var(--info);"></i> Water Pollution</h4>
+        <p>Waste dumped in rivers, lakes, and wetlands contaminates water sources. Plastics block drainage channels, causing flooding. Chemicals leach into groundwater, making it unsafe for drinking.</p>
+        <h4><i class="fas fa-mountain" style="color: var(--info);"></i> Soil Contamination</h4>
+        <p>Toxic substances from waste seep into the soil, killing beneficial microorganisms and reducing agricultural productivity. Heavy metals can accumulate in crops, entering the food chain.</p>
+        <h4><i class="fas fa-wind" style="color: var(--info);"></i> Air Pollution</h4>
+        <p>Open burning of waste releases toxic fumes, including dioxins and furans. Decomposing organic waste in landfills produces methane, a potent greenhouse gas contributing to climate change.</p>
+        <h4><i class="fas fa-fish" style="color: var(--info);"></i> Harm to Wildlife</h4>
+        <p>Plastic waste kills fish, birds, and animals that mistake it for food. Uganda's lakes and national parks are increasingly threatened by plastic pollution.</p>
+        <h4><i class="fas fa-heartbeat" style="color: var(--info);"></i> Public Health Risks</h4>
+        <p>Uncollected waste breeds disease vectors like mosquitoes, flies, and rodents. These spread malaria, typhoid, cholera, and other diseases. Children are especially vulnerable.</p>
+        <h4><i class="fas fa-hand-holding-usd" style="color: var(--info);"></i> Economic Costs</h4>
+        <p>Poor waste management leads to flooding, disease outbreaks, and lost tourism revenue. Cleanup costs are often higher than proper disposal would have been.</p>
+        <div class="highlight-box">
+          <strong>Our Shared Responsibility:</strong> Every Ugandan can contribute to reducing environmental impact. By segregating waste, composting organic matter, and recycling, we protect our nation's beauty for future generations.
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <div class="footer-brand">
+          <div class="footer-brand-icon"><img src="../assets/logo.svg" alt="UNWM Logo" width="44" height="44"></div>
+          <div class="footer-brand-title">Uganda National<br>Waste Management</div>
+        </div>
+        <p>Committed to a clean, green Uganda through innovation, community participation, and responsible waste management.</p>
+                <div class="footer-social">
+          <a href="https://x.com/unwm_uganda" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="https://youtube.com/@unwmuganda" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+          <a href="https://instagram.com/unwm_uganda" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://linkedin.com/company/unwm-uganda" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+          <a href="https://facebook.com/unwmuganda" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        </div>
+      </div>
+      <div class="footer-col"><h4>Quick Links</h4><a href="../index.html">Home</a><a href="services.html">Services</a><a href="districts.html">Districts</a><a href="booking.html">Book Pickup</a><a href="learn.html">Learn</a></div>
+      <div class="footer-col"><h4>Support</h4><a href="feedback.html">Feedback</a><a href="contact.html">Contact Us</a><a href="login.html">Login</a><a href="register.html">Register</a></div>
+      <div class="footer-col"><h4>Contact Info</h4><p><i class="fas fa-phone"></i> +256 800 100 200</p><p><i class="fas fa-envelope"></i> info@unwm.ug</p><p><i class="fas fa-map-marker-alt"></i> Plot 12, Kampala Road</p></div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        © <span id="currentYear">2025</span> Uganda National Waste Management. All rights reserved.
+        <!-- Hidden admin link - subtle, blends with text -->
+        <a href="admin.html" style="color: rgba(255,255,255,0.08); font-size: 0.7rem; text-decoration: none; margin-left: 4px; transition: color 0.3s;" onmouseover="this.style.color='rgba(255,255,255,0.5)'" onmouseout="this.style.color='rgba(255,255,255,0.08)'" title="Admin Access">•</a>
+      </div>
+    </div>
+  </footer>
+  <script src="../js/script.js"></script>
+  <script>
+    /* ============================================================
+       MODAL LOGIC FOR LEARN PAGE
+       ============================================================ */
+    function openModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (!modal) return;
+      
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    }
+
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (!modal) return;
+      
+      modal.classList.remove('active');
+      document.body.style.overflow = ''; // Restore background scrolling
+    }
+
+    // Close modal when clicking outside the content box
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', function (e) {
+        if (e.target === this) {
+          this.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      });
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        const activeModal = document.querySelector('.modal-overlay.active');
+        if (activeModal) {
+          activeModal.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      }
+    });
+  </script>
+
+  <!-- ===== Service Worker Registration ===== -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((reg) => console.log('[PWA] Service Worker registered:', reg.scope))
+          .catch((err) => console.warn('[PWA] Service Worker registration failed:', err));
+      });
+    }
+  </script>
+</body>
+</html>

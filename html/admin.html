@@ -1,0 +1,3359 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Admin Panel - Uganda National Waste Management">
+  <title>Admin Dashboard | UNWM</title>
+  <!-- ===== Favicon & App Icons ===== -->
+  <link rel="icon" type="image/svg+xml" href="../assets/logo.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png">
+
+  <!-- ===== PWA Meta Tags ===== -->
+  <meta name="theme-color" content="#1e6b3b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="UNWM">
+  <link rel="manifest" href="../manifest.json">
+
+  <!-- ===== Fonts & Styles ===== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    /* ================= ADMIN PANEL STYLES ================= */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body.admin-body {
+      background: #f0f4f1;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ================= LOGIN SCREEN ================= */
+    .login-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 5000;
+      background: linear-gradient(135deg, var(--primary-dark) 0%, #1a4a2a 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      transition: opacity 0.4s, visibility 0.4s;
+    }
+
+    .login-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .login-screen::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 20% 30%, rgba(245, 166, 35, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(46, 139, 87, 0.2) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .login-card {
+      background: white;
+      border-radius: 20px;
+      padding: 3rem 2.5rem;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+      position: relative;
+      z-index: 2;
+    }
+
+    .login-logo {
+      width: 72px;
+      height: 72px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 2rem;
+      margin: 0 auto 1.25rem;
+      box-shadow: 0 10px 30px rgba(30, 107, 59, 0.4);
+    }
+
+    .login-card h1 {
+      text-align: center;
+      font-size: 1.6rem;
+      color: var(--primary-dark);
+      margin-bottom: 0.35rem;
+    }
+
+    .login-card .login-sub {
+      text-align: center;
+      color: var(--gray-500);
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+    }
+
+    .login-field {
+      margin-bottom: 1.15rem;
+      position: relative;
+    }
+
+    .login-field label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--primary-dark);
+      margin-bottom: 0.4rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .login-field input {
+      width: 100%;
+      padding: 0.85rem 1rem 0.85rem 2.75rem;
+      border: 2px solid var(--gray-200);
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+      background: var(--gray-50);
+    }
+
+    .login-field input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: white;
+      box-shadow: 0 0 0 4px rgba(30, 107, 59, 0.08);
+    }
+
+    .login-field i {
+      position: absolute;
+      left: 1rem;
+      bottom: 0.95rem;
+      color: var(--gray-400);
+      font-size: 1rem;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 1rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .login-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(30, 107, 59, 0.35);
+    }
+
+    .login-error {
+      background: #fbe8e6;
+      border-left: 4px solid var(--danger);
+      color: #7a1f15;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .login-error.show { display: flex; }
+
+    .login-hint {
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--gray-400);
+      margin-top: 1.5rem;
+    }
+
+    /* ---------- TOP BAR ---------- */
+    .admin-topbar {
+      background: var(--primary-dark);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    }
+
+    .admin-topbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: white;
+      text-decoration: none;
+    }
+
+    .admin-topbar-brand i {
+      background: var(--primary);
+      padding: 0.5rem;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    .admin-topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .admin-topbar-right .admin-user {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.9);
+    }
+
+    .admin-topbar-right .admin-user i {
+      background: var(--primary);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .admin-topbar-right .btn-logout {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      text-decoration: none;
+    }
+
+    .admin-topbar-right .btn-logout:hover {
+      background: var(--danger);
+      border-color: var(--danger);
+    }
+
+    /* ---------- LAYOUT ---------- */
+    .admin-layout {
+      display: flex;
+      flex: 1;
+      min-height: calc(100vh - 60px);
+    }
+
+    /* ---------- SIDEBAR ---------- */
+    .admin-sidebar {
+      width: 260px;
+      background: white;
+      border-right: 1px solid var(--gray-200);
+      padding: 1.5rem 1rem;
+      flex-shrink: 0;
+      overflow-y: auto;
+    }
+
+    .admin-sidebar-section { margin-bottom: 1.5rem; }
+
+    .admin-sidebar-title {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--gray-400);
+      font-weight: 700;
+      padding: 0 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .admin-nav-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.7rem 0.75rem;
+      border-radius: 8px;
+      color: var(--gray-700);
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      font-family: inherit;
+      margin-bottom: 0.15rem;
+    }
+
+    .admin-nav-link:hover { background: var(--primary-pale); color: var(--primary-dark); }
+    .admin-nav-link.active { background: var(--primary); color: white; font-weight: 600; }
+    .admin-nav-link i { width: 20px; text-align: center; font-size: 0.95rem; }
+
+    .admin-nav-link .badge-count {
+      margin-left: auto;
+      background: var(--accent);
+      color: var(--primary-dark);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.15rem 0.5rem;
+      border-radius: 10px;
+    }
+
+    .admin-nav-link.active .badge-count { background: white; color: var(--primary-dark); }
+
+    /* ---------- MAIN CONTENT ---------- */
+    .admin-main {
+      flex: 1;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+
+    .admin-page { display: none; animation: fadeIn 0.25s ease; }
+    .admin-page.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .admin-page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .admin-page-header h1 { font-size: 1.75rem; color: var(--primary-dark); margin: 0; }
+    .admin-page-header p { color: var(--gray-500); font-size: 0.92rem; margin: 0.25rem 0 0; }
+
+    /* ---------- STATS CARDS ---------- */
+    .admin-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .admin-stat {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+      border-left: 4px solid var(--primary);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .admin-stat-content h3 { font-size: 1.8rem; margin: 0; color: var(--primary-dark); font-weight: 800; }
+    .admin-stat-content p { color: var(--gray-500); font-size: 0.85rem; margin: 0.25rem 0 0; font-weight: 500; }
+
+    .admin-stat-icon {
+      width: 48px; height: 48px;
+      background: var(--primary-pale);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; color: var(--primary);
+    }
+
+    .admin-stat.accent { border-left-color: var(--accent); }
+    .admin-stat.accent .admin-stat-icon { background: #fef3e0; color: var(--accent-dark); }
+    .admin-stat.info { border-left-color: var(--info); }
+    .admin-stat.info .admin-stat-icon { background: #e3f0fa; color: var(--info); }
+    .admin-stat.danger { border-left-color: var(--danger); }
+    .admin-stat.danger .admin-stat-icon { background: #fbe8e6; color: var(--danger); }
+
+    /* ---------- PANELS ---------- */
+    .admin-panel {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+    }
+
+    .admin-panel-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--gray-100);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .admin-panel-header h3 {
+      font-size: 1.1rem;
+      margin: 0;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .admin-panel-body { padding: 1.5rem; }
+
+    /* ---------- BUTTONS ---------- */
+    .admin-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.6rem 1.25rem;
+      border-radius: 8px;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      text-decoration: none;
+    }
+
+    .admin-btn:hover { background: var(--primary-dark); transform: translateY(-1px); }
+
+    .admin-btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--primary); }
+    .admin-btn-outline:hover { background: var(--primary); color: white; }
+    .admin-btn-danger { background: var(--danger); }
+    .admin-btn-danger:hover { background: #a93226; }
+    .admin-btn-sm { padding: 0.4rem 0.85rem; font-size: 0.8rem; }
+
+    .admin-btn-icon {
+      width: 34px; height: 34px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-size: 0.85rem;
+    }
+
+    .admin-btn-icon.edit { background: var(--primary-pale); color: var(--primary); }
+    .admin-btn-icon.edit:hover { background: var(--primary); color: white; }
+    .admin-btn-icon.delete { background: #fbe8e6; color: var(--danger); }
+    .admin-btn-icon.delete:hover { background: var(--danger); color: white; }
+    .admin-btn-icon.assign { background: #e3f0fa; color: var(--info); }
+    .admin-btn-icon.assign:hover { background: var(--info); color: white; }
+
+    /* ---------- FORM ---------- */
+    .admin-form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .admin-form-group { margin-bottom: 1.25rem; }
+
+    .admin-form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--primary-dark);
+      margin-bottom: 0.4rem;
+    }
+
+    .admin-form-group input,
+    .admin-form-group select,
+    .admin-form-group textarea {
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      border: 2px solid var(--gray-200);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.92rem;
+      transition: border 0.2s;
+    }
+
+    .admin-form-group input:focus,
+    .admin-form-group select:focus,
+    .admin-form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    /* ---------- TABLE ---------- */
+    .admin-table-wrapper { overflow-x: auto; }
+
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    .admin-table thead th {
+      text-align: left;
+      padding: 0.75rem 1rem;
+      background: var(--gray-50);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--gray-500);
+      font-weight: 700;
+      border-bottom: 1px solid var(--gray-200);
+      white-space: nowrap;
+    }
+
+    .admin-table tbody td {
+      padding: 0.9rem 1rem;
+      border-bottom: 1px solid var(--gray-100);
+      color: var(--gray-700);
+    }
+
+    .admin-table tbody tr:hover { background: var(--primary-pale); }
+
+    .admin-table .actions { display: flex; gap: 0.4rem; }
+
+    /* ---------- SEARCH ---------- */
+    .admin-search {
+      position: relative;
+      max-width: 340px;
+      width: 100%;
+    }
+
+    .admin-search input {
+      width: 100%;
+      padding: 0.6rem 1rem 0.6rem 2.5rem;
+      border: 2px solid var(--gray-200);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-family: inherit;
+    }
+
+    .admin-search input:focus { outline: none; border-color: var(--primary); }
+    .admin-search i {
+      position: absolute;
+      left: 0.9rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray-400);
+      font-size: 0.9rem;
+    }
+
+    /* ---------- MODAL ---------- */
+    .admin-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,20,0,0.6);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .admin-modal.active { display: flex; }
+
+    .admin-modal-content {
+      background: white;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 640px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+      animation: modalIn 0.25s ease;
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.95) translateY(15px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .admin-modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--gray-100);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .admin-modal-header h3 { margin: 0; font-size: 1.2rem; }
+
+    .admin-modal-close {
+      background: var(--gray-100);
+      border: none;
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1rem;
+      color: var(--gray-600);
+      transition: all 0.2s;
+    }
+
+    .admin-modal-close:hover { background: var(--danger); color: white; transform: rotate(90deg); }
+
+    .admin-modal-body { padding: 1.5rem; }
+
+    .admin-modal-footer {
+      padding: 1rem 1.5rem 1.5rem;
+      display: flex;
+      gap: 0.75rem;
+      justify-content: flex-end;
+    }
+
+    /* ---------- CALENDAR ---------- */
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .calendar-header h3 { margin: 0; font-size: 1.15rem; color: var(--primary-dark); }
+    .calendar-nav { display: flex; gap: 0.5rem; }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+    }
+
+    .calendar-day-header {
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--gray-500);
+      text-transform: uppercase;
+      padding: 0.5rem 0;
+    }
+
+    .calendar-day {
+      aspect-ratio: 1;
+      background: white;
+      border: 1px solid var(--gray-100);
+      border-radius: 8px;
+      padding: 0.5rem;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      min-height: 65px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
+
+    .calendar-day:hover { background: var(--primary-pale); border-color: var(--primary); }
+    .calendar-day.empty { background: transparent; border: none; cursor: default; }
+    .calendar-day.today { border: 2px solid var(--accent); font-weight: 700; }
+    .calendar-day .day-num { font-weight: 600; color: var(--gray-700); }
+    .calendar-day.today .day-num { color: var(--accent-dark); }
+
+    .calendar-day .day-events {
+      display: flex;
+      gap: 2px;
+      flex-wrap: wrap;
+      margin-top: auto;
+      width: 100%;
+    }
+
+    .calendar-day .day-event-dot {
+      width: 100%;
+      height: 4px;
+      border-radius: 2px;
+      background: var(--primary);
+    }
+
+    .calendar-day .day-event-dot.pickup { background: var(--primary); }
+    .calendar-day .day-event-dot.maintenance { background: var(--accent); }
+    .calendar-day .day-event-dot.meeting { background: var(--info); }
+    .calendar-day .day-event-dot.holiday { background: var(--danger); }
+
+    /* ---------- ACTIVITY FEED ---------- */
+    .activity-item {
+      display: flex;
+      gap: 1rem;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    .activity-item:last-child { border-bottom: none; }
+
+    .activity-icon {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: var(--primary-pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      flex-shrink: 0;
+      font-size: 0.9rem;
+    }
+
+    .activity-icon.accent { background: #fef3e0; color: var(--accent-dark); }
+    .activity-icon.info { background: #e3f0fa; color: var(--info); }
+
+    .activity-text p { margin: 0; font-size: 0.9rem; color: var(--gray-700); }
+    .activity-text small { color: var(--gray-400); font-size: 0.78rem; }
+
+    /* ---------- SETTINGS ---------- */
+    .setting-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    .setting-row:last-child { border-bottom: none; }
+    .setting-row-info h4 { margin: 0 0 0.25rem; font-size: 0.95rem; }
+    .setting-row-info p { margin: 0; font-size: 0.82rem; color: var(--gray-500); }
+
+    .toggle-switch {
+      position: relative;
+      width: 48px;
+      height: 26px;
+      background: var(--gray-300);
+      border-radius: 13px;
+      cursor: pointer;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+
+    .toggle-switch.active { background: var(--primary); }
+
+    .toggle-switch::after {
+      content: '';
+      position: absolute;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: white;
+      top: 3px; left: 3px;
+      transition: transform 0.2s;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+
+    .toggle-switch.active::after { transform: translateX(22px); }
+
+    /* ---------- CHART CONTAINER ---------- */
+    .chart-container {
+      position: relative;
+      height: 320px;
+      width: 100%;
+    }
+
+    .chart-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ---------- WORKER CATEGORY BADGES ---------- */
+    .cat-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.7rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .cat-engineer { background: #e3f0fa; color: #1a5a85; }
+    .cat-volunteer { background: #e7f7ee; color: #155d36; }
+    .cat-specialist { background: #fef3e0; color: #7a4a00; }
+    .cat-driver { background: #f0e6fa; color: #5a2d85; }
+    .cat-supervisor { background: #fbe8e6; color: #7a1f15; }
+    .cat-collector { background: #e6f7fa; color: #1a6b75; }
+
+    /* ---------- JOB CARDS ---------- */
+    .job-card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 10px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      border-left: 4px solid var(--primary);
+      transition: all 0.2s;
+    }
+
+    .job-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.06); }
+
+    .job-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.75rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .job-card-header h4 { margin: 0; font-size: 1rem; color: var(--primary-dark); }
+    .job-card-meta { display: flex; gap: 1rem; flex-wrap: wrap; font-size: 0.82rem; color: var(--gray-500); }
+    .job-card-meta span { display: flex; align-items: center; gap: 0.3rem; }
+
+    /* ---------- EMPTY STATE ---------- */
+    .empty-state { text-align: center; padding: 3rem 1rem; color: var(--gray-400); }
+    .empty-state i { font-size: 3rem; margin-bottom: 1rem; opacity: 0.4; }
+    .empty-state p { font-size: 0.95rem; }
+
+    /* ---------- EMAIL PREVIEW ---------- */
+    .email-preview {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 10px;
+      padding: 1.25rem;
+      margin-top: 1rem;
+      font-size: 0.88rem;
+    }
+
+    .email-preview-header {
+      border-bottom: 1px solid var(--gray-200);
+      padding-bottom: 0.75rem;
+      margin-bottom: 0.75rem;
+      font-family: 'Courier New', monospace;
+      font-size: 0.82rem;
+      color: var(--gray-600);
+    }
+
+    .email-preview-header div { margin-bottom: 0.2rem; }
+    .email-preview-body { color: var(--gray-700); line-height: 1.6; }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 900px) {
+      .admin-sidebar {
+        position: fixed;
+        left: -280px;
+        top: 60px;
+        bottom: 0;
+        z-index: 999;
+        transition: left 0.3s ease;
+        box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+        width: 280px;
+      }
+      .admin-sidebar.open { left: 0; }
+      .admin-main { padding: 1.25rem; }
+      .admin-menu-toggle { display: flex !important; }
+      .chart-grid { grid-template-columns: 1fr; }
+    }
+
+    .admin-menu-toggle {
+      display: none;
+      background: rgba(255,255,255,0.15);
+      border: none;
+      color: white;
+      width: 38px; height: 38px;
+      border-radius: 8px;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      cursor: pointer;
+      margin-right: 1rem;
+    }
+
+    @media (max-width: 600px) {
+      .admin-topbar-brand span { display: none; }
+      .admin-topbar-right .admin-user span { display: none; }
+      .admin-page-header h1 { font-size: 1.35rem; }
+      .admin-stat-content h3 { font-size: 1.4rem; }
+      .admin-form-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ---------- TOAST ---------- */
+    .admin-toast {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      background: var(--primary-dark);
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      z-index: 3000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      max-width: 360px;
+    }
+
+    .admin-toast.show { transform: translateY(0); opacity: 1; }
+    .admin-toast i { font-size: 1.1rem; }
+  </style>
+</head>
+<body class="admin-body">
+
+  <!-- ================= LOGIN SCREEN ================= -->
+  <div class="login-screen" id="loginScreen">
+    <div class="login-card">
+      <div class="login-logo"><i class="fas fa-user-shield"></i></div>
+      <h1>Admin Access</h1>
+      <p class="login-sub">Authorized personnel only</p>
+
+      <div class="login-error" id="loginError">
+        <i class="fas fa-exclamation-circle"></i>
+        <span id="loginErrorText">Invalid credentials. Please try again.</span>
+      </div>
+
+      <form id="loginForm">
+        <div class="login-field">
+          <label for="loginUsername">Username</label>
+          <i class="fas fa-user"></i>
+          <input type="text" id="loginUsername" placeholder="Enter username" autocomplete="username" required>
+        </div>
+        <div class="login-field">
+          <label for="loginPassword">Password</label>
+          <i class="fas fa-lock"></i>
+          <input type="password" id="loginPassword" placeholder="Enter password" autocomplete="current-password" required>
+        </div>
+        <div class="login-field">
+          <label for="loginSecret">Secret Code (4 digits)</label>
+          <i class="fas fa-key"></i>
+          <input type="password" id="loginSecret" placeholder="••••" maxlength="4" inputmode="numeric" pattern="[0-9]{4}" required>
+        </div>
+        <button type="submit" class="login-btn">
+          <i class="fas fa-sign-in-alt"></i> Secure Login
+        </button>
+      </form>
+
+      <p class="login-hint"><i class="fas fa-shield-alt"></i> Protected by 3-factor authentication</p>
+    </div>
+  </div>
+
+  <!-- ================= MAIN ADMIN (Hidden until login) ================= -->
+  <div id="adminApp" style="display: none;">
+
+    <!-- ========== TOP BAR ========== -->
+    <header class="admin-topbar">
+      <div style="display: flex; align-items: center;">
+        <button class="admin-menu-toggle" id="adminMenuToggle">
+          <i class="fas fa-bars"></i>
+        </button>
+        <a href="../index.html" class="admin-topbar-brand">
+            <a href="worker-dashboard.html" target="_blank" class="btn-logout" style="background: rgba(255,255,255,0.1);">
+  <i class="fas fa-hard-hat"></i> <span>Worker Portal</span>
+</a>
+          <i class="fas fa-recycle"></i>
+          <span>UNWM Admin Panel</span>
+        </a>
+      </div>
+      <div class="admin-topbar-right">
+        <div class="admin-user">
+          <i class="fas fa-user-shield"></i>
+          <span id="currentUser">Administrator</span>
+        </div>
+        <a href="#" class="btn-logout" onclick="logoutAdmin(event)">
+          <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- ========== LAYOUT ========== -->
+    <div class="admin-layout">
+
+      <!-- ========== SIDEBAR ========== -->
+      <aside class="admin-sidebar" id="adminSidebar">
+        <div class="admin-sidebar-section">
+          <div class="admin-sidebar-title">Main</div>
+          <button class="admin-nav-link active" data-page="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</button>
+          <button class="admin-nav-link" data-page="districts"><i class="fas fa-map-marked-alt"></i> Districts <span class="badge-count" id="districtsCount">0</span></button>
+          <button class="admin-nav-link" data-page="stations"><i class="fas fa-building"></i> Stations <span class="badge-count" id="stationsCount">0</span></button>
+        </div>
+
+        <div class="admin-sidebar-section">
+          <div class="admin-sidebar-title">Workforce</div>
+          <button class="admin-nav-link" data-page="workers"><i class="fas fa-users-cog"></i> Workers <span class="badge-count" id="workersCount">0</span></button>
+          <button class="admin-nav-link" data-page="assignments"><i class="fas fa-clipboard-list"></i> Job Assignments <span class="badge-count" id="assignmentsCount">0</span></button>
+        </div>
+
+        <div class="admin-sidebar-section">
+          <div class="admin-sidebar-title">Operations</div>
+          <button class="admin-nav-link" data-page="bookings"><i class="fas fa-truck"></i> Bookings <span class="badge-count" id="bookingsCount">0</span></button>
+          <button class="admin-nav-link" data-page="feedback"><i class="fas fa-comments"></i> Feedback <span class="badge-count" id="feedbackCount">0</span></button>
+          <button class="admin-nav-link" data-page="calendar"><i class="fas fa-calendar-alt"></i> Calendar</button>
+        </div>
+
+        <div class="admin-sidebar-section">
+          <div class="admin-sidebar-title">Content</div>
+          <button class="admin-nav-link" data-page="services"><i class="fas fa-concierge-bell"></i> Services</button>
+          <button class="admin-nav-link" data-page="users"><i class="fas fa-user-friends"></i> Users <span class="badge-count" id="usersCount">0</span></button>
+        </div>
+
+        <div class="admin-sidebar-section">
+          <div class="admin-sidebar-title">System</div>
+          <button class="admin-nav-link" data-page="analytics"><i class="fas fa-chart-line"></i> Analytics</button>
+          <button class="admin-nav-link" data-page="settings"><i class="fas fa-cog"></i> Settings</button>
+        </div>
+      </aside>
+
+      <!-- ========== MAIN CONTENT ========== -->
+      <main class="admin-main">
+
+        <!-- ============ DASHBOARD ============ -->
+        <div class="admin-page active" id="page-dashboard">
+          <div class="admin-page-header">
+            <div>
+              <h1>Dashboard Overview</h1>
+              <p>Welcome back, <strong id="welcomeName">Administrator</strong>. Here's what's happening today.</p>
+            </div>
+            <button class="admin-btn" onclick="exportData()"><i class="fas fa-download"></i> Export Data</button>
+          </div>
+
+          <div class="admin-stats">
+            <div class="admin-stat">
+              <div class="admin-stat-content"><h3 id="statDistricts">0</h3><p>Total Districts</p></div>
+              <div class="admin-stat-icon"><i class="fas fa-map-marked-alt"></i></div>
+            </div>
+            <div class="admin-stat accent">
+              <div class="admin-stat-content"><h3 id="statWorkers">0</h3><p>Active Workers</p></div>
+              <div class="admin-stat-icon"><i class="fas fa-users-cog"></i></div>
+            </div>
+            <div class="admin-stat info">
+              <div class="admin-stat-content"><h3 id="statBookings">0</h3><p>Total Bookings</p></div>
+              <div class="admin-stat-icon"><i class="fas fa-truck"></i></div>
+            </div>
+            <div class="admin-stat danger">
+              <div class="admin-stat-content"><h3 id="statAssignments">0</h3><p>Active Assignments</p></div>
+              <div class="admin-stat-icon"><i class="fas fa-clipboard-list"></i></div>
+            </div>
+          </div>
+
+          <div class="chart-grid">
+            <div class="admin-panel">
+              <div class="admin-panel-header"><h3><i class="fas fa-chart-pie" style="color: var(--primary);"></i> Workers by Category</h3></div>
+              <div class="admin-panel-body"><div class="chart-container"><canvas id="chartWorkers"></canvas></div></div>
+            </div>
+            <div class="admin-panel">
+              <div class="admin-panel-header"><h3><i class="fas fa-chart-bar" style="color: var(--accent);"></i> Bookings by Waste Type</h3></div>
+              <div class="admin-panel-body"><div class="chart-container"><canvas id="chartBookings"></canvas></div></div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;" id="dashboardGrid">
+            <div class="admin-panel">
+              <div class="admin-panel-header">
+                <h3><i class="fas fa-clock" style="color: var(--primary);"></i> Recent Bookings</h3>
+                <button class="admin-btn admin-btn-outline admin-btn-sm" onclick="switchAdminPage('bookings')">View All</button>
+              </div>
+              <div class="admin-panel-body" style="padding: 0;">
+                <div class="admin-table-wrapper">
+                  <table class="admin-table">
+                    <thead>
+                      <tr><th>Name</th><th>District</th><th>Waste Type</th><th>ETA</th><th>Status</th></tr>
+                    </thead>
+                    <tbody id="recentBookingsTable"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="admin-panel">
+              <div class="admin-panel-header"><h3><i class="fas fa-bell" style="color: var(--accent);"></i> Recent Activity</h3></div>
+              <div class="admin-panel-body" id="activityFeed"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ DISTRICTS ============ -->
+        <div class="admin-page" id="page-districts">
+          <div class="admin-page-header">
+            <div><h1>Manage Districts</h1><p>Add, edit, or remove districts across Uganda.</p></div>
+            <button class="admin-btn" onclick="openDistrictModal()"><i class="fas fa-plus"></i> Add District</button>
+          </div>
+
+          <div class="admin-panel">
+            <div class="admin-panel-header">
+              <div class="admin-search">
+                <i class="fas fa-search"></i>
+                <input type="text" id="districtSearch" placeholder="Search districts..." onkeyup="filterDistricts()">
+              </div>
+              <select id="regionFilter" style="padding: 0.6rem; border: 2px solid var(--gray-200); border-radius: 8px; font-family: inherit; margin: 0;" onchange="filterDistricts()">
+                <option value="">All Regions</option>
+                <option value="Central">Central</option>
+                <option value="Eastern">Eastern</option>
+                <option value="Northern">Northern</option>
+                <option value="Western">Western</option>
+              </select>
+            </div>
+            <div class="admin-panel-body" style="padding: 0;">
+              <div class="admin-table-wrapper">
+                <table class="admin-table">
+                  <thead>
+                    <tr><th>District</th><th>Region</th><th>Contact</th><th>Stations</th><th>Status</th><th>Actions</th></tr>
+                  </thead>
+                  <tbody id="districtsTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ STATIONS ============ -->
+        <div class="admin-page" id="page-stations">
+          <div class="admin-page-header">
+            <div><h1>Manage Stations</h1><p>Collection stations within each district.</p></div>
+            <button class="admin-btn" onclick="openStationModal()"><i class="fas fa-plus"></i> Add Station</button>
+          </div>
+
+          <div class="admin-panel">
+            <div class="admin-panel-header">
+              <div class="admin-search">
+                <i class="fas fa-search"></i>
+                <input type="text" id="stationSearch" placeholder="Search stations..." onkeyup="filterStations()">
+              </div>
+            </div>
+            <div class="admin-panel-body" style="padding: 0;">
+              <div class="admin-table-wrapper">
+                <table class="admin-table">
+                  <thead>
+                    <tr><th>Station Name</th><th>District</th><th>Phone</th><th>Email</th><th>Actions</th></tr>
+                  </thead>
+                  <tbody id="stationsTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ WORKERS ============ -->
+        <div class="admin-page" id="page-workers">
+          <div class="admin-page-header">
+            <div><h1>Workforce Management</h1><p>Engineers, volunteers, specialists, drivers, and all workers.</p></div>
+            <button class="admin-btn" onclick="openWorkerModal()"><i class="fas fa-plus"></i> Add Worker</button>
+          </div>
+
+          <div class="admin-stats" style="grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));">
+            <div class="admin-stat" style="border-left-color:#1a5a85;">
+              <div class="admin-stat-content"><h3 id="wEngineers">0</h3><p>Engineers</p></div>
+              <div class="admin-stat-icon" style="background:#e3f0fa; color:#1a5a85;"><i class="fas fa-hard-hat"></i></div>
+            </div>
+            <div class="admin-stat" style="border-left-color:#155d36;">
+              <div class="admin-stat-content"><h3 id="wVolunteers">0</h3><p>Volunteers</p></div>
+              <div class="admin-stat-icon" style="background:#e7f7ee; color:#155d36;"><i class="fas fa-hands-helping"></i></div>
+            </div>
+            <div class="admin-stat" style="border-left-color:#7a4a00;">
+              <div class="admin-stat-content"><h3 id="wSpecialists">0</h3><p>Specialists</p></div>
+              <div class="admin-stat-icon" style="background:#fef3e0; color:#7a4a00;"><i class="fas fa-flask"></i></div>
+            </div>
+            <div class="admin-stat" style="border-left-color:#5a2d85;">
+              <div class="admin-stat-content"><h3 id="wDrivers">0</h3><p>Drivers</p></div>
+              <div class="admin-stat-icon" style="background:#f0e6fa; color:#5a2d85;"><i class="fas fa-truck-moving"></i></div>
+            </div>
+            <div class="admin-stat" style="border-left-color:#7a1f15;">
+              <div class="admin-stat-content"><h3 id="wSupervisors">0</h3><p>Supervisors</p></div>
+              <div class="admin-stat-icon" style="background:#fbe8e6; color:#7a1f15;"><i class="fas fa-user-tie"></i></div>
+            </div>
+            <div class="admin-stat" style="border-left-color:#1a6b75;">
+              <div class="admin-stat-content"><h3 id="wCollectors">0</h3><p>Collectors</p></div>
+              <div class="admin-stat-icon" style="background:#e6f7fa; color:#1a6b75;"><i class="fas fa-dumpster"></i></div>
+            </div>
+          </div>
+
+          <div class="admin-panel">
+            <div class="admin-panel-header">
+              <div class="admin-search">
+                <i class="fas fa-search"></i>
+                <input type="text" id="workerSearch" placeholder="Search by name, ID, or district..." onkeyup="filterWorkers()">
+              </div>
+              <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                <select id="workerCategoryFilter" style="padding: 0.6rem; border: 2px solid var(--gray-200); border-radius: 8px; font-family: inherit;" onchange="filterWorkers()">
+                  <option value="">All Categories</option>
+                  <option value="Engineer">Engineers</option>
+                  <option value="Volunteer">Volunteers</option>
+                  <option value="Waste Specialist">Waste Specialists</option>
+                  <option value="Driver">Drivers</option>
+                  <option value="Supervisor">Supervisors</option>
+                  <option value="Collector">Collectors</option>
+                </select>
+                <select id="workerRegionFilter" style="padding: 0.6rem; border: 2px solid var(--gray-200); border-radius: 8px; font-family: inherit;" onchange="filterWorkers()">
+                  <option value="">All Regions</option>
+                  <option value="Central">Central</option>
+                  <option value="Eastern">Eastern</option>
+                  <option value="Northern">Northern</option>
+                  <option value="Western">Western</option>
+                </select>
+              </div>
+            </div>
+            <div class="admin-panel-body" style="padding: 0;">
+              <div class="admin-table-wrapper">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>ID Number</th><th>Full Name</th><th>Category</th><th>Region</th><th>District</th><th>Phone</th><th>Status</th><th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="workersTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ ASSIGNMENTS ============ -->
+        <div class="admin-page" id="page-assignments">
+          <div class="admin-page-header">
+            <div><h1>Job Assignments</h1><p>Assign workers to jobs and send email notifications.</p></div>
+            <button class="admin-btn" onclick="openAssignmentModal()"><i class="fas fa-plus"></i> New Assignment</button>
+          </div>
+
+          <div class="admin-panel">
+            <div class="admin-panel-header">
+              <div class="admin-search">
+                <i class="fas fa-search"></i>
+                <input type="text" id="assignmentSearch" placeholder="Search assignments..." onkeyup="filterAssignments()">
+              </div>
+              <select id="assignmentStatusFilter" style="padding: 0.6rem; border: 2px solid var(--gray-200); border-radius: 8px; font-family: inherit;" onchange="filterAssignments()">
+                <option value="">All Status</option>
+                <option value="Pending">Pending</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+                <option value="Cancelled">Cancelled</option>
+              </select>
+            </div>
+            <div class="admin-panel-body">
+              <div id="assignmentsList"></div>
+            </div>
+          </div>
+        </div>
+        <!-- ============ ANNOUNCEMENTS ============ -->
+<div class="admin-page" id="page-announcements">
+  <div class="admin-page-header">
+    <div>
+      <h1>Announcements</h1>
+      <p>Send messages, alerts, and updates to all workers or specific categories.</p>
+    </div>
+    <button class="admin-btn" onclick="openAnnouncementModal()">
+      <i class="fas fa-plus"></i> New Announcement
+    </button>
+  </div>
+
+  <div class="admin-panel">
+    <div class="admin-panel-header">
+      <h3><i class="fas fa-bullhorn" style="color: var(--accent);"></i> Sent Announcements</h3>
+    </div>
+    <div class="admin-panel-body" id="announcementsList">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</div>
+
+
+        <!-- ============ BOOKINGS ============ -->
+        <div class="admin-page" id="page-bookings">
+          <div class="admin-page-header">
+            <div><h1>Bookings Management</h1><p>View and manage all waste pickup requests.</p></div>
+            <div style="display: flex; gap: 0.5rem;">
+              <select id="bookingStatusFilter" style="padding: 0.6rem; border: 2px solid var(--gray-200); border-radius: 8px; font-family: inherit; margin: 0;" onchange="filterBookings()">
+                <option value="">All Status</option>
+                <option value="Pending">Pending</option>
+                <option value="Confirmed">Confirmed</option>
+                <option value="Completed">Completed</option>
+                <option value="Cancelled">Cancelled</option>
+              </select>
+              <button class="admin-btn admin-btn-danger" onclick="clearAllBookings()"><i class="fas fa-trash"></i> Clear All</button>
+            </div>
+          </div>
+
+          <div class="admin-panel">
+            <div class="admin-panel-body" style="padding: 0;">
+              <div class="admin-table-wrapper">
+                <table class="admin-table">
+                  <thead>
+  <tr><th>Customer</th><th>Phone</th><th>District</th><th>Waste Type</th><th>Volume</th><th>Tracking ID</th><th>Stage</th><th>Actions</th></tr>
+</thead>
+                  <tbody id="bookingsTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ FEEDBACK ============ -->
+        <div class="admin-page" id="page-feedback">
+          <div class="admin-page-header">
+            <div><h1>Customer Feedback</h1><p>Reviews and ratings submitted by users.</p></div>
+            <button class="admin-btn admin-btn-danger" onclick="clearAllFeedback()"><i class="fas fa-trash"></i> Clear All</button>
+          </div>
+
+          <div class="admin-panel">
+            <div class="admin-panel-body"><div id="feedbackList"></div></div>
+          </div>
+        </div>
+
+        <!-- ============ CALENDAR ============ -->
+        <div class="admin-page" id="page-calendar">
+          <div class="admin-page-header">
+            <div><h1>Operations Calendar</h1><p>Schedule and view pickups, maintenance, meetings, and holidays.</p></div>
+            <button class="admin-btn" onclick="openEventModal()"><i class="fas fa-plus"></i> Add Event</button>
+          </div>
+
+          <div class="admin-panel">
+            <div class="admin-panel-body">
+              <div class="calendar-header">
+                <h3 id="calendarMonthYear">October 2025</h3>
+                <div class="calendar-nav">
+                  <button class="admin-btn admin-btn-outline admin-btn-sm" onclick="changeMonth(-1)"><i class="fas fa-chevron-left"></i></button>
+                  <button class="admin-btn admin-btn-outline admin-btn-sm" onclick="goToToday()">Today</button>
+                  <button class="admin-btn admin-btn-outline admin-btn-sm" onclick="changeMonth(1)"><i class="fas fa-chevron-right"></i></button>
+                </div>
+              </div>
+              <div class="calendar-grid" id="calendarGrid"></div>
+              <div style="margin-top: 1.5rem; display: flex; gap: 1.5rem; flex-wrap: wrap; font-size: 0.85rem;">
+                <div style="display: flex; align-items: center; gap: 0.4rem;"><span style="width: 12px; height: 12px; background: var(--primary); border-radius: 3px;"></span> Pickup</div>
+                <div style="display: flex; align-items: center; gap: 0.4rem;"><span style="width: 12px; height: 12px; background: var(--accent); border-radius: 3px;"></span> Maintenance</div>
+                <div style="display: flex; align-items: center; gap: 0.4rem;"><span style="width: 12px; height: 12px; background: var(--info); border-radius: 3px;"></span> Meeting</div>
+                <div style="display: flex; align-items: center; gap: 0.4rem;"><span style="width: 12px; height: 12px; background: var(--danger); border-radius: 3px;"></span> Holiday</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ SERVICES ============ -->
+        <div class="admin-page" id="page-services">
+          <div class="admin-page-header">
+            <div><h1>Services Management</h1><p>Manage the services offered on your website.</p></div>
+            <button class="admin-btn" onclick="openServiceModal()"><i class="fas fa-plus"></i> Add Service</button>
+          </div>
+
+          <div class="admin-panel">
+            <div class="admin-panel-body" style="padding: 0;">
+              <div class="admin-table-wrapper">
+                <table class="admin-table">
+                  <thead><tr><th>Service Name</th><th>Icon</th><th>Description</th><th>Actions</th></tr></thead>
+                  <tbody id="servicesTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ USERS ============ -->
+        <div class="admin-page" id="page-users">
+          <div class="admin-page-header">
+            <div><h1>Registered Users</h1><p>All users who have signed up for the platform.</p></div>
+            <button class="admin-btn admin-btn-danger" onclick="clearAllUsers()"><i class="fas fa-trash"></i> Clear All</button>
+          </div>
+
+          <div class="admin-panel">
+            <div class="admin-panel-body" style="padding: 0;">
+              <div class="admin-table-wrapper">
+                <table class="admin-table">
+                  <thead>
+                    <tr><th>Name</th><th>Email</th><th>Phone</th><th>District</th><th>Account Type</th><th>Registered</th><th>Actions</th></tr>
+                  </thead>
+                  <tbody id="usersTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ ANALYTICS ============ -->
+        <div class="admin-page" id="page-analytics">
+          <div class="admin-page-header">
+            <div><h1>Analytics & Reports</h1><p>Insights into platform performance.</p></div>
+          </div>
+
+          <div class="admin-stats">
+            <div class="admin-stat">
+              <div class="admin-stat-content"><h3 id="anaTotalBookings">0</h3><p>Total Bookings</p></div>
+              <div class="admin-stat-icon"><i class="fas fa-truck"></i></div>
+            </div>
+            <div class="admin-stat accent">
+              <div class="admin-stat-content"><h3 id="anaAvgRating">0.0</h3><p>Average Rating</p></div>
+              <div class="admin-stat-icon"><i class="fas fa-star"></i></div>
+            </div>
+            <div class="admin-stat info">
+              <div class="admin-stat-content"><h3 id="anaUsers">0</h3><p>Active Users</p></div>
+              <div class="admin-stat-icon"><i class="fas fa-users"></i></div>
+            </div>
+            <div class="admin-stat danger">
+              <div class="admin-stat-content"><h3 id="anaCompletion">0%</h3><p>Completion Rate</p></div>
+              <div class="admin-stat-icon"><i class="fas fa-check-circle"></i></div>
+            </div>
+          </div>
+
+          <div class="chart-grid">
+            <div class="admin-panel">
+              <div class="admin-panel-header"><h3><i class="fas fa-chart-line" style="color: var(--primary);"></i> Monthly Bookings Trend</h3></div>
+              <div class="admin-panel-body"><div class="chart-container"><canvas id="chartMonthly"></canvas></div></div>
+            </div>
+            <div class="admin-panel">
+              <div class="admin-panel-header"><h3><i class="fas fa-star" style="color: var(--accent);"></i> Feedback Ratings Distribution</h3></div>
+              <div class="admin-panel-body"><div class="chart-container"><canvas id="chartRatings"></canvas></div></div>
+            </div>
+          </div>
+
+          <div class="admin-panel">
+            <div class="admin-panel-header"><h3><i class="fas fa-hard-hat" style="color: var(--info);"></i> Workers by Region</h3></div>
+            <div class="admin-panel-body"><div class="chart-container"><canvas id="chartRegion"></canvas></div></div>
+          </div>
+        </div>
+
+        <!-- ============ SETTINGS ============ -->
+        <div class="admin-page" id="page-settings">
+          <div class="admin-page-header">
+            <div><h1>System Settings</h1><p>Configure your website preferences.</p></div>
+          </div>
+
+          <div class="admin-panel">
+            <div class="admin-panel-header"><h3><i class="fas fa-bell" style="color: var(--accent);"></i> Notifications</h3></div>
+            <div class="admin-panel-body">
+              <div class="setting-row">
+                <div class="setting-row-info"><h4>Email Notifications</h4><p>Receive email alerts when new bookings are made.</p></div>
+                <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-row-info"><h4>Engineer Assignment Emails</h4><p>Automatically email engineers when assigned to jobs.</p></div>
+                <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-row-info"><h4>SMS Notifications</h4><p>Send SMS confirmation to customers after pickup.</p></div>
+                <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-panel">
+            <div class="admin-panel-header"><h3><i class="fas fa-database" style="color: var(--danger);"></i> Data Management</h3></div>
+            <div class="admin-panel-body">
+              <div class="setting-row">
+                <div class="setting-row-info"><h4>Export All Data</h4><p>Download all data as JSON.</p></div>
+                <button class="admin-btn" onclick="exportData()"><i class="fas fa-download"></i> Export</button>
+              </div>
+              <div class="setting-row">
+                <div class="setting-row-info"><h4>Reset All Data</h4><p>Permanently delete all data (irreversible).</p></div>
+                <button class="admin-btn admin-btn-danger" onclick="resetAllData()"><i class="fas fa-trash"></i> Reset</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ========== MODALS ========== -->
+
+  <!-- District Modal -->
+  <div class="admin-modal" id="districtModal">
+    <div class="admin-modal-content">
+      <div class="admin-modal-header"><h3 id="districtModalTitle">Add District</h3><button class="admin-modal-close" onclick="closeModal('districtModal')"><i class="fas fa-times"></i></button></div>
+      <div class="admin-modal-body">
+        <form id="districtForm">
+          <input type="hidden" id="districtEditId">
+          <div class="admin-form-group"><label>District Name *</label><input type="text" id="districtName" required></div>
+          <div class="admin-form-group"><label>Region *</label>
+            <select id="districtRegion" required>
+              <option value="">Select Region</option>
+              <option value="Central">Central</option>
+              <option value="Eastern">Eastern</option>
+              <option value="Northern">Northern</option>
+              <option value="Western">Western</option>
+            </select>
+          </div>
+          <div class="admin-form-group"><label>Main Contact Phone *</label><input type="tel" id="districtContact" placeholder="+256 700 000 000" required></div>
+          <div class="admin-form-group"><label>Email</label><input type="email" id="districtEmail" placeholder="district@unwm.ug"></div>
+          <div class="admin-form-group"><label>Status</label>
+            <select id="districtStatus"><option value="Active">Active</option><option value="Expanding">Expanding</option><option value="Inactive">Inactive</option></select>
+          </div>
+        </form>
+      </div>
+      <div class="admin-modal-footer">
+        <button class="admin-btn admin-btn-outline" onclick="closeModal('districtModal')">Cancel</button>
+        <button class="admin-btn" onclick="saveDistrict()"><i class="fas fa-save"></i> Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Station Modal -->
+  <div class="admin-modal" id="stationModal">
+    <div class="admin-modal-content">
+      <div class="admin-modal-header"><h3 id="stationModalTitle">Add Station</h3><button class="admin-modal-close" onclick="closeModal('stationModal')"><i class="fas fa-times"></i></button></div>
+      <div class="admin-modal-body">
+        <form id="stationForm">
+          <input type="hidden" id="stationEditId">
+          <div class="admin-form-group"><label>Station Name *</label><input type="text" id="stationName" required></div>
+          <div class="admin-form-group"><label>District *</label><select id="stationDistrict" required><option value="">Select District</option></select></div>
+          <div class="admin-form-group"><label>Phone *</label><input type="tel" id="stationPhone" required></div>
+          <div class="admin-form-group"><label>Email</label><input type="email" id="stationEmail"></div>
+          <div class="admin-form-group"><label>Operating Hours</label><input type="text" id="stationHours" placeholder="Mon-Sat: 7am - 8pm"></div>
+        </form>
+      </div>
+      <div class="admin-modal-footer">
+        <button class="admin-btn admin-btn-outline" onclick="closeModal('stationModal')">Cancel</button>
+        <button class="admin-btn" onclick="saveStation()"><i class="fas fa-save"></i> Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Worker Modal -->
+  <div class="admin-modal" id="workerModal">
+    <div class="admin-modal-content">
+      <div class="admin-modal-header"><h3 id="workerModalTitle">Add Worker</h3><button class="admin-modal-close" onclick="closeModal('workerModal')"><i class="fas fa-times"></i></button></div>
+      <div class="admin-modal-body">
+        <form id="workerForm">
+          <input type="hidden" id="workerEditId">
+          <div class="admin-form-grid">
+            <div class="admin-form-group"><label>National ID Number *</label><input type="text" id="workerIdNumber" placeholder="e.g. CM12345678ABCD" required></div>
+            <div class="admin-form-group"><label>Full Name *</label><input type="text" id="workerName" required></div>
+          </div>
+          <div class="admin-form-grid">
+            <div class="admin-form-group"><label>Category *</label>
+              <select id="workerCategory" required>
+                <option value="">Select Category</option>
+                <option value="Engineer">Engineer</option>
+                <option value="Volunteer">Voluntary Worker</option>
+                <option value="Waste Specialist">Waste Specialist</option>
+                <option value="Driver">Driver</option>
+                <option value="Supervisor">Supervisor</option>
+                <option value="Collector">Waste Collector</option>
+              </select>
+            </div>
+            <div class="admin-form-group"><label>Region *</label>
+              <select id="workerRegion" required>
+                <option value="">Select Region</option>
+                <option value="Central">Central</option>
+                <option value="Eastern">Eastern</option>
+                <option value="Northern">Northern</option>
+                <option value="Western">Western</option>
+              </select>
+            </div>
+          </div>
+          <div class="admin-form-grid">
+            <div class="admin-form-group"><label>District *</label>
+              <select id="workerDistrict" required><option value="">Select District</option></select>
+            </div>
+            <div class="admin-form-group"><label>Place of Residence *</label><input type="text" id="workerResidence" placeholder="e.g. Kisenyi, Zone 3" required></div>
+          </div>
+          <div class="admin-form-grid">
+            <div class="admin-form-group"><label>Phone Number *</label><input type="tel" id="workerPhone" placeholder="+256 700 000 000" required></div>
+            <div class="admin-form-group"><label>Email *</label><input type="email" id="workerEmail" placeholder="worker@unwm.ug" required></div>
+          </div>
+          <div class="admin-form-grid">
+            <div class="admin-form-group"><label>Date of Birth</label><input type="date" id="workerDob"></div>
+            <div class="admin-form-group"><label>Date of Joining *</label><input type="date" id="workerJoinDate" required></div>
+          </div>
+          <div class="admin-form-grid">
+            <div class="admin-form-group"><label>Status</label>
+              <select id="workerStatus">
+                <option value="Available">Available</option>
+                <option value="On Assignment">On Assignment</option>
+                <option value="On Leave">On Leave</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+            </div>
+            <div class="admin-form-group"><label>Years of Experience</label><input type="number" id="workerExperience" min="0" max="50" placeholder="0"></div>
+          </div>
+          <div class="admin-form-group"><label>Specialization / Skills</label><input type="text" id="workerSkills" placeholder="e.g. Hazardous Waste Handling, Truck Driving"></div>
+        </form>
+      </div>
+      <div class="admin-modal-footer">
+        <button class="admin-btn admin-btn-outline" onclick="closeModal('workerModal')">Cancel</button>
+        <button class="admin-btn" onclick="saveWorker()"><i class="fas fa-save"></i> Save Worker</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Assignment Modal -->
+  <div class="admin-modal" id="assignmentModal">
+    <div class="admin-modal-content" style="max-width: 720px;">
+      <div class="admin-modal-header"><h3 id="assignmentModalTitle">New Job Assignment</h3><button class="admin-modal-close" onclick="closeModal('assignmentModal')"><i class="fas fa-times"></i></button></div>
+      <div class="admin-modal-body">
+        <form id="assignmentForm">
+          <input type="hidden" id="assignmentEditId">
+          <div class="admin-form-group"><label>Job Title *</label><input type="text" id="assignmentTitle" placeholder="e.g. Waste Collection - Kisenyi" required></div>
+          <div class="admin-form-group"><label>Job Description *</label><textarea id="assignmentDescription" rows="2" placeholder="Describe the task..." required></textarea></div>
+          <div class="admin-form-grid">
+            <div class="admin-form-group"><label>District *</label><select id="assignmentDistrict" required><option value="">Select District</option></select></div>
+            <div class="admin-form-group"><label>Region *</label>
+              <select id="assignmentRegion" required>
+                <option value="">Select Region</option>
+                <option value="Central">Central</option>
+                <option value="Eastern">Eastern</option>
+                <option value="Northern">Northern</option>
+                <option value="Western">Western</option>
+              </select>
+            </div>
+          </div>
+          <div class="admin-form-grid">
+            <div class="admin-form-group"><label>Priority *</label>
+              <select id="assignmentPriority" required>
+                <option value="Normal">Normal</option>
+                <option value="High">High</option>
+                <option value="Urgent">Urgent</option>
+              </select>
+            </div>
+            <div class="admin-form-group"><label>Deadline *</label><input type="date" id="assignmentDeadline" required></div>
+          </div>
+          <div class="admin-form-group">
+            <label>Assign Workers (select multiple) *</label>
+            <div id="assignmentWorkersList" style="max-height: 220px; overflow-y: auto; border: 2px solid var(--gray-200); border-radius: 8px; padding: 0.5rem;">
+              <!-- Populated by JS -->
+            </div>
+            <small style="color: var(--gray-500); font-size: 0.78rem;">Tip: Filter workers by category below to assign the right team.</small>
+          </div>
+          <div class="admin-form-group">
+            <label>Filter Workers by Category</label>
+            <select id="assignmentWorkerCategoryFilter" onchange="renderAssignmentWorkers()">
+              <option value="">All Categories</option>
+              <option value="Engineer">Engineers only</option>
+              <option value="Waste Specialist">Waste Specialists only</option>
+              <option value="Driver">Drivers only</option>
+              <option value="Supervisor">Supervisors only</option>
+              <option value="Collector">Collectors only</option>
+              <option value="Volunteer">Volunteers only</option>
+            </select>
+          </div>
+          <div class="email-preview" id="emailPreview" style="display:none;">
+            <div class="email-preview-header">
+              <div><strong>From:</strong> admin@unwm.ug</div>
+              <div><strong>To:</strong> <span id="emailPreviewTo">selected workers</span></div>
+              <div><strong>Subject:</strong> New Job Assignment - <span id="emailPreviewSubject">Job Title</span></div>
+            </div>
+            <div class="email-preview-body" id="emailPreviewBody"></div>
+          </div>
+        </form>
+      </div>
+      <div class="admin-modal-footer">
+        <button class="admin-btn admin-btn-outline" onclick="closeModal('assignmentModal')">Cancel</button>
+        <button class="admin-btn" onclick="saveAssignment()"><i class="fas fa-paper-plane"></i> Assign & Send Emails</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Event Modal -->
+  <div class="admin-modal" id="eventModal">
+    <div class="admin-modal-content">
+      <div class="admin-modal-header"><h3 id="eventModalTitle">Add Event</h3><button class="admin-modal-close" onclick="closeModal('eventModal')"><i class="fas fa-times"></i></button></div>
+      <div class="admin-modal-body">
+        <form id="eventForm">
+          <input type="hidden" id="eventEditId">
+          <div class="admin-form-group"><label>Event Title *</label><input type="text" id="eventTitle" required></div>
+          <div class="admin-form-group"><label>Date *</label><input type="date" id="eventDate" required></div>
+          <div class="admin-form-group"><label>Type *</label>
+            <select id="eventType" required>
+              <option value="pickup">Pickup</option>
+              <option value="maintenance">Maintenance</option>
+              <option value="meeting">Meeting</option>
+              <option value="holiday">Holiday</option>
+            </select>
+          </div>
+          <div class="admin-form-group"><label>Description</label><textarea id="eventDescription" rows="3"></textarea></div>
+        </form>
+      </div>
+      <div class="admin-modal-footer">
+        <button class="admin-btn admin-btn-outline" onclick="closeModal('eventModal')">Cancel</button>
+        <button class="admin-btn" onclick="saveEvent()"><i class="fas fa-save"></i> Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Service Modal -->
+  <div class="admin-modal" id="serviceModal">
+    <div class="admin-modal-content">
+      <div class="admin-modal-header"><h3 id="serviceModalTitle">Add Service</h3><button class="admin-modal-close" onclick="closeModal('serviceModal')"><i class="fas fa-times"></i></button></div>
+      <div class="admin-modal-body">
+        <form id="serviceForm">
+          <input type="hidden" id="serviceEditId">
+          <div class="admin-form-group"><label>Service Name *</label><input type="text" id="serviceName" required></div>
+          <div class="admin-form-group"><label>Font Awesome Icon (e.g., fa-home) *</label><input type="text" id="serviceIcon" placeholder="fa-home" required></div>
+          <div class="admin-form-group"><label>Description *</label><textarea id="serviceDescription" rows="3" required></textarea></div>
+        </form>
+      </div>
+      <div class="admin-modal-footer">
+        <button class="admin-btn admin-btn-outline" onclick="closeModal('serviceModal')">Cancel</button>
+        <button class="admin-btn" onclick="saveService()"><i class="fas fa-save"></i> Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="admin-toast" id="adminToast">
+    <i class="fas fa-check-circle"></i>
+    <span id="adminToastText">Action completed</span>
+  </div>
+
+  <script>
+    /* ============================================================
+       ADMIN PANEL JAVASCRIPT
+       ============================================================ */
+
+    // ---------- AUTHENTICATION CREDENTIALS ----------
+    const ADMIN_CREDENTIALS = {
+      username: 'JOSH',
+      password: '(Lojo_256)',
+      secret: '8787'
+    };
+
+    // ---------- STORAGE KEYS ----------
+    const STORAGE_KEYS = {
+      districts: 'unwm_admin_districts',
+      stations: 'unwm_admin_stations',
+      workers: 'unwm_admin_workers',
+      assignments: 'unwm_admin_assignments',
+      events: 'unwm_admin_events',
+      services: 'unwm_admin_services',
+      bookings: 'unwm_reports',
+      feedback: 'unwm_reviews',
+      users: 'unwm_users',
+      auth: 'unwm_admin_auth'
+    };
+
+    // ---------- DEFAULT DATA ----------
+    const DEFAULT_DISTRICTS = [
+      { id: 'd1', name: 'Kampala', region: 'Central', contact: '+256 700 111 001', email: 'kampala@unwm.ug', status: 'Active' },
+      { id: 'd2', name: 'Gulu', region: 'Northern', contact: '+256 700 222 001', email: 'gulu@unwm.ug', status: 'Active' },
+      { id: 'd3', name: 'Mbarara', region: 'Western', contact: '+256 700 333 001', email: 'mbarara@unwm.ug', status: 'Active' },
+      { id: 'd4', name: 'Jinja', region: 'Eastern', contact: '+256 700 444 101', email: 'jinja@unwm.ug', status: 'Active' },
+      { id: 'd5', name: 'Mbale', region: 'Eastern', contact: '+256 700 600 026', email: 'mbale@unwm.ug', status: 'Active' },
+      { id: 'd6', name: 'Arua', region: 'Northern', contact: '+256 700 700 009', email: 'arua@unwm.ug', status: 'Active' },
+      { id: 'd7', name: 'Masaka', region: 'Central', contact: '+256 700 500 015', email: 'masaka@unwm.ug', status: 'Active' },
+      { id: 'd8', name: 'Fort Portal', region: 'Western', contact: '+256 700 800 009', email: 'fortportal@unwm.ug', status: 'Active' },
+      { id: 'd9', name: 'Lira', region: 'Northern', contact: '+256 700 700 018', email: 'lira@unwm.ug', status: 'Active' },
+      { id: 'd10', name: 'Soroti', region: 'Eastern', contact: '+256 700 600 033', email: 'soroti@unwm.ug', status: 'Active' }
+    ];
+
+    const DEFAULT_STATIONS = [
+      { id: 's1', name: 'Kisenyi Station', district: 'Kampala', phone: '+256 700 111 001', email: 'kisenyi@unwm.ug', hours: 'Mon-Sat: 6am - 9pm' },
+      { id: 's2', name: 'Kamwokya Station', district: 'Kampala', phone: '+256 700 111 002', email: 'kamwokya@unwm.ug', hours: 'Mon-Sat: 6am - 9pm' },
+      { id: 's3', name: 'Nakawa Station', district: 'Kampala', phone: '+256 700 111 003', email: 'nakawa@unwm.ug', hours: 'Mon-Sat: 6am - 9pm' },
+      { id: 's4', name: 'Layibi Station', district: 'Gulu', phone: '+256 700 222 001', email: 'layibi@unwm.ug', hours: 'Mon-Sat: 7am - 8pm' },
+      { id: 's5', name: 'Kakoba Station', district: 'Mbarara', phone: '+256 700 333 001', email: 'kakoba@unwm.ug', hours: 'Mon-Sat: 7am - 8pm' }
+    ];
+
+    const DEFAULT_WORKERS = [
+      { id: 'w1', idNumber: 'CM90012345678AB', name: 'Eng. David Mukasa', category: 'Engineer', region: 'Central', district: 'Kampala', residence: 'Kisenyi Zone 3', phone: '+256 701 000 001', email: 'david.mukasa@unwm.ug', dob: '1985-04-12', joinDate: '2020-01-15', status: 'Available', experience: 10, skills: 'Environmental Engineering, Site Assessment' },
+      { id: 'w2', idNumber: 'CM90012345679CD', name: 'Eng. Sarah Nalubega', category: 'Engineer', region: 'Central', district: 'Kampala', residence: 'Nakawa Division', phone: '+256 701 000 002', email: 'sarah.nalubega@unwm.ug', dob: '1990-08-22', joinDate: '2021-03-10', status: 'Available', experience: 7, skills: 'Waste Treatment Design, Recycling Systems' },
+      { id: 'w3', idNumber: 'CM90012345680EF', name: 'James Okello', category: 'Waste Specialist', region: 'Northern', district: 'Gulu', residence: 'Layibi, Plot 45', phone: '+256 701 000 003', email: 'james.okello@unwm.ug', dob: '1988-11-05', joinDate: '2019-07-01', status: 'Available', experience: 8, skills: 'Hazardous Waste, Chemical Handling' },
+      { id: 'w4', idNumber: 'CM90012345681GH', name: 'Mary Achieng', category: 'Volunteer', region: 'Eastern', district: 'Jinja', residence: 'Mpumudde Road', phone: '+256 701 000 004', email: 'mary.achieng@unwm.ug', dob: '1995-02-18', joinDate: '2023-05-20', status: 'Available', experience: 2, skills: 'Community Outreach, Awareness Campaigns' },
+      { id: 'w5', idNumber: 'CM90012345682IJ', name: 'Robert Ssekandi', category: 'Driver', region: 'Central', district: 'Kampala', residence: 'Rubaga Division', phone: '+256 701 000 005', email: 'robert.ssekandi@unwm.ug', dob: '1982-09-30', joinDate: '2018-11-12', status: 'Available', experience: 12, skills: 'Heavy Truck, Class C License' },
+      { id: 'w6', idNumber: 'CM90012345683KL', name: 'Patricia Nabirye', category: 'Supervisor', region: 'Eastern', district: 'Mbale', residence: 'Nkoma Ward', phone: '+256 701 000 006', email: 'patricia.nabirye@unwm.ug', dob: '1987-06-15', joinDate: '2020-02-28', status: 'Available', experience: 9, skills: 'Team Leadership, Route Optimization' },
+      { id: 'w7', idNumber: 'CM90012345684MN', name: 'Moses Kizza', category: 'Collector', region: 'Central', district: 'Kampala', residence: 'Makindye Zone 5', phone: '+256 701 000 007', email: 'moses.kizza@unwm.ug', dob: '1993-12-08', joinDate: '2022-01-10', status: 'Available', experience: 4, skills: 'Waste Sorting, Safety Protocols' },
+      { id: 'w8', idNumber: 'CM90012345685OP', name: 'Grace Atim', category: 'Waste Specialist', region: 'Western', district: 'Mbarara', residence: 'Kakoba Division', phone: '+256 701 000 008', email: 'grace.atim@unwm.ug', dob: '1991-03-25', joinDate: '2021-09-01', status: 'Available', experience: 6, skills: 'Composting, Organic Waste Management' },
+      { id: 'w9', idNumber: 'CM90012345686QR', name: 'Peter Ochieng', category: 'Engineer', region: 'Western', district: 'Fort Portal', residence: 'Boma Ward', phone: '+256 701 000 009', email: 'peter.ochieng@unwm.ug', dob: '1986-07-14', joinDate: '2020-06-15', status: 'Available', experience: 11, skills: 'Landfill Design, Environmental Impact' },
+      { id: 'w10', idNumber: 'CM90012345687ST', name: 'Joan Akello', category: 'Volunteer', region: 'Northern', district: 'Lira', residence: 'Central Ward', phone: '+256 701 000 010', email: 'joan.akello@unwm.ug', dob: '1997-10-02', joinDate: '2024-01-15', status: 'Available', experience: 1, skills: 'Community Mobilization' }
+    ];
+
+    const DEFAULT_SERVICES = [
+      { id: 'sv1', name: 'Household Collection', icon: 'fa-home', description: 'Regular scheduled pickups for residential areas, including organic, plastic, and general waste.' },
+      { id: 'sv2', name: 'Commercial Waste', icon: 'fa-building', description: 'Tailored waste management for businesses, markets, hotels, and offices with flexible schedules.' },
+      { id: 'sv3', name: 'Industrial & Hazardous', icon: 'fa-industry', description: 'Safe handling and disposal of industrial, medical, and electronic waste following strict regulations.' },
+      { id: 'sv4', name: 'Recycling Program', icon: 'fa-recycle', description: 'Collection and processing of recyclable materials including plastics, paper, glass, and metals.' }
+    ];
+
+    // ---------- STATE ----------
+    let districts = [];
+    let stations = [];
+    let workers = [];
+    let assignments = [];
+    let events = [];
+    let services = [];
+    let bookings = [];
+    let feedback = [];
+    let users = [];
+
+    let calendarDate = new Date();
+    let currentBookingFilter = '';
+    let currentAssignmentFilter = '';
+
+    // Chart instances (destroy before recreating)
+    let chartWorkers = null;
+    let chartBookings = null;
+    let chartMonthly = null;
+    let chartRatings = null;
+    let chartRegion = null;
+
+    // ============================================================
+    // LOGIN
+    // ============================================================
+    document.getElementById('loginForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const username = document.getElementById('loginUsername').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const secret = document.getElementById('loginSecret').value.trim();
+
+      const errorBox = document.getElementById('loginError');
+      const errorText = document.getElementById('loginErrorText');
+
+      if (username === ADMIN_CREDENTIALS.username &&
+          password === ADMIN_CREDENTIALS.password &&
+          secret === ADMIN_CREDENTIALS.secret) {
+        // Success
+        errorBox.classList.remove('show');
+        sessionStorage.setItem('unwm_admin_logged', 'true');
+        sessionStorage.setItem('unwm_admin_user', username);
+        showAdminApp();
+        showAdminToast('Welcome back, ' + username + '!');
+      } else {
+        errorBox.classList.add('show');
+        if (username !== ADMIN_CREDENTIALS.username) {
+          errorText.textContent = 'Invalid username. Access denied.';
+        } else if (password !== ADMIN_CREDENTIALS.password) {
+          errorText.textContent = 'Incorrect password. Please try again.';
+        } else {
+          errorText.textContent = 'Invalid secret code. Access denied.';
+        }
+        document.getElementById('loginSecret').value = '';
+      }
+    });
+
+    function showAdminApp() {
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('adminApp').style.display = 'block';
+      document.getElementById('currentUser').textContent = sessionStorage.getItem('unwm_admin_user') || 'Administrator';
+      document.getElementById('welcomeName').textContent = sessionStorage.getItem('unwm_admin_user') || 'Administrator';
+      initAdmin();
+    }
+
+    function logoutAdmin(e) {
+      e.preventDefault();
+      if (!confirm('Are you sure you want to logout?')) return;
+      sessionStorage.removeItem('unwm_admin_logged');
+      sessionStorage.removeItem('unwm_admin_user');
+      location.reload();
+    }
+
+    // Check if already logged in
+    if (sessionStorage.getItem('unwm_admin_logged') === 'true') {
+      showAdminApp();
+    }
+
+    // ============================================================
+    // INIT
+    // ============================================================
+    function initAdmin() {
+      loadAllData();
+      setupNavigation();
+      setupSidebarToggle();
+      renderDashboard();
+      renderDistricts();
+      renderStations();
+      renderWorkers();
+      renderAssignments();
+      renderBookings();
+      renderFeedback();
+      renderServices();
+      renderUsers();
+      renderAnalytics();
+      renderCalendar();
+      updateCounts();
+      populateDistrictSelects();
+      initCharts();
+    }
+
+    // ---------- LOAD DATA ----------
+    function loadAllData() {
+      districts = getStored(STORAGE_KEYS.districts, DEFAULT_DISTRICTS);
+      stations = getStored(STORAGE_KEYS.stations, DEFAULT_STATIONS);
+      workers = getStored(STORAGE_KEYS.workers, DEFAULT_WORKERS);
+      assignments = getStored(STORAGE_KEYS.assignments, []);
+      events = getStored(STORAGE_KEYS.events, []);
+      services = getStored(STORAGE_KEYS.services, DEFAULT_SERVICES);
+      bookings = getStored(STORAGE_KEYS.bookings, []);
+      feedback = getStored(STORAGE_KEYS.feedback, []);
+      users = getStored(STORAGE_KEYS.users, []);
+    }
+
+    function getStored(key, fallback) {
+      try {
+        const val = localStorage.getItem(key);
+        return val ? JSON.parse(val) : fallback;
+      } catch (e) { return fallback; }
+    }
+
+    function setStored(key, value) {
+      try { localStorage.setItem(key, JSON.stringify(value)); }
+      catch (e) { console.warn('Storage error:', e); }
+    }
+
+    // ---------- NAVIGATION ----------
+    function setupNavigation() {
+      document.querySelectorAll('.admin-nav-link').forEach(link => {
+        link.addEventListener('click', function () {
+          const page = this.dataset.page;
+          switchAdminPage(page);
+          document.getElementById('adminSidebar').classList.remove('open');
+        });
+      });
+    }
+
+    function switchAdminPage(page) {
+      document.querySelectorAll('.admin-page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.admin-nav-link').forEach(l => l.classList.remove('active'));
+
+      const pageEl = document.getElementById('page-' + page);
+      const linkEl = document.querySelector(`.admin-nav-link[data-page="${page}"]`);
+
+      if (pageEl) pageEl.classList.add('active');
+      if (linkEl) linkEl.classList.add('active');
+
+      if (page === 'dashboard') { renderDashboard(); initCharts(); }
+      if (page === 'districts') renderDistricts();
+      if (page === 'stations') renderStations();
+      if (page === 'workers') renderWorkers();
+      if (page === 'assignments') renderAssignments();
+      if (page === 'bookings') renderBookings();
+      if (page === 'feedback') renderFeedback();
+      if (page === 'services') renderServices();
+      if (page === 'users') renderUsers();
+      if (page === 'analytics') { renderAnalytics(); initAnalyticsCharts(); }
+      if (page === 'calendar') renderCalendar();
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function setupSidebarToggle() {
+      const toggle = document.getElementById('adminMenuToggle');
+      const sidebar = document.getElementById('adminSidebar');
+      if (toggle) toggle.addEventListener('click', () => sidebar.classList.toggle('open'));
+    }
+
+    // ---------- COUNTS ----------
+    function updateCounts() {
+      document.getElementById('districtsCount').textContent = districts.length;
+      document.getElementById('stationsCount').textContent = stations.length;
+      document.getElementById('workersCount').textContent = workers.length;
+      document.getElementById('assignmentsCount').textContent = assignments.length;
+      document.getElementById('bookingsCount').textContent = bookings.length;
+      document.getElementById('feedbackCount').textContent = feedback.length;
+      document.getElementById('usersCount').textContent = users.length;
+
+      document.getElementById('statDistricts').textContent = districts.length;
+      document.getElementById('statWorkers').textContent = workers.length;
+      document.getElementById('statBookings').textContent = bookings.length;
+      document.getElementById('statAssignments').textContent = assignments.filter(a => a.status !== 'Completed' && a.status !== 'Cancelled').length;
+
+      // Category counts
+      document.getElementById('wEngineers').textContent = workers.filter(w => w.category === 'Engineer').length;
+      document.getElementById('wVolunteers').textContent = workers.filter(w => w.category === 'Volunteer').length;
+      document.getElementById('wSpecialists').textContent = workers.filter(w => w.category === 'Waste Specialist').length;
+      document.getElementById('wDrivers').textContent = workers.filter(w => w.category === 'Driver').length;
+      document.getElementById('wSupervisors').textContent = workers.filter(w => w.category === 'Supervisor').length;
+      document.getElementById('wCollectors').textContent = workers.filter(w => w.category === 'Collector').length;
+    }
+
+    // ---------- DASHBOARD ----------
+    function renderDashboard() {
+      const tbody = document.getElementById('recentBookingsTable');
+      const recent = bookings.slice(-5).reverse();
+
+      if (!recent.length) {
+        tbody.innerHTML = '<tr><td colspan="5" class="empty-state" style="padding: 2rem;"><p>No bookings yet.</p></td></tr>';
+      } else {
+        tbody.innerHTML = recent.map(b => `
+          <tr>
+            <td><strong>${escapeHtml(b.name || 'Anonymous')}</strong></td>
+            <td>${escapeHtml(b.district || '-')}</td>
+            <td>${escapeHtml(b.wasteType || '-')}</td>
+            <td>${escapeHtml(b.eta || '-')}</td>
+            <td><span class="badge badge-success">Pending</span></td>
+          </tr>
+        `).join('');
+      }
+
+      const feed = document.getElementById('activityFeed');
+      const activities = [];
+      if (bookings.length) activities.push({ icon: 'fa-truck', type: '', text: `${bookings.length} total bookings recorded`, time: 'Recent' });
+      if (assignments.length) activities.push({ icon: 'fa-clipboard-list', type: 'accent', text: `${assignments.length} job assignments created`, time: 'Recent' });
+      if (workers.length) activities.push({ icon: 'fa-users-cog', type: 'info', text: `${workers.length} workers registered`, time: 'System' });
+      if (feedback.length) activities.push({ icon: 'fa-comments', type: '', text: `${feedback.length} reviews submitted`, time: 'Recent' });
+      if (districts.length) activities.push({ icon: 'fa-map-marked-alt', type: 'accent', text: `${districts.length} districts configured`, time: 'System' });
+
+      if (!activities.length) {
+        feed.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>No recent activity</p></div>';
+      } else {
+        feed.innerHTML = activities.map(a => `
+          <div class="activity-item">
+            <div class="activity-icon ${a.type}"><i class="fas ${a.icon}"></i></div>
+            <div class="activity-text">
+              <p>${escapeHtml(a.text)}</p>
+              <small>${escapeHtml(a.time)}</small>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      updateCounts();
+      renderDashboardCharts();
+    }
+
+    // ============================================================
+    // CHARTS
+    // ============================================================
+    function initCharts() {
+      renderDashboardCharts();
+    }
+
+    function renderDashboardCharts() {
+      // Workers by Category (Doughnut)
+      const ctx1 = document.getElementById('chartWorkers');
+      if (ctx1) {
+        const cats = ['Engineer', 'Volunteer', 'Waste Specialist', 'Driver', 'Supervisor', 'Collector'];
+        const counts = cats.map(c => workers.filter(w => w.category === c).length);
+        if (chartWorkers) chartWorkers.destroy();
+        chartWorkers = new Chart(ctx1, {
+          type: 'doughnut',
+          data: {
+            labels: cats,
+            datasets: [{
+              data: counts,
+              backgroundColor: ['#2980b9', '#27ae60', '#f5a623', '#8e44ad', '#c0392b', '#16a085'],
+              borderWidth: 3,
+              borderColor: '#ffffff'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { position: 'bottom', labels: { padding: 15, font: { size: 12 } } }
+            },
+            cutout: '60%'
+          }
+        });
+      }
+
+      // Bookings by Waste Type (Bar)
+      const ctx2 = document.getElementById('chartBookings');
+      if (ctx2) {
+        const breakdown = {};
+        bookings.forEach(b => {
+          const t = b.wasteType || 'Unknown';
+          breakdown[t] = (breakdown[t] || 0) + 1;
+        });
+        const labels = Object.keys(breakdown);
+        const data = Object.values(breakdown);
+
+        if (chartBookings) chartBookings.destroy();
+        chartBookings = new Chart(ctx2, {
+          type: 'bar',
+          data: {
+            labels: labels.length ? labels : ['No data'],
+            datasets: [{
+              label: 'Bookings',
+              data: data.length ? data : [0],
+              backgroundColor: 'rgba(46, 139, 87, 0.75)',
+              borderColor: 'rgba(30, 107, 59, 1)',
+              borderWidth: 2,
+              borderRadius: 8
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              y: { beginAtZero: true, ticks: { precision: 0 } }
+            }
+          }
+        });
+      }
+    }
+
+    function initAnalyticsCharts() {
+      // Monthly Bookings Trend (Line)
+      const ctx1 = document.getElementById('chartMonthly');
+      if (ctx1) {
+        const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        const counts = new Array(12).fill(0);
+        bookings.forEach(b => {
+          if (b.date) {
+            const m = new Date(b.date).getMonth();
+            if (m >= 0 && m < 12) counts[m]++;
+          }
+        });
+        if (chartMonthly) chartMonthly.destroy();
+        chartMonthly = new Chart(ctx1, {
+          type: 'line',
+          data: {
+            labels: months,
+            datasets: [{
+              label: 'Bookings',
+              data: counts,
+              borderColor: '#1e6b3b',
+              backgroundColor: 'rgba(46, 139, 87, 0.15)',
+              fill: true,
+              tension: 0.4,
+              borderWidth: 3,
+              pointBackgroundColor: '#1e6b3b',
+              pointRadius: 5,
+              pointHoverRadius: 7
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+          }
+        });
+      }
+
+      // Ratings Distribution (Bar)
+      const ctx2 = document.getElementById('chartRatings');
+      if (ctx2) {
+        const stars = [1, 2, 3, 4, 5];
+        const counts = stars.map(s => feedback.filter(f => parseInt(f.rating) === s).length);
+        if (chartRatings) chartRatings.destroy();
+        chartRatings = new Chart(ctx2, {
+          type: 'bar',
+          data: {
+            labels: ['1★', '2★', '3★', '4★', '5★'],
+            datasets: [{
+              label: 'Reviews',
+              data: counts,
+              backgroundColor: ['#c0392b', '#e67e22', '#f1c40f', '#2ecc71', '#27ae60'],
+              borderRadius: 8,
+              borderWidth: 0
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+          }
+        });
+      }
+
+      // Workers by Region (Pie)
+      const ctx3 = document.getElementById('chartRegion');
+      if (ctx3) {
+        const regions = ['Central', 'Eastern', 'Northern', 'Western'];
+        const counts = regions.map(r => workers.filter(w => w.region === r).length);
+        if (chartRegion) chartRegion.destroy();
+        chartRegion = new Chart(ctx3, {
+          type: 'pie',
+          data: {
+            labels: regions,
+            datasets: [{
+              data: counts,
+              backgroundColor: ['#1e6b3b', '#f5a623', '#2980b9', '#c0392b'],
+              borderWidth: 3,
+              borderColor: '#ffffff'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { position: 'bottom', labels: { padding: 15, font: { size: 12 } } }
+            }
+          }
+        });
+      }
+    }
+
+    // ============================================================
+    // DISTRICTS
+    // ============================================================
+    function renderDistricts(filter = '', region = '') {
+      const tbody = document.getElementById('districtsTableBody');
+      let list = districts;
+      if (filter) list = list.filter(d => d.name.toLowerCase().includes(filter.toLowerCase()));
+      if (region) list = list.filter(d => d.region === region);
+
+      if (!list.length) {
+        tbody.innerHTML = '<tr><td colspan="6" class="empty-state" style="padding: 3rem;"><i class="fas fa-map-marked-alt"></i><p>No districts found.</p></td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = list.map(d => {
+        const stationCount = stations.filter(s => s.district === d.name).length;
+        return `
+          <tr>
+            <td><strong>${escapeHtml(d.name)}</strong></td>
+            <td><span class="badge badge-primary">${escapeHtml(d.region)}</span></td>
+            <td>${escapeHtml(d.contact)}</td>
+            <td>${stationCount} station${stationCount !== 1 ? 's' : ''}</td>
+            <td><span class="badge ${d.status === 'Active' ? 'badge-success' : d.status === 'Expanding' ? 'badge-warning' : 'badge-danger'}">${escapeHtml(d.status)}</span></td>
+            <td>
+              <div class="actions">
+                <button class="admin-btn-icon edit" onclick="editDistrict('${d.id}')" title="Edit"><i class="fas fa-edit"></i></button>
+                <button class="admin-btn-icon delete" onclick="deleteDistrict('${d.id}')" title="Delete"><i class="fas fa-trash"></i></button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterDistricts() {
+      renderDistricts(
+        document.getElementById('districtSearch').value,
+        document.getElementById('regionFilter').value
+      );
+    }
+
+    function openDistrictModal() {
+      document.getElementById('districtModalTitle').textContent = 'Add District';
+      document.getElementById('districtForm').reset();
+      document.getElementById('districtEditId').value = '';
+      document.getElementById('districtModal').classList.add('active');
+    }
+
+    function editDistrict(id) {
+      const d = districts.find(x => x.id === id);
+      if (!d) return;
+      document.getElementById('districtModalTitle').textContent = 'Edit District';
+      document.getElementById('districtEditId').value = d.id;
+      document.getElementById('districtName').value = d.name;
+      document.getElementById('districtRegion').value = d.region;
+      document.getElementById('districtContact').value = d.contact;
+      document.getElementById('districtEmail').value = d.email || '';
+      document.getElementById('districtStatus').value = d.status;
+      document.getElementById('districtModal').classList.add('active');
+    }
+
+    function saveDistrict() {
+      const id = document.getElementById('districtEditId').value;
+      const name = document.getElementById('districtName').value.trim();
+      const region = document.getElementById('districtRegion').value;
+      const contact = document.getElementById('districtContact').value.trim();
+      const email = document.getElementById('districtEmail').value.trim();
+      const status = document.getElementById('districtStatus').value;
+
+      if (!name || !region || !contact) {
+        showAdminToast('Please fill in all required fields', 'error');
+        return;
+      }
+
+      if (id) {
+        const idx = districts.findIndex(d => d.id === id);
+        if (idx > -1) districts[idx] = { ...districts[idx], name, region, contact, email, status };
+        showAdminToast('District updated successfully');
+      } else {
+        districts.push({ id: 'd' + Date.now(), name, region, contact, email, status });
+        showAdminToast('District added successfully');
+      }
+
+      setStored(STORAGE_KEYS.districts, districts);
+      closeModal('districtModal');
+      renderDistricts();
+      populateDistrictSelects();
+      updateCounts();
+    }
+
+    function deleteDistrict(id) {
+      if (!confirm('Delete this district?')) return;
+      districts = districts.filter(d => d.id !== id);
+      setStored(STORAGE_KEYS.districts, districts);
+      renderDistricts();
+      updateCounts();
+      showAdminToast('District deleted');
+    }
+
+    // ============================================================
+    // STATIONS
+    // ============================================================
+    function renderStations(filter = '') {
+      const tbody = document.getElementById('stationsTableBody');
+      let list = stations;
+      if (filter) list = list.filter(s => s.name.toLowerCase().includes(filter.toLowerCase()) || s.district.toLowerCase().includes(filter.toLowerCase()));
+
+      if (!list.length) {
+        tbody.innerHTML = '<tr><td colspan="5" class="empty-state" style="padding: 3rem;"><i class="fas fa-building"></i><p>No stations found.</p></td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = list.map(s => `
+        <tr>
+          <td><strong>${escapeHtml(s.name)}</strong></td>
+          <td>${escapeHtml(s.district)}</td>
+          <td>${escapeHtml(s.phone)}</td>
+          <td>${escapeHtml(s.email || '-')}</td>
+          <td>
+            <div class="actions">
+              <button class="admin-btn-icon edit" onclick="editStation('${s.id}')" title="Edit"><i class="fas fa-edit"></i></button>
+              <button class="admin-btn-icon delete" onclick="deleteStation('${s.id}')" title="Delete"><i class="fas fa-trash"></i></button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function filterStations() { renderStations(document.getElementById('stationSearch').value); }
+
+    function openStationModal() {
+      document.getElementById('stationModalTitle').textContent = 'Add Station';
+      document.getElementById('stationForm').reset();
+      document.getElementById('stationEditId').value = '';
+      populateDistrictSelects();
+      document.getElementById('stationModal').classList.add('active');
+    }
+
+    function editStation(id) {
+      const s = stations.find(x => x.id === id);
+      if (!s) return;
+      document.getElementById('stationModalTitle').textContent = 'Edit Station';
+      document.getElementById('stationEditId').value = s.id;
+      document.getElementById('stationName').value = s.name;
+      populateDistrictSelects();
+      document.getElementById('stationDistrict').value = s.district;
+      document.getElementById('stationPhone').value = s.phone;
+      document.getElementById('stationEmail').value = s.email || '';
+      document.getElementById('stationHours').value = s.hours || '';
+      document.getElementById('stationModal').classList.add('active');
+    }
+
+    function saveStation() {
+      const id = document.getElementById('stationEditId').value;
+      const name = document.getElementById('stationName').value.trim();
+      const district = document.getElementById('stationDistrict').value;
+      const phone = document.getElementById('stationPhone').value.trim();
+      const email = document.getElementById('stationEmail').value.trim();
+      const hours = document.getElementById('stationHours').value.trim();
+
+      if (!name || !district || !phone) {
+        showAdminToast('Please fill in all required fields', 'error');
+        return;
+      }
+
+      if (id) {
+        const idx = stations.findIndex(s => s.id === id);
+        if (idx > -1) stations[idx] = { ...stations[idx], name, district, phone, email, hours };
+        showAdminToast('Station updated');
+      } else {
+        stations.push({ id: 's' + Date.now(), name, district, phone, email, hours });
+        showAdminToast('Station added');
+      }
+
+      setStored(STORAGE_KEYS.stations, stations);
+      closeModal('stationModal');
+      renderStations();
+      renderDistricts();
+      updateCounts();
+    }
+
+    function deleteStation(id) {
+      if (!confirm('Delete this station?')) return;
+      stations = stations.filter(s => s.id !== id);
+      setStored(STORAGE_KEYS.stations, stations);
+      renderStations();
+      renderDistricts();
+      updateCounts();
+      showAdminToast('Station deleted');
+    }
+
+    function populateDistrictSelects() {
+      const selects = ['stationDistrict', 'workerDistrict', 'assignmentDistrict'];
+      selects.forEach(id => {
+        const select = document.getElementById(id);
+        if (!select) return;
+        const current = select.value;
+        select.innerHTML = '<option value="">Select District</option>' +
+          districts.map(d => `<option value="${escapeHtml(d.name)}">${escapeHtml(d.name)} (${escapeHtml(d.region)})</option>`).join('');
+        select.value = current;
+      });
+    }
+
+    // ============================================================
+    // WORKERS
+    // ============================================================
+    function renderWorkers(filter = '', category = '', region = '') {
+      const tbody = document.getElementById('workersTableBody');
+      let list = workers;
+      if (filter) {
+        const f = filter.toLowerCase();
+        list = list.filter(w =>
+          w.name.toLowerCase().includes(f) ||
+          w.idNumber.toLowerCase().includes(f) ||
+          w.district.toLowerCase().includes(f)
+        );
+      }
+      if (category) list = list.filter(w => w.category === category);
+      if (region) list = list.filter(w => w.region === region);
+
+      if (!list.length) {
+        tbody.innerHTML = '<tr><td colspan="8" class="empty-state" style="padding: 3rem;"><i class="fas fa-users-cog"></i><p>No workers found.</p></td></tr>';
+        return;
+      }
+
+      const catClass = {
+        'Engineer': 'cat-engineer',
+        'Volunteer': 'cat-volunteer',
+        'Waste Specialist': 'cat-specialist',
+        'Driver': 'cat-driver',
+        'Supervisor': 'cat-supervisor',
+        'Collector': 'cat-collector'
+      };
+
+      tbody.innerHTML = list.map(w => `
+        <tr>
+          <td><code style="font-size:0.8rem;">${escapeHtml(w.idNumber)}</code></td>
+          <td><strong>${escapeHtml(w.name)}</strong></td>
+          <td><span class="cat-badge ${catClass[w.category] || 'cat-specialist'}">${escapeHtml(w.category)}</span></td>
+          <td>${escapeHtml(w.region)}</td>
+          <td>${escapeHtml(w.district)}</td>
+          <td>${escapeHtml(w.phone)}</td>
+          <td><span class="badge ${w.status === 'Available' ? 'badge-success' : w.status === 'On Assignment' ? 'badge-info' : w.status === 'On Leave' ? 'badge-warning' : 'badge-danger'}">${escapeHtml(w.status)}</span></td>
+          <td>
+            <div class="actions">
+              <button class="admin-btn-icon edit" onclick="viewWorker('${w.id}')" title="View Details"><i class="fas fa-eye"></i></button>
+              <button class="admin-btn-icon assign" onclick="quickAssign('${w.id}')" title="Assign to Job"><i class="fas fa-paper-plane"></i></button>
+              <button class="admin-btn-icon edit" onclick="editWorker('${w.id}')" title="Edit"><i class="fas fa-edit"></i></button>
+              <button class="admin-btn-icon delete" onclick="deleteWorker('${w.id}')" title="Delete"><i class="fas fa-trash"></i></button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function filterWorkers() {
+      renderWorkers(
+        document.getElementById('workerSearch').value,
+        document.getElementById('workerCategoryFilter').value,
+        document.getElementById('workerRegionFilter').value
+      );
+    }
+
+    function openWorkerModal() {
+      document.getElementById('workerModalTitle').textContent = 'Add Worker';
+      document.getElementById('workerForm').reset();
+      document.getElementById('workerEditId').value = '';
+      populateDistrictSelects();
+      document.getElementById('workerModal').classList.add('active');
+    }
+
+    function editWorker(id) {
+      const w = workers.find(x => x.id === id);
+      if (!w) return;
+      document.getElementById('workerModalTitle').textContent = 'Edit Worker';
+      document.getElementById('workerEditId').value = w.id;
+      document.getElementById('workerIdNumber').value = w.idNumber;
+      document.getElementById('workerName').value = w.name;
+      document.getElementById('workerCategory').value = w.category;
+      document.getElementById('workerRegion').value = w.region;
+      populateDistrictSelects();
+      document.getElementById('workerDistrict').value = w.district;
+      document.getElementById('workerResidence').value = w.residence;
+      document.getElementById('workerPhone').value = w.phone;
+      document.getElementById('workerEmail').value = w.email;
+      document.getElementById('workerDob').value = w.dob || '';
+      document.getElementById('workerJoinDate').value = w.joinDate || '';
+      document.getElementById('workerStatus').value = w.status;
+      document.getElementById('workerExperience').value = w.experience || 0;
+      document.getElementById('workerSkills').value = w.skills || '';
+      document.getElementById('workerModal').classList.add('active');
+    }
+
+    function viewWorker(id) {
+      const w = workers.find(x => x.id === id);
+      if (!w) return;
+      alert(
+        `WORKER DETAILS\n` +
+        `━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+        `ID Number: ${w.idNumber}\n` +
+        `Full Name: ${w.name}\n` +
+        `Category: ${w.category}\n` +
+        `Region: ${w.region}\n` +
+        `District: ${w.district}\n` +
+        `Residence: ${w.residence}\n` +
+        `Phone: ${w.phone}\n` +
+        `Email: ${w.email}\n` +
+        `Date of Birth: ${w.dob || 'N/A'}\n` +
+        `Joined: ${w.joinDate}\n` +
+        `Experience: ${w.experience || 0} years\n` +
+        `Skills: ${w.skills || 'N/A'}\n` +
+        `Status: ${w.status}`
+      );
+    }
+
+    function saveWorker() {
+      const id = document.getElementById('workerEditId').value;
+      const data = {
+        idNumber: document.getElementById('workerIdNumber').value.trim(),
+        name: document.getElementById('workerName').value.trim(),
+        category: document.getElementById('workerCategory').value,
+        region: document.getElementById('workerRegion').value,
+        district: document.getElementById('workerDistrict').value,
+        residence: document.getElementById('workerResidence').value.trim(),
+        phone: document.getElementById('workerPhone').value.trim(),
+        email: document.getElementById('workerEmail').value.trim(),
+        dob: document.getElementById('workerDob').value,
+        joinDate: document.getElementById('workerJoinDate').value,
+        status: document.getElementById('workerStatus').value,
+        experience: parseInt(document.getElementById('workerExperience').value) || 0,
+        skills: document.getElementById('workerSkills').value.trim()
+      };
+
+      // Validate
+      for (const k of ['idNumber','name','category','region','district','residence','phone','email','joinDate']) {
+        if (!data[k]) {
+          showAdminToast('Please fill in all required fields', 'error');
+          return;
+        }
+      }
+
+      if (id) {
+        const idx = workers.findIndex(w => w.id === id);
+        if (idx > -1) workers[idx] = { ...workers[idx], ...data };
+        showAdminToast('Worker updated successfully');
+      } else {
+        workers.push({ id: 'w' + Date.now(), ...data });
+        showAdminToast('Worker added successfully');
+      }
+
+      setStored(STORAGE_KEYS.workers, workers);
+      closeModal('workerModal');
+      renderWorkers();
+      updateCounts();
+      renderDashboardCharts();
+    }
+
+    function deleteWorker(id) {
+      if (!confirm('Delete this worker? This will also remove them from assignments.')) return;
+      workers = workers.filter(w => w.id !== id);
+      // Remove from assignments
+      assignments.forEach(a => {
+        a.workerIds = (a.workerIds || []).filter(wid => wid !== id);
+      });
+      setStored(STORAGE_KEYS.workers, workers);
+      setStored(STORAGE_KEYS.assignments, assignments);
+      renderWorkers();
+      renderAssignments();
+      updateCounts();
+      renderDashboardCharts();
+      showAdminToast('Worker deleted');
+    }
+
+    function quickAssign(workerId) {
+      openAssignmentModal();
+      setTimeout(() => {
+        const cb = document.querySelector(`#assignmentWorkersList input[value="${workerId}"]`);
+        if (cb) { cb.checked = true; updateEmailPreview(); }
+      }, 100);
+    }
+
+    // ============================================================
+    // ASSIGNMENTS
+    // ============================================================
+    function renderAssignments(filter = '', statusFilter = '') {
+      const container = document.getElementById('assignmentsList');
+      let list = assignments.slice().reverse();
+      if (filter) {
+        const f = filter.toLowerCase();
+        list = list.filter(a => a.title.toLowerCase().includes(f) || a.district.toLowerCase().includes(f));
+      }
+      if (statusFilter) list = list.filter(a => a.status === statusFilter);
+
+      if (!list.length) {
+        container.innerHTML = '<div class="empty-state"><i class="fas fa-clipboard-list"></i><p>No assignments yet. Click "New Assignment" to create one.</p></div>';
+        return;
+      }
+
+      container.innerHTML = list.map(a => {
+        const assignedWorkers = (a.workerIds || []).map(id => workers.find(w => w.id === id)).filter(Boolean);
+        const priorityColor = a.priority === 'Urgent' ? 'badge-danger' : a.priority === 'High' ? 'badge-warning' : 'badge-info';
+        const statusColor = a.status === 'Completed' ? 'badge-success' : a.status === 'In Progress' ? 'badge-info' : a.status === 'Cancelled' ? 'badge-danger' : 'badge-warning';
+        return `
+          <div class="job-card">
+            <div class="job-card-header">
+              <div>
+                <h4>${escapeHtml(a.title)}</h4>
+                <div class="job-card-meta">
+                  <span><i class="fas fa-map-marker-alt"></i> ${escapeHtml(a.district)}, ${escapeHtml(a.region)}</span>
+                  <span><i class="fas fa-calendar"></i> Due: ${escapeHtml(a.deadline)}</span>
+                  <span><i class="fas fa-flag"></i> <span class="badge ${priorityColor}">${escapeHtml(a.priority)}</span></span>
+                  <span class="badge ${statusColor}">${escapeHtml(a.status)}</span>
+                </div>
+              </div>
+              <div class="actions">
+                <button class="admin-btn-icon edit" onclick="cycleAssignmentStatus('${a.id}')" title="Change Status"><i class="fas fa-sync-alt"></i></button>
+                <button class="admin-btn-icon delete" onclick="deleteAssignment('${a.id}')" title="Delete"><i class="fas fa-trash"></i></button>
+              </div>
+            </div>
+            <p style="color: var(--gray-600); font-size: 0.88rem; margin: 0.5rem 0;">${escapeHtml(a.description)}</p>
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.5rem;">
+              <strong style="font-size:0.82rem; color: var(--gray-600);">Assigned (${assignedWorkers.length}):</strong>
+              ${assignedWorkers.map(w => `<span class="cat-badge cat-engineer" style="font-size:0.7rem;">${escapeHtml(w.name)}</span>`).join('')}
+            </div>
+            <div style="margin-top: 0.75rem; font-size: 0.75rem; color: var(--gray-400);">
+              <i class="fas fa-envelope"></i> Emails sent to ${assignedWorkers.filter(w => w.email).length} worker(s) on ${new Date(a.createdAt).toLocaleDateString()}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function filterAssignments() {
+      renderAssignments(
+        document.getElementById('assignmentSearch').value,
+        document.getElementById('assignmentStatusFilter').value
+      );
+    }
+
+    function openAssignmentModal() {
+      document.getElementById('assignmentModalTitle').textContent = 'New Job Assignment';
+      document.getElementById('assignmentForm').reset();
+      document.getElementById('assignmentEditId').value = '';
+      populateDistrictSelects();
+      document.getElementById('assignmentDeadline').value = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+      renderAssignmentWorkers();
+      document.getElementById('emailPreview').style.display = 'none';
+      document.getElementById('assignmentModal').classList.add('active');
+    }
+
+    function renderAssignmentWorkers() {
+      const container = document.getElementById('assignmentWorkersList');
+      const catFilter = document.getElementById('assignmentWorkerCategoryFilter').value;
+      let list = workers.filter(w => w.status === 'Available' || w.status === 'On Assignment');
+      if (catFilter) list = list.filter(w => w.category === catFilter);
+
+      if (!list.length) {
+        container.innerHTML = '<p style="color:var(--gray-400); text-align:center; padding:1rem; font-size:0.85rem;">No workers available in this category.</p>';
+        return;
+      }
+
+      container.innerHTML = list.map(w => `
+        <label style="display:flex; align-items:center; gap:0.75rem; padding:0.6rem; border-radius:6px; cursor:pointer; transition:background 0.15s;" onmouseover="this.style.background='var(--primary-pale)'" onmouseout="this.style.background='transparent'">
+          <input type="checkbox" value="${w.id}" onchange="updateEmailPreview()" style="width:auto; margin:0;">
+          <div style="flex:1;">
+            <div style="font-weight:600; font-size:0.88rem;">${escapeHtml(w.name)} <span class="cat-badge ${'cat-' + (w.category === 'Waste Specialist' ? 'specialist' : w.category === 'Volunteer' ? 'volunteer' : w.category.toLowerCase())}" style="font-size:0.65rem;">${escapeHtml(w.category)}</span></div>
+            <div style="font-size:0.75rem; color:var(--gray-500);">${escapeHtml(w.email)} · ${escapeHtml(w.district)}</div>
+          </div>
+        </label>
+      `).join('');
+    }
+
+    function updateEmailPreview() {
+      const checked = Array.from(document.querySelectorAll('#assignmentWorkersList input[type="checkbox"]:checked'));
+      const preview = document.getElementById('emailPreview');
+      if (!checked.length) { preview.style.display = 'none'; return; }
+
+      const title = document.getElementById('assignmentTitle').value || 'Job Assignment';
+      const deadline = document.getElementById('assignmentDeadline').value || 'TBD';
+      const priority = document.getElementById('assignmentPriority').value || 'Normal';
+
+      const selectedWorkers = checked.map(c => workers.find(w => w.id === c.value)).filter(Boolean);
+      const emails = selectedWorkers.map(w => w.email).join(', ');
+
+      document.getElementById('emailPreviewTo').textContent = emails;
+      document.getElementById('emailPreviewSubject').textContent = title;
+      document.getElementById('emailPreviewBody').innerHTML = `
+        <p>Dear Team,</p>
+        <p>You have been assigned to a new job:</p>
+        <p><strong>${escapeHtml(title)}</strong></p>
+        <p><strong>Priority:</strong> ${escapeHtml(priority)}<br>
+        <strong>Deadline:</strong> ${escapeHtml(deadline)}</p>
+        <p>Please login to the UNWM portal or contact your supervisor for more details.</p>
+        <p>Thank you for your service,<br><em>Uganda National Waste Management</em></p>
+      `;
+      preview.style.display = 'block';
+    }
+
+    function saveAssignment() {
+      const title = document.getElementById('assignmentTitle').value.trim();
+      const description = document.getElementById('assignmentDescription').value.trim();
+      const district = document.getElementById('assignmentDistrict').value;
+      const region = document.getElementById('assignmentRegion').value;
+      const priority = document.getElementById('assignmentPriority').value;
+      const deadline = document.getElementById('assignmentDeadline').value;
+
+      const checked = Array.from(document.querySelectorAll('#assignmentWorkersList input[type="checkbox"]:checked')).map(c => c.value);
+
+      if (!title || !description || !district || !region || !deadline) {
+        showAdminToast('Please fill in all required fields', 'error');
+        return;
+      }
+      if (!checked.length) {
+        showAdminToast('Please select at least one worker', 'error');
+        return;
+      }
+
+      const assignment = {
+        id: 'a' + Date.now(),
+        title, description, district, region, priority, deadline,
+        workerIds: checked,
+        status: 'Pending',
+        createdAt: new Date().toISOString()
+      };
+
+      assignments.push(assignment);
+      setStored(STORAGE_KEYS.assignments, assignments);
+
+      // Update worker statuses
+      checked.forEach(id => {
+        const w = workers.find(x => x.id === id);
+        if (w && w.status === 'Available') w.status = 'On Assignment';
+      });
+      setStored(STORAGE_KEYS.workers, workers);
+
+      // Simulate emails sent
+      const emailsSent = checked.map(id => workers.find(w => w.id === id)?.email).filter(Boolean);
+      console.log('%c📧 EMAILS SENT', 'background:#1e6b3b; color:white; padding:4px 8px; border-radius:4px;');
+      console.log('Assignment:', title);
+      console.log('Recipients:', emailsSent);
+
+      closeModal('assignmentModal');
+      renderAssignments();
+      renderWorkers();
+      updateCounts();
+      renderDashboardCharts();
+      showAdminToast(`Job assigned! ${emailsSent.length} email(s) sent to workers.`);
+    }
+
+    function cycleAssignmentStatus(id) {
+      const a = assignments.find(x => x.id === id);
+      if (!a) return;
+      const statuses = ['Pending', 'In Progress', 'Completed', 'Cancelled'];
+      const current = a.status || 'Pending';
+      const next = statuses[(statuses.indexOf(current) + 1) % statuses.length];
+      a.status = next;
+
+      // If completed or cancelled, set workers back to Available
+      if (next === 'Completed' || next === 'Cancelled') {
+        (a.workerIds || []).forEach(wid => {
+          const w = workers.find(x => x.id === wid);
+          if (w) w.status = 'Available';
+        });
+        setStored(STORAGE_KEYS.workers, workers);
+      }
+
+      setStored(STORAGE_KEYS.assignments, assignments);
+      renderAssignments();
+      renderWorkers();
+      updateCounts();
+      showAdminToast(`Status changed to ${next}`);
+    }
+
+    function deleteAssignment(id) {
+      if (!confirm('Delete this assignment?')) return;
+      const a = assignments.find(x => x.id === id);
+      if (a) {
+        (a.workerIds || []).forEach(wid => {
+          const w = workers.find(x => x.id === wid);
+          if (w && w.status === 'On Assignment') w.status = 'Available';
+        });
+        setStored(STORAGE_KEYS.workers, workers);
+      }
+      assignments = assignments.filter(x => x.id !== id);
+      setStored(STORAGE_KEYS.assignments, assignments);
+      renderAssignments();
+      renderWorkers();
+      updateCounts();
+      showAdminToast('Assignment deleted');
+    }
+    
+
+    // ============================================================
+    // BOOKINGS
+    // ============================================================
+    function renderBookings() {
+  const tbody = document.getElementById('bookingsTableBody');
+  let list = bookings;
+  if (currentBookingFilter) list = list.filter(b => (b.status || 'Pending') === currentBookingFilter);
+
+  if (!list.length) {
+    tbody.innerHTML = '<tr><td colspan="8" class="empty-state" style="padding: 3rem;"><i class="fas fa-truck"></i><p>No bookings found.</p></td></tr>';
+    return;
+  }
+
+  const STAGE_LABELS = {
+    received: 'Received',
+    confirmed: 'Confirmed',
+    dispatched: 'Dispatched',
+    transit: 'In Transit',
+    collected: 'Collected',
+    completed: 'Completed'
+  };
+
+  tbody.innerHTML = list.map((b, i) => {
+    const stage = b.trackingStage || 'received';
+    const stageLabel = STAGE_LABELS[stage] || 'Received';
+    const stageClass = stage === 'completed' ? 'badge-success' : stage === 'collected' ? 'badge-info' : stage === 'transit' || stage === 'dispatched' ? 'badge-warning' : 'badge-primary';
+
+    return `
+      <tr>
+        <td><strong>${escapeHtml(b.name || 'Anonymous')}</strong></td>
+        <td>${escapeHtml(b.phone || '-')}</td>
+        <td>${escapeHtml(b.district || '-')}</td>
+        <td>${escapeHtml(b.wasteType || '-')}</td>
+        <td>${escapeHtml(b.volume || '-')}</td>
+        <td>
+          <code style="font-size:0.78rem; background: var(--gray-100); padding: 0.15rem 0.5rem; border-radius: 4px;">${escapeHtml(b.trackingId || b.id || '-')}</code>
+        </td>
+        <td><span class="badge ${stageClass}">${stageLabel}</span></td>
+        <td>
+          <div class="actions">
+            <button class="admin-btn-icon edit" onclick="advanceTracking(${i})" title="Advance Stage"><i class="fas fa-forward"></i></button>
+            <button class="admin-btn-icon delete" onclick="deleteBooking(${i})" title="Delete"><i class="fas fa-trash"></i></button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+// Advance a booking to the next tracking stage
+function advanceTracking(index) {
+  const STAGES = ['received', 'confirmed', 'dispatched', 'transit', 'collected', 'completed'];
+  const booking = bookings[index];
+  if (!booking) return;
+
+  const current = booking.trackingStage || 'received';
+  const currentIdx = STAGES.indexOf(current);
+
+  if (currentIdx === STAGES.length - 1) {
+    showAdminToast('This pickup is already completed.');
+    return;
+  }
+
+  const nextStage = STAGES[currentIdx + 1];
+  booking.trackingStage = nextStage;
+  booking.status = nextStage === 'completed' ? 'Completed' : 'Confirmed';
+  booking.trackingHistory = booking.trackingHistory || {};
+  booking.trackingHistory[nextStage] = new Date().toISOString();
+
+  setStored(STORAGE_KEYS.bookings, bookings);
+  renderBookings();
+  renderDashboard();
+  showAdminToast('Tracking updated to: ' + nextStage);
+}
+    function filterBookings() {
+      currentBookingFilter = document.getElementById('bookingStatusFilter').value;
+      renderBookings();
+    }
+
+    function cycleBookingStatus(index) {
+      const statuses = ['Pending', 'Confirmed', 'Completed', 'Cancelled'];
+      const current = bookings[index].status || 'Pending';
+      const next = statuses[(statuses.indexOf(current) + 1) % statuses.length];
+      bookings[index].status = next;
+      setStored(STORAGE_KEYS.bookings, bookings);
+      renderBookings();
+      renderDashboard();
+      showAdminToast(`Status changed to ${next}`);
+    }
+
+    function deleteBooking(index) {
+      if (!confirm('Delete this booking?')) return;
+      bookings.splice(index, 1);
+      setStored(STORAGE_KEYS.bookings, bookings);
+      renderBookings();
+      renderDashboard();
+      updateCounts();
+      showAdminToast('Booking deleted');
+    }
+
+    function clearAllBookings() {
+      if (!confirm('Delete ALL bookings? This cannot be undone.')) return;
+      bookings = [];
+      setStored(STORAGE_KEYS.bookings, bookings);
+      renderBookings();
+      renderDashboard();
+      updateCounts();
+      showAdminToast('All bookings cleared');
+    }
+
+    // ============================================================
+    // FEEDBACK
+    // ============================================================
+    function renderFeedback() {
+      const list = document.getElementById('feedbackList');
+      if (!feedback.length) {
+        list.innerHTML = '<div class="empty-state"><i class="fas fa-comments"></i><p>No feedback yet.</p></div>';
+        return;
+      }
+
+      list.innerHTML = feedback.slice().reverse().map((f, i) => {
+        const realIndex = feedback.length - 1 - i;
+        const stars = '★'.repeat(f.rating || 5) + '☆'.repeat(5 - (f.rating || 5));
+        return `
+          <div class="review-item" style="margin-bottom: 1rem;">
+            <div class="review-header">
+              <div>
+                <div class="review-author">${escapeHtml(f.name || 'Anonymous')}</div>
+                <div class="review-location">${escapeHtml(f.district || '')} · ${escapeHtml(f.category || 'General')}</div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <div class="review-stars">${stars}</div>
+                <button class="admin-btn-icon delete" onclick="deleteFeedback(${realIndex})" title="Delete"><i class="fas fa-trash"></i></button>
+              </div>
+            </div>
+            <p class="review-text">"${escapeHtml(f.message || '')}"</p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function deleteFeedback(index) {
+      if (!confirm('Delete this feedback?')) return;
+      feedback.splice(index, 1);
+      setStored(STORAGE_KEYS.feedback, feedback);
+      renderFeedback();
+      renderDashboard();
+      updateCounts();
+      showAdminToast('Feedback deleted');
+    }
+
+    function clearAllFeedback() {
+      if (!confirm('Delete ALL feedback?')) return;
+      feedback = [];
+      setStored(STORAGE_KEYS.feedback, feedback);
+      renderFeedback();
+      renderDashboard();
+      updateCounts();
+      showAdminToast('All feedback cleared');
+    }
+
+    // ============================================================
+    // SERVICES
+    // ============================================================
+    function renderServices() {
+      const tbody = document.getElementById('servicesTableBody');
+      if (!services.length) {
+        tbody.innerHTML = '<tr><td colspan="4" class="empty-state"><p>No services yet.</p></td></tr>';
+        return;
+      }
+      tbody.innerHTML = services.map(s => `
+        <tr>
+          <td><strong>${escapeHtml(s.name)}</strong></td>
+          <td><i class="fas ${escapeHtml(s.icon)}" style="font-size: 1.4rem; color: var(--primary);"></i></td>
+          <td>${escapeHtml(s.description)}</td>
+          <td>
+            <div class="actions">
+              <button class="admin-btn-icon edit" onclick="editService('${s.id}')"><i class="fas fa-edit"></i></button>
+              <button class="admin-btn-icon delete" onclick="deleteService('${s.id}')"><i class="fas fa-trash"></i></button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function openServiceModal() {
+      document.getElementById('serviceModalTitle').textContent = 'Add Service';
+      document.getElementById('serviceForm').reset();
+      document.getElementById('serviceEditId').value = '';
+      document.getElementById('serviceModal').classList.add('active');
+    }
+
+    function editService(id) {
+      const s = services.find(x => x.id === id);
+      if (!s) return;
+      document.getElementById('serviceModalTitle').textContent = 'Edit Service';
+      document.getElementById('serviceEditId').value = s.id;
+      document.getElementById('serviceName').value = s.name;
+      document.getElementById('serviceIcon').value = s.icon;
+      document.getElementById('serviceDescription').value = s.description;
+      document.getElementById('serviceModal').classList.add('active');
+    }
+
+    function saveService() {
+      const id = document.getElementById('serviceEditId').value;
+      const name = document.getElementById('serviceName').value.trim();
+      const icon = document.getElementById('serviceIcon').value.trim();
+      const description = document.getElementById('serviceDescription').value.trim();
+
+      if (!name || !icon || !description) { showAdminToast('Fill all fields', 'error'); return; }
+
+      if (id) {
+        const idx = services.findIndex(s => s.id === id);
+        if (idx > -1) services[idx] = { ...services[idx], name, icon, description };
+        showAdminToast('Service updated');
+      } else {
+        services.push({ id: 'sv' + Date.now(), name, icon, description });
+        showAdminToast('Service added');
+      }
+      setStored(STORAGE_KEYS.services, services);
+      closeModal('serviceModal');
+      renderServices();
+    }
+
+    function deleteService(id) {
+      if (!confirm('Delete this service?')) return;
+      services = services.filter(s => s.id !== id);
+      setStored(STORAGE_KEYS.services, services);
+      renderServices();
+      showAdminToast('Service deleted');
+    }
+
+    // ============================================================
+    // USERS
+    // ============================================================
+   function renderUsers() {
+  const tbody = document.getElementById('usersTableBody');
+  if (!users.length) {
+    tbody.innerHTML = '<tr><td colspan="7" class="empty-state" style="padding: 3rem;"><i class="fas fa-users" style="font-size: 2rem; display: block; margin-bottom: 0.5rem; opacity: 0.4;"></i><p>No registered users yet.</p></td></tr>';
+    return;
+  }
+  tbody.innerHTML = users.map((u, i) => {
+    const initial = (u.firstName || u.email || 'U').charAt(0).toUpperCase();
+    const avatarHtml = u.avatar 
+      ? `<img src="${u.avatar}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;">`
+      : `<div style="width:36px;height:36px;border-radius:50%;background:${u.avatarColor || 'var(--primary)'};color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;">${initial}</div>`;
+    
+    return `
+      <tr>
+        <td style="display:flex; align-items:center; gap:0.75rem;">
+          ${avatarHtml}
+          <strong>${escapeHtml((u.firstName || '') + ' ' + (u.lastName || ''))}</strong>
+        </td>
+        <td>${escapeHtml(u.email || '-')}</td>
+        <td>${escapeHtml(u.phone || '-')}</td>
+        <td>${escapeHtml(u.district || '-')}</td>
+        <td>${escapeHtml(u.accountType || '-')}</td>
+        <td>${u.registeredAt ? new Date(u.registeredAt).toLocaleDateString() : '-'}</td>
+        <td>
+          <div class="actions">
+            <button class="admin-btn-icon edit" onclick="viewUserProfile(${i})" title="View Profile"><i class="fas fa-eye"></i></button>
+            <button class="admin-btn-icon delete" onclick="deleteUser(${i})" title="Delete"><i class="fas fa-trash"></i></button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function viewUserProfile(index) {
+  const u = users[index];
+  if (!u) return;
+  const details = [
+    `USER PROFILE`,
+    `━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+    `Name: ${(u.firstName || '') + ' ' + (u.lastName || '')}`,
+    `Email: ${u.email || 'N/A'}`,
+    `Phone: ${u.phone || 'N/A'}`,
+    `Account Type: ${u.accountType || 'N/A'}`,
+    `Date of Birth: ${u.dob || 'N/A'}`,
+    `Gender: ${u.gender || 'N/A'}`,
+    `Occupation: ${u.occupation || 'N/A'}`,
+    ``,
+    `ADDRESS`,
+    `━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+    `Region: ${u.region || 'N/A'}`,
+    `District: ${u.district || 'N/A'}`,
+    `City/Town: ${u.city || 'N/A'}`,
+    `Area/Zone: ${u.area || 'N/A'}`,
+    `Street/Plot: ${u.street || 'N/A'}`,
+    `Landmark: ${u.landmark || 'N/A'}`,
+    `Postal Code: ${u.postal || 'N/A'}`,
+    ``,
+    `Bio: ${u.bio || 'N/A'}`,
+    `Registered: ${u.registeredAt ? new Date(u.registeredAt).toLocaleString() : 'N/A'}`
+  ].join('\n');
+  alert(details);
+}
+    // ============================================================
+    // CALENDAR
+    // ============================================================
+    function renderCalendar() {
+      const grid = document.getElementById('calendarGrid');
+      const header = document.getElementById('calendarMonthYear');
+      const year = calendarDate.getFullYear();
+      const month = calendarDate.getMonth();
+
+      const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      header.textContent = `${monthNames[month]} ${year}`;
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const today = new Date();
+
+      let html = '';
+      ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(d => html += `<div class="calendar-day-header">${d}</div>`);
+
+      for (let i = 0; i < firstDay; i++) html += '<div class="calendar-day empty"></div>';
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const dayEvents = events.filter(e => e.date === dateStr);
+        const isToday = today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
+
+        html += `
+          <div class="calendar-day ${isToday ? 'today' : ''}" onclick="openEventModal('${dateStr}')">
+            <span class="day-num">${day}</span>
+            <div class="day-events">
+              ${dayEvents.slice(0, 4).map(e => `<div class="day-event-dot ${e.type}" title="${escapeHtml(e.title)}"></div>`).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      grid.innerHTML = html;
+    }
+
+    function changeMonth(delta) { calendarDate.setMonth(calendarDate.getMonth() + delta); renderCalendar(); }
+    function goToToday() { calendarDate = new Date(); renderCalendar(); }
+
+    function openEventModal(dateStr) {
+      document.getElementById('eventModalTitle').textContent = 'Add Event';
+      document.getElementById('eventForm').reset();
+      document.getElementById('eventEditId').value = '';
+      if (dateStr) document.getElementById('eventDate').value = dateStr;
+      else document.getElementById('eventDate').valueAsDate = new Date();
+      document.getElementById('eventModal').classList.add('active');
+    }
+
+    function saveEvent() {
+      const title = document.getElementById('eventTitle').value.trim();
+      const date = document.getElementById('eventDate').value;
+      const type = document.getElementById('eventType').value;
+      const description = document.getElementById('eventDescription').value.trim();
+
+      if (!title || !date || !type) { showAdminToast('Fill all required fields', 'error'); return; }
+
+      events.push({ id: 'e' + Date.now(), title, date, type, description });
+      setStored(STORAGE_KEYS.events, events);
+      closeModal('eventModal');
+      renderCalendar();
+      showAdminToast('Event added');
+    }
+
+    // ============================================================
+    // ANALYTICS
+    // ============================================================
+    function renderAnalytics() {
+      document.getElementById('anaTotalBookings').textContent = bookings.length;
+      document.getElementById('anaUsers').textContent = users.length;
+
+      let avg = 0;
+      if (feedback.length) avg = (feedback.reduce((s, f) => s + (parseInt(f.rating) || 5), 0) / feedback.length).toFixed(1);
+      document.getElementById('anaAvgRating').textContent = avg;
+
+      const completed = bookings.filter(b => b.status === 'Completed').length;
+      const rate = bookings.length ? Math.round((completed / bookings.length) * 100) : 0;
+      document.getElementById('anaCompletion').textContent = rate + '%';
+    }
+
+    // ============================================================
+    // MODAL HELPERS
+    // ============================================================
+    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+    document.querySelectorAll('.admin-modal').forEach(m => {
+      m.addEventListener('click', function (e) { if (e.target === this) this.classList.remove('active'); });
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') document.querySelectorAll('.admin-modal.active').forEach(m => m.classList.remove('active'));
+    });
+
+    // ============================================================
+    // TOAST
+    // ============================================================
+    function showAdminToast(message, type = 'success') {
+      const toast = document.getElementById('adminToast');
+      const text = document.getElementById('adminToastText');
+      const icon = toast.querySelector('i');
+      text.textContent = message;
+      if (type === 'error') { toast.style.background = 'var(--danger)'; icon.className = 'fas fa-exclamation-circle'; }
+      else { toast.style.background = 'var(--primary-dark)'; icon.className = 'fas fa-check-circle'; }
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3200);
+    }
+
+    // ============================================================
+    // EXPORT / RESET
+    // ============================================================
+    function exportData() {
+      const data = { districts, stations, workers, assignments, events, services, bookings, feedback, users, exportedAt: new Date().toISOString() };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `unwm-export-${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showAdminToast('Data exported');
+    }
+
+    function resetAllData() {
+      if (!confirm('WARNING: Delete ALL data? This is IRREVERSIBLE.')) return;
+      if (!confirm('Are you absolutely sure?')) return;
+      Object.values(STORAGE_KEYS).forEach(k => localStorage.removeItem(k));
+      location.reload();
+    }
+
+    // ============================================================
+    // UTILITY
+    // ============================================================
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text == null ? '' : String(text);
+      return div.innerHTML;
+    }
+    // ============================================================
+// ANNOUNCEMENTS
+// ============================================================
+function renderAnnouncements() {
+  const container = document.getElementById('announcementsList');
+  const announcements = getStored('unwm_announcements', []).slice().reverse();
+
+  document.getElementById('annCount').textContent = announcements.length;
+
+  if (!announcements.length) {
+    container.innerHTML = '<div class="empty-state"><i class="fas fa-bullhorn"></i><p>No announcements sent yet.</p></div>';
+    return;
+  }
+
+  container.innerHTML = announcements.map(a => {
+    const priorityClass = a.priority === 'Urgent' ? 'badge-danger' : a.priority === 'High' ? 'badge-warning' : 'badge-info';
+    const dateStr = a.createdAt ? new Date(a.createdAt).toLocaleString('en-GB', {
+      day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+    }) : '';
+    return `
+      <div style="background:white; border-left: 4px solid var(--primary); border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 1rem; box-shadow: 0 2px 10px rgba(0,0,0,0.04);">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; flex-wrap:wrap; margin-bottom:0.5rem;">
+          <h4 style="margin:0; font-size:1rem; color:var(--primary-dark);">${escapeHtml(a.title)}</h4>
+          <span style="font-size:0.78rem; color:var(--gray-400);">${dateStr}</span>
+        </div>
+        <p style="color:var(--gray-600); font-size:0.9rem; margin:0.5rem 0; line-height:1.6;">${escapeHtml(a.message)}</p>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.75rem; padding-top:0.75rem; border-top:1px solid var(--gray-100);">
+          <div style="display:flex; gap:0.5rem;">
+            <span class="badge ${priorityClass}">${escapeHtml(a.priority)}</span>
+            <span class="badge badge-primary"><i class="fas fa-users"></i> ${escapeHtml(a.target)}</span>
+          </div>
+          <button class="admin-btn-icon delete" onclick="deleteAnnouncement('${a.id}')"><i class="fas fa-trash"></i></button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function openAnnouncementModal() {
+  document.getElementById('announcementForm').reset();
+  document.getElementById('announcementModal').classList.add('active');
+}
+
+function saveAnnouncement() {
+  const title = document.getElementById('annTitle').value.trim();
+  const message = document.getElementById('annMessage').value.trim();
+  const priority = document.getElementById('annPriority').value;
+  const target = document.getElementById('annTarget').value;
+
+  if (!title || !message) {
+    showAdminToast('Please fill all required fields', 'error');
+    return;
+  }
+
+  const announcements = getStored('unwm_announcements', []);
+  announcements.push({
+    id: 'ann' + Date.now(),
+    title, message, priority, target,
+    createdAt: new Date().toISOString()
+  });
+  setStored('unwm_announcements', announcements);
+
+  closeModal('announcementModal');
+  renderAnnouncements();
+  showAdminToast('Announcement sent to workers!');
+}
+
+function deleteAnnouncement(id) {
+  if (!confirm('Delete this announcement?')) return;
+  let announcements = getStored('unwm_announcements', []);
+  announcements = announcements.filter(a => a.id !== id);
+  setStored('unwm_announcements', announcements);
+  renderAnnouncements();
+  showAdminToast('Announcement deleted');
+}
+
+// Add to switchAdminPage() function - inside:
+// if (page === 'announcements') renderAnnouncements();
+
+// Add to initAdmin() function:
+// renderAnnouncements();
+  </script>
+
+<!-- Announcement Modal -->
+<div class="admin-modal" id="announcementModal">
+  <div class="admin-modal-content">
+    <div class="admin-modal-header">
+      <h3 id="announcementModalTitle">New Announcement</h3>
+      <button class="admin-modal-close" onclick="closeModal('announcementModal')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="admin-modal-body">
+      <form id="announcementForm">
+        <div class="admin-form-group">
+          <label>Title *</label>
+          <input type="text" id="annTitle" placeholder="e.g. New Job Available in Kampala" required>
+        </div>
+        <div class="admin-form-group">
+          <label>Message *</label>
+          <textarea id="annMessage" rows="5" placeholder="Write your announcement..." required></textarea>
+        </div>
+        <div class="admin-form-grid">
+          <div class="admin-form-group">
+            <label>Priority *</label>
+            <select id="annPriority" required>
+              <option value="Info">Info</option>
+              <option value="Normal" selected>Normal</option>
+              <option value="High">High</option>
+              <option value="Urgent">Urgent</option>
+            </select>
+          </div>
+          <div class="admin-form-group">
+            <label>Send To *</label>
+            <select id="annTarget" required>
+              <option value="All">All Workers</option>
+              <option value="Engineer">Engineers Only</option>
+              <option value="Volunteer">Volunteers Only</option>
+              <option value="Waste Specialist">Waste Specialists Only</option>
+              <option value="Driver">Drivers Only</option>
+              <option value="Supervisor">Supervisors Only</option>
+              <option value="Collector">Collectors Only</option>
+            </select>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="admin-modal-footer">
+      <button class="admin-btn admin-btn-outline" onclick="closeModal('announcementModal')">Cancel</button>
+      <button class="admin-btn" onclick="saveAnnouncement()"><i class="fas fa-paper-plane"></i> Send Announcement</button>
+    </div>
+  </div>
+</div>
+
+  <!-- ===== Service Worker Registration ===== -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((reg) => console.log('[PWA] Service Worker registered:', reg.scope))
+          .catch((err) => console.warn('[PWA] Service Worker registration failed:', err));
+      });
+    }
+  </script>
+</body>
+</html>

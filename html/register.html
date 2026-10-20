@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Create your UNWM account to schedule pickups, track waste collection, and manage your service.">
+  <title>Register | Uganda National Waste Management</title>
+  <!-- ===== Favicon & App Icons ===== -->
+  <link rel="icon" type="image/svg+xml" href="../assets/logo.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png">
+
+  <!-- ===== PWA Meta Tags ===== -->
+  <meta name="theme-color" content="#1e6b3b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="UNWM">
+  <link rel="manifest" href="../manifest.json">
+
+  <!-- ===== Fonts & Styles ===== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .auth-wrapper {
+      min-height: calc(100vh - 78px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1.5rem;
+      background: linear-gradient(135deg, #eaf7ee 0%, #d0e9d9 100%);
+    }
+    .auth-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 520px;
+    }
+    .auth-logo {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+    .auth-logo .brand-icon {
+      width: 64px;
+      height: 64px;
+      font-size: 2rem;
+    }
+    .auth-card h1 {
+      text-align: center;
+      font-size: 1.75rem;
+      margin-bottom: 0.5rem;
+    }
+    .auth-card .subtitle {
+      text-align: center;
+      color: var(--gray-500);
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+    }
+    .auth-footer {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      color: var(--gray-600);
+    }
+    .auth-footer a {
+      font-weight: 600;
+    }
+    .password-strength {
+      height: 5px;
+      background: var(--gray-200);
+      border-radius: 3px;
+      margin-top: 0.5rem;
+      overflow: hidden;
+    }
+    .password-strength-bar {
+      height: 100%;
+      width: 0%;
+      transition: all 0.3s ease;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="navbar">
+      <a href="../index.html" class="brand">
+        <div class="brand-icon"><img src="../assets/logo.svg" alt="UNWM Logo" width="48" height="48"></div>
+        <div class="brand-text">
+          <span class="brand-title">Uganda National</span>
+          <span class="brand-sub">Waste Management</span>
+        </div>
+      </a>
+            <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="nav-drawer-backdrop" id="navDrawerBackdrop"></div>
+      <ul class="nav-menu" id="navMenu">
+        <li class="drawer-header-item">
+          <div class="drawer-logo-badge">
+            <img src="../assets/logo.svg" alt="UNWM Logo">
+          </div>
+          <button type="button" class="drawer-close-btn" id="drawerCloseBtn" aria-label="Close navigation">
+            <i class="fas fa-times"></i>
+          </button>
+        </li>
+        <li><a href="../index.html" class="nav-link">Home</a></li>
+        <li><a href="services.html" class="nav-link">Services</a></li>
+        <li>
+          <a href="districts.html" class="nav-link">Districts</a>
+          <span class="drawer-subtext">All 135+ Municipalities</span>
+        </li>
+        <li>
+          <a href="booking.html" class="nav-link">Book Pickup</a>
+          <span class="drawer-subtext">Instant ETA · Quick Dispatch</span>
+        </li>
+        <li>
+          <a href="track.html" class="nav-link">Track</a>
+          <span class="drawer-subtext">Live Truck GPS · Status</span>
+        </li>
+        <li><a href="learn.html" class="nav-link">Learn</a></li>
+        <li><a href="feedback.html" class="nav-link">Feedback</a></li>
+        <li><a href="contact.html" class="nav-link">Contact</a></li>
+        <li class="drawer-footer-item">
+          <hr class="drawer-divider">
+          <a href="contact.html" class="drawer-contact-btn">Contact</a>
+          <div class="drawer-social-row">
+            <a href="https://linkedin.com/company/unwm-uganda" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="https://x.com/unwm_uganda" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="https://youtube.com/@unwmuganda" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+            <a href="https://wa.me/256700000000" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+          </div>
+        </li>
+        <li class="nav-cta" id="navAuthBtn"><a href="login.html" class="btn btn-sm"><i class="fas fa-user"></i> Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div class="brand-icon"><i class="fas fa-user-plus"></i></div>
+      </div>
+      <h1>Create Account</h1>
+      <p class="subtitle">Join thousands of Ugandans keeping our country clean.</p>
+
+      <form id="registerForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="regFirstName">First Name <span class="required">*</span></label>
+            <input type="text" id="regFirstName" class="form-control" placeholder="John" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="regLastName">Last Name <span class="required">*</span></label>
+            <input type="text" id="regLastName" class="form-control" placeholder="Okello" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="regEmail">Email Address <span class="required">*</span></label>
+          <input type="email" id="regEmail" class="form-control" placeholder="you@example.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="regPhone">Phone Number <span class="required">*</span></label>
+          <input type="tel" id="regPhone" class="form-control" placeholder="+256 700 000 000" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="regDistrict">District <span class="required">*</span></label>
+            <select id="regDistrict" class="form-select" required>
+              <option value="">-- Select --</option>
+              <option value="Kampala">Kampala</option>
+              <option value="Gulu">Gulu</option>
+              <option value="Mbarara">Mbarara</option>
+              <option value="Jinja">Jinja</option>
+              <option value="Mbale">Mbale</option>
+              <option value="Fort Portal">Fort Portal</option>
+              <option value="Arua">Arua</option>
+              <option value="Masaka">Masaka</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="regAccountType">Account Type <span class="required">*</span></label>
+            <select id="regAccountType" class="form-select" required>
+              <option value="Household">Household</option>
+              <option value="Business">Business</option>
+              <option value="Institution">Institution / School</option>
+              <option value="Industrial">Industrial</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="regPassword">Password <span class="required">*</span></label>
+          <input type="password" id="regPassword" class="form-control" placeholder="Create a strong password" required>
+          <div class="password-strength">
+            <div class="password-strength-bar" id="strengthBar"></div>
+          </div>
+          <span class="form-hint" id="strengthText">Use at least 8 characters with a mix of letters, numbers, and symbols.</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="regConfirm">Confirm Password <span class="required">*</span></label>
+          <input type="password" id="regConfirm" class="form-control" placeholder="Re-enter password" required>
+        </div>
+        <div class="form-group" style="display: flex; align-items: flex-start; gap: 0.6rem;">
+          <input type="checkbox" id="regTerms" style="margin-top: 5px;" required>
+          <label for="regTerms" style="font-size: 0.88rem; color: var(--gray-600);">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</label>
+        </div>
+        <button type="submit" class="btn btn-block btn-lg"><i class="fas fa-user-plus"></i> Create Account</button>
+      </form>
+
+      <div class="auth-footer">
+        Already have an account? <a href="login.html">Login here</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/script.js"></script>
+  <script>
+    // Password strength meter
+    const pwd = document.getElementById('regPassword');
+    const bar = document.getElementById('strengthBar');
+    const text = document.getElementById('strengthText');
+
+    pwd.addEventListener('input', function () {
+      const val = this.value;
+      let score = 0;
+      if (val.length >= 8) score++;
+      if (/[a-z]/.test(val) && /[A-Z]/.test(val)) score++;
+      if (/\d/.test(val)) score++;
+      if (/[^a-zA-Z0-9]/.test(val)) score++;
+
+      const colors = ['#e74c3c', '#e67e22', '#f1c40f', '#27ae60'];
+      const labels = ['Weak', 'Fair', 'Good', 'Strong'];
+
+      if (val.length === 0) {
+        bar.style.width = '0%';
+        text.textContent = 'Use at least 8 characters with a mix of letters, numbers, and symbols.';
+        return;
+      }
+
+      bar.style.width = (score * 25) + '%';
+      bar.style.background = colors[Math.max(0, score - 1)];
+      text.textContent = 'Password strength: ' + labels[Math.max(0, score - 1)];
+      text.style.color = colors[Math.max(0, score - 1)];
+    });
+
+    document.getElementById('registerForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+
+  const first = document.getElementById('regFirstName').value.trim();
+  const last = document.getElementById('regLastName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const phone = document.getElementById('regPhone').value.trim();
+  const password = document.getElementById('regPassword').value;
+  const confirm = document.getElementById('regConfirm').value;
+  const district = document.getElementById('regDistrict').value;
+  const accountType = document.getElementById('regAccountType').value;
+
+  if (!UNWM.validateEmail(email)) {
+    UNWM.showFormAlert('registerForm', 'danger', 'Please enter a valid email address.');
+    return;
+  }
+  if (!UNWM.validatePhone(phone)) {
+    UNWM.showFormAlert('registerForm', 'danger', 'Please enter a valid phone number.');
+    return;
+  }
+  if (password.length < 8) {
+    UNWM.showFormAlert('registerForm', 'danger', 'Password must be at least 8 characters.');
+    return;
+  }
+  if (password !== confirm) {
+    UNWM.showFormAlert('registerForm', 'danger', 'Passwords do not match.');
+    return;
+  }
+
+  const newUser = {
+    firstName: first,
+    lastName: last,
+    email: email,
+    phone: phone,
+    password: password,
+    district: district,
+    accountType: accountType,
+    registeredAt: new Date().toISOString(),
+    avatar: null,
+    avatarColor: null
+  };
+
+  // Save logged-in user
+  localStorage.setItem('unwm_user', JSON.stringify(newUser));
+  localStorage.setItem('unwm_user_logged', 'true');
+
+  // Add to users list (for admin panel)
+  const users = JSON.parse(localStorage.getItem('unwm_users') || '[]');
+  users.push(newUser);
+  localStorage.setItem('unwm_users', JSON.stringify(users));
+
+  UNWM.showToast('Account created successfully! Welcome to UNWM.', 'success');
+  setTimeout(() => window.location.href = 'profile.html', 1500);
+});
+  </script>
+
+  <!-- ===== Service Worker Registration ===== -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((reg) => console.log('[PWA] Service Worker registered:', reg.scope))
+          .catch((err) => console.warn('[PWA] Service Worker registration failed:', err));
+      });
+    }
+  </script>
+</body>
+</html>

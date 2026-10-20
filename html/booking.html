@@ -1,0 +1,361 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Report waste or book a pickup with UNWM. Get instant ETA and track your collection across Uganda.">
+  <title>Book a Pickup | Uganda National Waste Management</title>
+  <!-- ===== Favicon & App Icons ===== -->
+  <link rel="icon" type="image/svg+xml" href="../assets/logo.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png">
+
+  <!-- ===== PWA Meta Tags ===== -->
+  <meta name="theme-color" content="#1e6b3b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="UNWM">
+  <link rel="manifest" href="../manifest.json">
+
+  <!-- ===== Fonts & Styles ===== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="navbar">
+      <a href="../index.html" class="brand">
+        <div class="brand-icon"><img src="../assets/logo.svg" alt="UNWM Logo" width="48" height="48"></div>
+        <div class="brand-text">
+          <span class="brand-title">Uganda National</span>
+          <span class="brand-sub">Waste Management</span>
+        </div>
+      </a>
+            <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="nav-drawer-backdrop" id="navDrawerBackdrop"></div>
+      <ul class="nav-menu" id="navMenu">
+        <li class="drawer-header-item">
+          <div class="drawer-logo-badge">
+            <img src="../assets/logo.svg" alt="UNWM Logo">
+          </div>
+          <button type="button" class="drawer-close-btn" id="drawerCloseBtn" aria-label="Close navigation">
+            <i class="fas fa-times"></i>
+          </button>
+        </li>
+        <li><a href="../index.html" class="nav-link">Home</a></li>
+        <li><a href="services.html" class="nav-link">Services</a></li>
+        <li>
+          <a href="districts.html" class="nav-link">Districts</a>
+          <span class="drawer-subtext">All 135+ Municipalities</span>
+        </li>
+        <li>
+          <a href="booking.html" class="nav-link active">Book Pickup</a>
+          <span class="drawer-subtext">Instant ETA · Quick Dispatch</span>
+        </li>
+        <li>
+          <a href="track.html" class="nav-link">Track</a>
+          <span class="drawer-subtext">Live Truck GPS · Status</span>
+        </li>
+        <li><a href="learn.html" class="nav-link">Learn</a></li>
+        <li><a href="feedback.html" class="nav-link">Feedback</a></li>
+        <li><a href="contact.html" class="nav-link">Contact</a></li>
+        <li class="drawer-footer-item">
+          <hr class="drawer-divider">
+          <a href="contact.html" class="drawer-contact-btn">Contact</a>
+          <div class="drawer-social-row">
+            <a href="https://linkedin.com/company/unwm-uganda" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="https://x.com/unwm_uganda" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="https://youtube.com/@unwmuganda" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+            <a href="https://wa.me/256700000000" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+          </div>
+        </li>
+        <li class="nav-cta" id="navAuthBtn"><a href="login.html" class="btn btn-sm"><i class="fas fa-user"></i> Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="page-header">
+    <div class="container">
+      <h1>Book a Waste Pickup</h1>
+      <p>Report waste availability in your area and get an instant estimated pickup time. It takes less than 2 minutes.</p>
+      <div class="breadcrumb"><a href="../index.html">Home</a> <span>/</span> <span>Book Pickup</span></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container-narrow">
+      <!-- Info alerts -->
+      <div class="alert alert-info">
+        <i class="fas fa-info-circle"></i>
+        <div>
+          <strong>How it works:</strong> Fill the form below with your location and waste details. We'll instantly calculate an ETA and our nearest team will confirm your pickup by phone.
+        </div>
+      </div>
+
+      <div class="form-card">
+        <h2 style="margin-bottom: 0.5rem;"><i class="fas fa-truck" style="color: var(--primary);"></i> Waste Pickup Request</h2>
+        <p style="color: var(--gray-500); margin-bottom: 2rem;">All fields marked <span style="color: var(--danger);">*</span> are required.</p>
+
+        <form id="bookingForm">
+          <!-- Reporter Info -->
+          <h3 style="font-size: 1.1rem; margin-bottom: 1rem; color: var(--primary-dark);"><i class="fas fa-user"></i> Your Information</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="fullName">Full Name <span class="required">*</span></label>
+              <input type="text" id="fullName" class="form-control" placeholder="e.g. John Okello" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="phone">Phone Number <span class="required">*</span></label>
+              <input type="tel" id="phone" class="form-control" placeholder="+256 700 000 000" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="email">Email Address (optional)</label>
+            <input type="email" id="email" class="form-control" placeholder="you@example.com">
+          </div>
+
+          <hr class="divider">
+
+          <!-- Location -->
+          <h3 style="font-size: 1.1rem; margin-bottom: 1rem; color: var(--primary-dark);"><i class="fas fa-map-marked-alt"></i> Waste Location</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="district">District <span class="required">*</span></label>
+              <select id="district" class="form-select" required>
+                <option value="">-- Select District --</option>
+                <option value="Kampala">Kampala</option>
+                <option value="Gulu">Gulu</option>
+                <option value="Mbarara">Mbarara</option>
+                <option value="Jinja">Jinja</option>
+                <option value="Mbale">Mbale</option>
+                <option value="Fort Portal">Fort Portal</option>
+                <option value="Arua">Arua</option>
+                <option value="Masaka">Masaka</option>
+                <option value="Lira">Lira</option>
+                <option value="Soroti">Soroti</option>
+                <option value="Kabale">Kabale</option>
+                <option value="Hoima">Hoima</option>
+                <option value="Mukono">Mukono</option>
+                <option value="Entebbe">Entebbe</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="area">Area / Village / Zone <span class="required">*</span></label>
+              <input type="text" id="area" class="form-control" placeholder="e.g. Kisenyi, Kamwokya" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="landmark">Nearest Landmark (optional)</label>
+            <input type="text" id="landmark" class="form-control" placeholder="e.g. Opposite Shell Station">
+            <span class="form-hint">Helps our team find you faster.</span>
+          </div>
+
+          <hr class="divider">
+
+          <!-- Waste Details -->
+          <h3 style="font-size: 1.1rem; margin-bottom: 1rem; color: var(--primary-dark);"><i class="fas fa-dumpster"></i> Waste Details</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="wasteType">Type of Waste <span class="required">*</span></label>
+              <select id="wasteType" class="form-select" required>
+                <option value="">-- Select Type --</option>
+                <option value="Household">Household (general)</option>
+                <option value="Plastic">Plastic / Polythene</option>
+                <option value="Organic">Organic / Food waste</option>
+                <option value="Construction">Construction debris</option>
+                <option value="Electronic">Electronic (e-waste)</option>
+                <option value="Medical">Medical / Clinical</option>
+                <option value="Industrial">Industrial / Chemical</option>
+                <option value="Garden">Garden / Green waste</option>
+                <option value="Liquid">Liquid waste</option>
+                <option value="Mixed">Mixed / Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="volume">Estimated Volume <span class="required">*</span></label>
+              <select id="volume" class="form-select" required>
+                <option value="">-- Select Volume --</option>
+                <option value="Small (1-2 bags)">Small (1-2 bags / sacks)</option>
+                <option value="Medium (3-5 bags)">Medium (3-5 bags / sacks)</option>
+                <option value="Large (6+ bags)">Large (6+ bags / sacks)</option>
+                <option value="Half truck">Half truck load</option>
+                <option value="Full truck">Full truck load</option>
+                <option value="Bulk (multiple trucks)">Bulk (multiple trucks)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="urgency">Urgency Level <span class="required">*</span></label>
+            <select id="urgency" class="form-select" required>
+              <option value="normal">Normal - within 24 hours</option>
+              <option value="urgent">Urgent - within 6 hours</option>
+              <option value="emergency">Emergency - immediate (extra fee)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="notes">Additional Notes</label>
+            <textarea id="notes" class="form-textarea" placeholder="Access instructions, special handling requirements, gate codes, etc."></textarea>
+          </div>
+
+          <div class="form-group" style="display: flex; align-items: flex-start; gap: 0.6rem;">
+            <input type="checkbox" id="terms" style="margin-top: 5px;" required>
+            <label for="terms" style="font-size: 0.9rem; color: var(--gray-600);">I confirm the information provided is accurate and agree to UNWM's terms of service.</label>
+          </div>
+
+          <button type="submit" class="btn btn-lg btn-block"><i class="fas fa-paper-plane"></i> Submit Report & Get ETA</button>
+        </form>
+
+        <!-- ETA Result -->
+        <div id="etaResult" style="display: none; margin-top: 2rem; padding: 1.75rem; background: linear-gradient(135deg, #eaf7ee, #d0e9d9); border-radius: var(--radius-md); border-left: 5px solid var(--primary);">
+          <h3 style="color: var(--primary-dark); margin-bottom: 1rem;"><i class="fas fa-truck-fast"></i> Estimated Pickup Time</h3>
+          <p style="font-size: 1.6rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem;" id="etaTime">-</p>
+          <p id="etaDetails" style="margin-bottom: 0.5rem;"></p>
+          <p style="font-size: 0.88rem; color: var(--gray-600); margin-bottom: 0;">
+            <i class="fas fa-phone"></i> Our team will call you shortly to confirm. Please keep your phone accessible.
+          </p>
+        </div>
+      </div>
+
+      <!-- Tracking Info -->
+      <div class="grid grid-3 mt-5">
+        <div class="card text-center">
+          <div class="card-icon" style="margin: 0 auto 1rem;"><i class="fas fa-map-pin"></i></div>
+          <h4>Live Tracking</h4>
+          <p style="font-size: 0.9rem;">Once confirmed, you'll receive a tracking link via SMS to monitor your pickup.</p>
+        </div>
+        <div class="card text-center">
+          <div class="card-icon accent" style="margin: 0 auto 1rem;"><i class="fas fa-clock"></i></div>
+          <h4>Fast Response</h4>
+          <p style="font-size: 0.9rem;">Average response time is under 3 hours in major cities.</p>
+        </div>
+        <div class="card text-center">
+          <div class="card-icon info" style="margin: 0 auto 1rem;"><i class="fas fa-shield-alt"></i></div>
+          <h4>Safe Handling</h4>
+          <p style="font-size: 0.9rem;">All waste is handled per NEMA regulations by trained professionals.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <div class="footer-brand">
+          <div class="footer-brand-icon"><img src="../assets/logo.svg" alt="UNWM Logo" width="44" height="44"></div>
+          <div class="footer-brand-title">Uganda National<br>Waste Management</div>
+        </div>
+        <p>Committed to a clean, green Uganda through innovation, community participation, and responsible waste management.</p>
+                <div class="footer-social">
+          <a href="https://x.com/unwm_uganda" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="https://youtube.com/@unwmuganda" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+          <a href="https://instagram.com/unwm_uganda" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://linkedin.com/company/unwm-uganda" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+          <a href="https://facebook.com/unwmuganda" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        </div>
+      </div>
+      <div class="footer-col"><h4>Quick Links</h4><a href="../index.html">Home</a><a href="services.html">Services</a><a href="districts.html">Districts</a><a href="booking.html">Book Pickup</a><a href="learn.html">Learn</a></div>
+      <div class="footer-col"><h4>Support</h4><a href="feedback.html">Feedback</a><a href="contact.html">Contact Us</a><a href="login.html">Login</a><a href="register.html">Register</a></div>
+      <div class="footer-col"><h4>Contact Info</h4><p><i class="fas fa-phone"></i> +256 800 100 200</p><p><i class="fas fa-envelope"></i> info@unwm.ug</p><p><i class="fas fa-map-marker-alt"></i> Plot 12, Kampala Road</p></div>
+    </div>
+    <div class="footer-bottom"><div class="container">© <span id="currentYear">2025</span> UNWM. All rights reserved.</div></div>
+  </footer>
+
+  <script src="../js/script.js"></script>
+  <script>
+    document.getElementById('bookingForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById('fullName').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const district = document.getElementById('district').value;
+      const area = document.getElementById('area').value.trim();
+      const wasteType = document.getElementById('wasteType').value;
+      const volume = document.getElementById('volume').value;
+      const urgency = document.getElementById('urgency').value;
+
+      if (!UNWM.validatePhone(phone)) {
+        UNWM.showFormAlert('bookingForm', 'danger', 'Please enter a valid phone number.');
+        return;
+      }
+
+      // Calculate ETA
+      const eta = UNWM.calculateETA(wasteType, volume, district, urgency);
+
+      // Generate Tracking ID
+      const year = new Date().getFullYear();
+      const random = Math.floor(1000 + Math.random() * 9000);
+      const trackingId = 'UNWM-' + year + '-' + random;
+
+      // Build booking record
+      const booking = {
+        id: trackingId,
+        trackingId: trackingId,
+        name, phone, district, area, wasteType, volume, urgency,
+        eta: eta.display,
+        status: 'Pending',
+        trackingStage: 'received',
+        trackingHistory: {
+          received: new Date().toISOString()
+        },
+        date: new Date().toISOString()
+      };
+
+      // Save booking
+      const reports = JSON.parse(localStorage.getItem('unwm_reports') || '[]');
+      reports.push(booking);
+      localStorage.setItem('unwm_reports', JSON.stringify(reports));
+
+      // Show success message WITH tracking ID
+      document.getElementById('etaTime').textContent = eta.display;
+      document.getElementById('etaDetails').innerHTML = `
+        <strong>Location:</strong> ${area}, ${district} &nbsp;|&nbsp;
+        <strong>Waste:</strong> ${wasteType} &nbsp;|&nbsp;
+        <strong>Volume:</strong> ${volume} &nbsp;|&nbsp;
+        <strong>Priority:</strong> ${eta.priority}
+      `;
+
+      // Add tracking ID block
+      const etaResult = document.getElementById('etaResult');
+      etaResult.style.display = 'block';
+      etaResult.innerHTML += `
+        <div style="margin-top: 1.25rem; padding: 1.25rem; background: white; border-radius: 12px; border-left: 4px solid var(--accent);">
+          <div style="font-size: 0.85rem; color: var(--gray-600); margin-bottom: 0.4rem;">
+            <i class="fas fa-ticket-alt" style="color: var(--accent-dark);"></i> <strong>Your Tracking ID</strong>
+          </div>
+          <div style="font-family: 'Courier New', monospace; font-size: 1.5rem; font-weight: 800; color: var(--primary-dark); letter-spacing: 2px; margin-bottom: 0.75rem;">
+            ${trackingId}
+          </div>
+          <p style="font-size: 0.85rem; color: var(--gray-600); margin-bottom: 0.85rem;">
+            Save this ID - you'll need it to track your pickup.
+          </p>
+          <a href="track.html?id=${trackingId}" class="btn btn-sm" style="text-decoration: none;">
+            <i class="fas fa-map-marked-alt"></i> Track Your Pickup
+          </a>
+        </div>
+      `;
+
+      UNWM.showToast(`Booking confirmed! Tracking ID: ${trackingId}`, 'success');
+      document.getElementById('etaResult').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      this.reset();
+    });
+  </script>
+
+  <!-- ===== Service Worker Registration ===== -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((reg) => console.log('[PWA] Service Worker registered:', reg.scope))
+          .catch((err) => console.warn('[PWA] Service Worker registration failed:', err));
+      });
+    }
+  </script>
+</body>
+</html>

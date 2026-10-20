@@ -1,0 +1,349 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Explore UNWM's waste management services - household, commercial, industrial, recycling, and more across Uganda.">
+  <title>Our Services | Uganda National Waste Management</title>
+  <!-- ===== Favicon & App Icons ===== -->
+  <link rel="icon" type="image/svg+xml" href="../assets/logo.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png">
+
+  <!-- ===== PWA Meta Tags ===== -->
+  <meta name="theme-color" content="#1e6b3b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="UNWM">
+  <link rel="manifest" href="../manifest.json">
+
+  <!-- ===== Fonts & Styles ===== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="navbar">
+      <a href="../index.html" class="brand">
+        <div class="brand-icon"><img src="../assets/logo.svg" alt="UNWM Logo" width="48" height="48"></div>
+        <div class="brand-text">
+          <span class="brand-title">Uganda National</span>
+          <span class="brand-sub">Waste Management</span>
+        </div>
+      </a>
+            <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="nav-drawer-backdrop" id="navDrawerBackdrop"></div>
+      <ul class="nav-menu" id="navMenu">
+        <li class="drawer-header-item">
+          <div class="drawer-logo-badge">
+            <img src="../assets/logo.svg" alt="UNWM Logo">
+          </div>
+          <button type="button" class="drawer-close-btn" id="drawerCloseBtn" aria-label="Close navigation">
+            <i class="fas fa-times"></i>
+          </button>
+        </li>
+        <li><a href="../index.html" class="nav-link">Home</a></li>
+        <li><a href="services.html" class="nav-link active">Services</a></li>
+        <li>
+          <a href="districts.html" class="nav-link">Districts</a>
+          <span class="drawer-subtext">All 135+ Municipalities</span>
+        </li>
+        <li>
+          <a href="booking.html" class="nav-link">Book Pickup</a>
+          <span class="drawer-subtext">Instant ETA · Quick Dispatch</span>
+        </li>
+        <li>
+          <a href="track.html" class="nav-link">Track</a>
+          <span class="drawer-subtext">Live Truck GPS · Status</span>
+        </li>
+        <li><a href="learn.html" class="nav-link">Learn</a></li>
+        <li><a href="feedback.html" class="nav-link">Feedback</a></li>
+        <li><a href="contact.html" class="nav-link">Contact</a></li>
+        <li class="drawer-footer-item">
+          <hr class="drawer-divider">
+          <a href="contact.html" class="drawer-contact-btn">Contact</a>
+          <div class="drawer-social-row">
+            <a href="https://linkedin.com/company/unwm-uganda" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="https://x.com/unwm_uganda" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="https://youtube.com/@unwmuganda" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+            <a href="https://wa.me/256700000000" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+          </div>
+        </li>
+        <li class="nav-cta" id="navAuthBtn"><a href="login.html" class="btn btn-sm"><i class="fas fa-user"></i> Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="page-header">
+    <div class="container">
+      <h1>Our Services</h1>
+      <p>Comprehensive, reliable, and eco-friendly waste management solutions for every need across Uganda.</p>
+      <div class="breadcrumb">
+        <a href="../index.html">Home</a> <span>/</span> <span>Services</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Services -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <h2>Core Collection Services</h2>
+        <p>We handle every type of waste with professional care and environmental responsibility.</p>
+      </div>
+      <div class="grid grid-3">
+        <div class="card animate-on-scroll">
+          <div class="card-icon"><i class="fas fa-home"></i></div>
+          <h3>Household Collection</h3>
+          <p>Regular weekly or bi-weekly pickup for homes, apartments, and estates. We collect general waste, plastics, organic matter, and recyclables.</p>
+          <ul style="margin-top: 1rem; padding-left: 1.25rem; color: var(--gray-600); font-size: 0.92rem;">
+            <li>Flexible schedules</li>
+            <li>Door-to-door pickup</li>
+            <li>Sorting guidance</li>
+            <li>Affordable monthly rates</li>
+          </ul>
+        </div>
+        <div class="card animate-on-scroll">
+          <div class="card-icon accent"><i class="fas fa-store"></i></div>
+          <h3>Commercial Waste</h3>
+          <p>Tailored solutions for markets, shops, hotels, restaurants, schools, and offices. We design schedules that fit your operations.</p>
+          <ul style="margin-top: 1rem; padding-left: 1.25rem; color: var(--gray-600); font-size: 0.92rem;">
+            <li>Custom pickup times</li>
+            <li>Bulk container rental</li>
+            <li>Waste audits</li>
+            <li>Compliance reporting</li>
+          </ul>
+        </div>
+        <div class="card animate-on-scroll">
+          <div class="card-icon info"><i class="fas fa-industry"></i></div>
+          <h3>Industrial & Hazardous</h3>
+          <p>Safe handling of industrial, medical, chemical, and electronic waste. Our trained specialists ensure regulatory compliance.</p>
+          <ul style="margin-top: 1rem; padding-left: 1.25rem; color: var(--gray-600); font-size: 0.92rem;">
+            <li>NEMA compliance</li>
+            <li>Hazmat trained staff</li>
+            <li>Secure transport</li>
+            <li>Certified disposal</li>
+          </ul>
+        </div>
+        <div class="card animate-on-scroll">
+          <div class="card-icon danger"><i class="fas fa-hard-hat"></i></div>
+          <h3>Construction Debris</h3>
+          <p>Removal of construction and demolition waste including concrete, wood, metal, and packaging materials.</p>
+          <ul style="margin-top: 1rem; padding-left: 1.25rem; color: var(--gray-600); font-size: 0.92rem;">
+            <li>Site clearance</li>
+            <li>Heavy equipment</li>
+            <li>Recycling of materials</li>
+            <li>Project-based pricing</li>
+          </ul>
+        </div>
+        <div class="card animate-on-scroll">
+          <div class="card-icon"><i class="fas fa-tree"></i></div>
+          <h3>Garden & Organic</h3>
+          <p>Collection of garden waste, leaves, branches, and food waste. We compost organic matter to create fertilizer.</p>
+          <ul style="margin-top: 1rem; padding-left: 1.25rem; color: var(--gray-600); font-size: 0.92rem;">
+            <li>Composting program</li>
+            <li>Green waste recycling</li>
+            <li>Mulch production</li>
+            <li>Landscaping support</li>
+          </ul>
+        </div>
+        <div class="card animate-on-scroll">
+          <div class="card-icon accent"><i class="fas fa-tint"></i></div>
+          <h3>Liquid Waste</h3>
+          <p>Safe collection and disposal of liquid waste including septic tank emptying and industrial effluent.</p>
+          <ul style="margin-top: 1rem; padding-left: 1.25rem; color: var(--gray-600); font-size: 0.92rem;">
+            <li>Septic emptying</li>
+            <li>Grease trap cleaning</li>
+            <li>Effluent treatment</li>
+            <li>Emergency response</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recycling & Special Programs -->
+  <section class="section" style="background: var(--primary-pale);">
+    <div class="container">
+      <div class="section-title">
+        <h2>Recycling & Special Programs</h2>
+        <p>Going beyond collection - we turn waste into value and protect our environment.</p>
+      </div>
+      <div class="grid grid-2">
+        <div class="card animate-on-scroll">
+          <div class="card-icon"><i class="fas fa-recycle"></i></div>
+          <h3>Plastic Recycling Initiative</h3>
+          <p>We collect, sort, and process plastic waste into reusable pellets and products. Our program supports local recycling entrepreneurs and reduces plastic pollution in Uganda's cities and waterways.</p>
+        </div>
+        <div class="card animate-on-scroll">
+          <div class="card-icon accent"><i class="fas fa-laptop"></i></div>
+          <h3>E-Waste Management</h3>
+          <p>Safe disposal of electronic waste including computers, phones, and appliances. We ensure data destruction, component recovery, and environmentally sound disposal of hazardous materials.</p>
+        </div>
+        <div class="card animate-on-scroll">
+          <div class="card-icon info"><i class="fas fa-leaf"></i></div>
+          <h3>Composting Program</h3>
+          <p>Organic waste from markets and households is converted into high-quality compost for agriculture. This reduces landfill use and supports sustainable farming across Uganda.</p>
+        </div>
+        <div class="card animate-on-scroll">
+          <div class="card-icon danger"><i class="fas fa-school"></i></div>
+          <h3>School Education Program</h3>
+          <p>We partner with schools to teach students about waste management, recycling, and environmental stewardship. Free workshops and materials for participating schools.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Service Process -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <h2>How Our Services Work</h2>
+        <p>A simple, transparent process from start to finish.</p>
+      </div>
+      <div class="timeline" style="max-width: 800px; margin: 0 auto;">
+        <div class="timeline-item">
+          <h4>Step 1: Report or Schedule</h4>
+          <p>Use our website, mobile app, or call your district station. Provide location, waste type, and volume.</p>
+        </div>
+        <div class="timeline-item">
+          <h4>Step 2: Get Your ETA</h4>
+          <p>Our system calculates the estimated pickup time and assigns the nearest available collection team.</p>
+        </div>
+        <div class="timeline-item">
+          <h4>Step 3: Confirmation Call</h4>
+          <p>You receive a confirmation call or SMS with the exact pickup window and team details.</p>
+        </div>
+        <div class="timeline-item">
+          <h4>Step 4: Collection & Documentation</h4>
+          <p>Our team arrives, collects the waste, and provides you with a collection receipt or digital confirmation.</p>
+        </div>
+        <div class="timeline-item">
+          <h4>Step 5: Recycling & Disposal</h4>
+          <p>Waste is transported to our sorting facility, recycled where possible, and disposed of responsibly.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="section" style="background: var(--gray-50);">
+    <div class="container">
+      <div class="section-title">
+        <h2>Service Packages</h2>
+        <p>Transparent pricing for households and businesses. Custom quotes available for industrial clients.</p>
+      </div>
+      <div class="grid grid-3">
+        <div class="card animate-on-scroll text-center">
+          <div class="card-icon" style="margin: 0 auto 1.25rem;"><i class="fas fa-home"></i></div>
+          <h3>Household Basic</h3>
+          <div style="font-size: 2rem; font-weight: 800; color: var(--primary); margin: 1rem 0;">UGX 30,000<span style="font-size: 0.9rem; font-weight: 500; color: var(--gray-500);">/month</span></div>
+          <p style="font-size: 0.92rem;">For small households up to 4 people</p>
+          <ul style="list-style: none; padding: 0; text-align: left; margin: 1.5rem 0; font-size: 0.92rem;">
+            <li style="padding: 0.4rem 0;"><i class="fas fa-check" style="color: var(--success);"></i> Weekly pickup</li>
+            <li style="padding: 0.4rem 0;"><i class="fas fa-check" style="color: var(--success);"></i> 1 standard bin</li>
+            <li style="padding: 0.4rem 0;"><i class="fas fa-check" style="color: var(--success);"></i> General waste</li>
+            <li style="padding: 0.4rem 0;"><i class="fas fa-check" style="color: var(--success);"></i> SMS notifications</li>
+          </ul>
+          <a href="booking.html" class="btn btn-block">Get Started</a>
+        </div>
+        <div class="card animate-on-scroll text-center" style="border: 3px solid var(--primary); position: relative;">
+          <span class="badge badge-accent" style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--accent); color: var(--primary-dark);">Most Popular</span>
+          <div class="card-icon accent" style="margin: 0 auto 1.25rem;"><i class="fas fa-users"></i></div>
+          <h3>Family Plus</h3>
+          <div style="font-size: 2rem; font-weight: 800; color: var(--primary); margin: 1rem 0;">UGX 55,000<span style="font-size: 0.9rem; font-weight: 500; color: var(--gray-500);">/month</span></div>
+          <p style="font-size: 0.92rem;">For larger families and estates</p>
+          <ul style="list-style: none; padding: 0; text-align: left; margin: 1.5rem 0; font-size: 0.92rem;">
+            <li style="padding: 0.4rem 0;"><i class="fas fa-check" style="color: var(--success);"></i> Twice weekly pickup</li>
+            <li style="padding: 0.4rem 0;"><i class="fas fa-check" style="color: var(--success);"></i> 2 standard bins</li>
+            <li style="padding: 0.4rem 0;"><i class="fas fa-check" style="color: var(--success);"></i> Recycling included</li>
+            <li style="padding: 0.4rem 0;"><i class="fas fa-check" style="color: var(--success);"></i> Priority support</li>
+          </ul>
+          <a href="booking.html" class="btn btn-block btn-accent">Get Started</a>
+        </div>
+        <div class="card animate-on-scroll text-center">
+          <div class="card-icon info" style="margin: 0 auto 1.25rem;"><i class="fas fa-building"></i></div>
+          <h3>Business Pro</h3>
+          <div style="font-size: 2rem; font-weight: 800; color: var(--primary); margin: 1rem 0;">UGX 150,000<span style="font-size: 0.9rem; font-weight: 500; color: var(--gray-500);">/month</span></div>
+          <p style="font-size: 0.92rem;">For businesses and institutions</p>
+          <ul style="list-style: none; padding: 0; text-align: left; margin: 1.5rem 0; font-size: 0.92rem;">
+            <li style="padding: 0.4rem 0;"><i class="fas fa-check" style="color: var(--success);"></i> Custom schedule</li>
+            <li style="padding: 0.4rem 0;"><i class="fas fa-check" style="color: var(--success);"></i> Bulk containers</li>
+            <li style="padding: 0.4rem 0;"><i class="fas fa-check" style="color: var(--success);"></i> Waste audit</li>
+            <li style="padding: 0.4rem 0;"><i class="fas fa-check" style="color: var(--success);"></i> Compliance reports</li>
+          </ul>
+          <a href="booking.html" class="btn btn-block">Get Quote</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container">
+    <div class="cta-section">
+      <h2>Need a Custom Solution?</h2>
+      <p>We design waste management programs for organizations of all sizes. Contact us for a free consultation.</p>
+      <a href="contact.html" class="btn btn-lg"><i class="fas fa-phone"></i> Contact Us Today</a>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <div class="footer-brand">
+          <div class="footer-brand-icon"><img src="../assets/logo.svg" alt="UNWM Logo" width="44" height="44"></div>
+          <div class="footer-brand-title">Uganda National<br>Waste Management</div>
+        </div>
+        <p>Committed to a clean, green Uganda through innovation, community participation, and responsible waste management.</p>
+                <div class="footer-social">
+          <a href="https://x.com/unwm_uganda" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="https://youtube.com/@unwmuganda" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+          <a href="https://instagram.com/unwm_uganda" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://linkedin.com/company/unwm-uganda" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+          <a href="https://facebook.com/unwmuganda" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <a href="../index.html">Home</a>
+        <a href="services.html">Services</a>
+        <a href="districts.html">Districts</a>
+        <a href="booking.html">Book Pickup</a>
+        <a href="learn.html">Learn</a>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <a href="feedback.html">Feedback</a>
+        <a href="contact.html">Contact Us</a>
+        <a href="login.html">Login</a>
+        <a href="register.html">Register</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact Info</h4>
+        <p><i class="fas fa-phone"></i> +256 800 100 200</p>
+        <p><i class="fas fa-envelope"></i> info@unwm.ug</p>
+        <p><i class="fas fa-map-marker-alt"></i> Plot 12, Kampala Road</p>
+      </div>
+    </div>
+    <div class="footer-bottom"><div class="container">© <span id="currentYear">2025</span> UNWM. All rights reserved.</div></div>
+  </footer>
+
+  <script src="../js/script.js"></script>
+
+  <!-- ===== Service Worker Registration ===== -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((reg) => console.log('[PWA] Service Worker registered:', reg.scope))
+          .catch((err) => console.warn('[PWA] Service Worker registration failed:', err));
+      });
+    }
+  </script>
+</body>
+</html>

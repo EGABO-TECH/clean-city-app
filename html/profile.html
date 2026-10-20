@@ -1,0 +1,1346 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Manage your UNWM profile - update personal info, upload profile picture, and manage your account.">
+  <title>My Profile | Uganda National Waste Management</title>
+  <!-- ===== Favicon & App Icons ===== -->
+  <link rel="icon" type="image/svg+xml" href="../assets/logo.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png">
+
+  <!-- ===== PWA Meta Tags ===== -->
+  <meta name="theme-color" content="#1e6b3b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="UNWM">
+  <link rel="manifest" href="../manifest.json">
+
+  <!-- ===== Fonts & Styles ===== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    /* ================= PROFILE PAGE STYLES ================= */
+    .profile-hero {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      padding: 3rem 0;
+      color: white;
+      border-radius: 0 0 28px 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .profile-hero::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(245, 166, 35, 0.2), transparent 70%);
+      border-radius: 50%;
+    }
+
+    .profile-header-content {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      position: relative;
+      z-index: 2;
+      flex-wrap: wrap;
+    }
+
+    .profile-avatar-wrapper {
+      position: relative;
+      width: 140px;
+      height: 140px;
+      flex-shrink: 0;
+    }
+
+    .profile-avatar {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 5px solid rgba(255, 255, 255, 0.3);
+      background: var(--white);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.5rem;
+      color: var(--primary);
+      font-weight: 700;
+      overflow: hidden;
+    }
+
+    .avatar-upload-btn {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: var(--primary-dark);
+      border: 3px solid white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transition: all 0.2s;
+    }
+
+    .avatar-upload-btn:hover {
+      background: var(--accent-dark);
+      transform: scale(1.1);
+    }
+
+    .profile-header-info h1 {
+      color: white;
+      margin: 0 0 0.5rem;
+      font-size: 2rem;
+    }
+
+    .profile-header-info p {
+      color: rgba(255, 255, 255, 0.85);
+      margin: 0 0 1rem;
+      font-size: 1rem;
+    }
+
+    .profile-badges {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .profile-badge {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      padding: 0.4rem 1rem;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* Profile content layout */
+    .profile-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 850px) {
+      .profile-content { grid-template-columns: 1fr; }
+      .profile-header-content { flex-direction: column; text-align: center; }
+      .profile-badges { justify-content: center; }
+      .profile-header-info h1 { font-size: 1.6rem; }
+    }
+
+    @media (max-width: 540px) {
+      .profile-stats { grid-template-columns: 1fr; }
+      .profile-tabs { flex-direction: column; }
+      .profile-tab { width: 100%; min-width: 0; }
+      .profile-header-info h1 { font-size: 1.35rem; }
+      .avatar-upload-btn { width: 36px; height: 36px; font-size: 0.85rem; }
+      .info-section { padding: 1.25rem; }
+    }
+
+    /* Stats in profile */
+    .profile-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .profile-stat {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--gray-200);
+    }
+
+    .profile-stat-number {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+
+    .profile-stat-label {
+      font-size: 0.75rem;
+      color: var(--gray-500);
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* Info sections */
+    .info-section {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      padding: 1.75rem;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--gray-200);
+      margin-bottom: 1.5rem;
+    }
+
+    .info-section h3 {
+      font-size: 1.1rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid var(--gray-100);
+      color: var(--primary-dark);
+    }
+
+    .info-section h3 i {
+      color: var(--primary);
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    @media (max-width: 600px) {
+      .info-grid { grid-template-columns: 1fr; }
+    }
+
+    .info-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .info-item-label {
+      font-size: 0.75rem;
+      color: var(--gray-500);
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .info-item-value {
+      font-size: 0.95rem;
+      color: var(--gray-800);
+      font-weight: 500;
+      padding: 0.5rem 0;
+    }
+
+    /* Tab navigation */
+    .profile-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      background: var(--white);
+      padding: 0.5rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--gray-200);
+    }
+
+    .profile-tab {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      background: transparent;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 0.88rem;
+      color: var(--gray-600);
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      min-width: 110px;
+    }
+
+    .profile-tab:hover {
+      background: var(--primary-pale);
+      color: var(--primary);
+    }
+
+    .profile-tab.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: fadeTab 0.3s; }
+
+    @keyframes fadeTab {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Avatar modal */
+    .avatar-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 20, 0, 0.8);
+      backdrop-filter: blur(6px);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .avatar-modal-overlay.active { display: flex; }
+
+    .avatar-modal {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+      animation: modalIn 0.3s ease;
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .avatar-modal h3 {
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .avatar-modal p {
+      text-align: center;
+      color: var(--gray-500);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .avatar-preview-large {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: var(--primary-pale);
+      margin: 0 auto 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4.5rem;
+      color: var(--primary);
+      font-weight: 700;
+      overflow: hidden;
+      border: 4px solid var(--gray-200);
+      position: relative;
+    }
+
+    .avatar-preview-large img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .avatar-options {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    .avatar-option {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: white;
+      font-weight: 700;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .avatar-option:hover { transform: scale(1.1); }
+    .avatar-option.selected { border-color: var(--accent); transform: scale(1.1); }
+
+    .avatar-actions {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+    }
+
+    .avatar-actions .btn { flex: 1; }
+
+    /* File input hidden */
+    .file-input-hidden {
+      display: none;
+    }
+
+    /* Upload progress */
+    .upload-progress {
+      display: none;
+      height: 6px;
+      background: var(--gray-200);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 1rem;
+    }
+
+    .upload-progress.active { display: block; }
+
+    .upload-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      width: 0%;
+      transition: width 0.3s;
+      border-radius: 3px;
+    }
+
+    /* Login prompt */
+    .login-prompt {
+      text-align: center;
+      padding: 5rem 1rem;
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      max-width: 480px;
+      margin: 3rem auto;
+    }
+
+    .login-prompt i {
+      font-size: 4rem;
+      color: var(--primary-pale);
+      margin-bottom: 1.5rem;
+    }
+
+    .login-prompt h2 {
+      color: var(--primary-dark);
+      margin-bottom: 0.75rem;
+    }
+
+    .login-prompt p {
+      color: var(--gray-500);
+      margin-bottom: 2rem;
+    }
+
+    /* Success toast */
+    .profile-toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--primary-dark);
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      z-index: 9999;
+      transform: translateY(150%);
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      max-width: 380px;
+    }
+
+    .profile-toast.show { transform: translateY(0); }
+    .profile-toast i { font-size: 1.2rem; }
+    .profile-toast.error { background: var(--danger); }
+  </style>
+</head>
+<body>
+
+  <!-- ========== HEADER ========== -->
+  <header class="site-header">
+    <nav class="navbar">
+      <a href="../index.html" class="brand">
+        <div class="brand-icon"><img src="../assets/logo.svg" alt="UNWM Logo" width="48" height="48"></div>
+        <div class="brand-text">
+          <span class="brand-title">Uganda National</span>
+          <span class="brand-sub">Waste Management</span>
+        </div>
+      </a>
+            <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="nav-drawer-backdrop" id="navDrawerBackdrop"></div>
+      <ul class="nav-menu" id="navMenu">
+        <li class="drawer-header-item">
+          <div class="drawer-logo-badge">
+            <img src="../assets/logo.svg" alt="UNWM Logo">
+          </div>
+          <button type="button" class="drawer-close-btn" id="drawerCloseBtn" aria-label="Close navigation">
+            <i class="fas fa-times"></i>
+          </button>
+        </li>
+        <li><a href="../index.html" class="nav-link">Home</a></li>
+        <li><a href="services.html" class="nav-link">Services</a></li>
+        <li>
+          <a href="districts.html" class="nav-link">Districts</a>
+          <span class="drawer-subtext">All 135+ Municipalities</span>
+        </li>
+        <li>
+          <a href="booking.html" class="nav-link">Book Pickup</a>
+          <span class="drawer-subtext">Instant ETA · Quick Dispatch</span>
+        </li>
+        <li>
+          <a href="track.html" class="nav-link">Track</a>
+          <span class="drawer-subtext">Live Truck GPS · Status</span>
+        </li>
+        <li><a href="learn.html" class="nav-link">Learn</a></li>
+        <li><a href="feedback.html" class="nav-link">Feedback</a></li>
+        <li><a href="contact.html" class="nav-link">Contact</a></li>
+        <li class="drawer-footer-item">
+          <hr class="drawer-divider">
+          <a href="contact.html" class="drawer-contact-btn">Contact</a>
+          <div class="drawer-social-row">
+            <a href="https://linkedin.com/company/unwm-uganda" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="https://x.com/unwm_uganda" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="https://youtube.com/@unwmuganda" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+            <a href="https://wa.me/256700000000" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+          </div>
+        </li>
+        <li class="nav-cta" id="navAuthBtn"><a href="login.html" class="btn btn-sm"><i class="fas fa-user"></i> Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ========== MAIN CONTENT ========== -->
+  <div id="profileContainer">
+
+    <!-- If NOT logged in -->
+    <div id="loginPrompt" class="container" style="display: none;">
+      <div class="login-prompt">
+        <i class="fas fa-user-lock"></i>
+        <h2>Please Login to View Profile</h2>
+        <p>You need to be logged in to access your profile. Please sign in or create an account to continue.</p>
+        <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
+          <a href="login.html" class="btn"><i class="fas fa-sign-in-alt"></i> Login</a>
+          <a href="register.html" class="btn btn-outline"><i class="fas fa-user-plus"></i> Register</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- If logged in - profile display -->
+    <div id="profileContent" style="display: none;">
+
+      <!-- Profile Hero -->
+      <section class="profile-hero">
+        <div class="container">
+          <div class="profile-header-content">
+            <div class="profile-avatar-wrapper">
+              <div class="profile-avatar" id="profileAvatarDisplay">J</div>
+              <button class="avatar-upload-btn" onclick="openAvatarModal()" title="Change photo">
+                <i class="fas fa-camera"></i>
+              </button>
+            </div>
+            <div class="profile-header-info">
+              <h1 id="profileHeaderName">John Okello</h1>
+              <p id="profileHeaderEmail">you@example.com</p>
+              <div class="profile-badges">
+                <span class="profile-badge" id="profileBadgeType">
+                  <i class="fas fa-home"></i> Household
+                </span>
+                <span class="profile-badge" id="profileBadgeDistrict">
+                  <i class="fas fa-map-marker-alt"></i> Kampala
+                </span>
+                <span class="profile-badge" id="profileBadgeStatus">
+                  <i class="fas fa-check-circle"></i> Active Member
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Profile body -->
+      <section class="section" style="padding-top: 2rem;">
+        <div class="container">
+
+          <!-- Stats -->
+          <div class="profile-stats">
+            <div class="profile-stat">
+              <div class="profile-stat-number" id="statBookings">0</div>
+              <div class="profile-stat-label">Bookings Made</div>
+            </div>
+            <div class="profile-stat">
+              <div class="profile-stat-number" id="statReviews">0</div>
+              <div class="profile-stat-label">Reviews</div>
+            </div>
+            <div class="profile-stat">
+              <div class="profile-stat-number" id="statDays">0</div>
+              <div class="profile-stat-label">Days as Member</div>
+            </div>
+          </div>
+
+          <!-- Tabs -->
+          <div class="profile-tabs">
+            <button class="profile-tab active" data-tab="overview"><i class="fas fa-id-card"></i> Overview</button>
+            <button class="profile-tab" data-tab="personal"><i class="fas fa-user-edit"></i> Personal Info</button>
+            <button class="profile-tab" data-tab="address"><i class="fas fa-home"></i> Address</button>
+            <button class="profile-tab" data-tab="security"><i class="fas fa-shield-alt"></i> Security</button>
+            <button class="profile-tab" data-tab="activity"><i class="fas fa-history"></i> Activity</button>
+          </div>
+
+          <!-- TAB: Overview -->
+          <div class="tab-panel active" id="tab-overview">
+            <div class="profile-content">
+              <div>
+                <div class="info-section">
+                  <h3><i class="fas fa-user-circle"></i> Account Summary</h3>
+                  <div class="info-grid">
+                    <div class="info-item">
+                      <span class="info-item-label">Full Name</span>
+                      <span class="info-item-value" id="ovName">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-item-label">Account Type</span>
+                      <span class="info-item-value" id="ovAccountType">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-item-label">Email</span>
+                      <span class="info-item-value" id="ovEmail">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-item-label">Phone</span>
+                      <span class="info-item-value" id="ovPhone">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-item-label">District</span>
+                      <span class="info-item-value" id="ovDistrict">-</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-item-label">Member Since</span>
+                      <span class="info-item-value" id="ovMemberSince">-</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="info-section">
+                  <h3><i class="fas fa-chart-line"></i> Your Impact</h3>
+                  <p style="font-size: 0.92rem; color: var(--gray-600); line-height: 1.7;">
+                    Thank you for being part of the UNWM family! Your participation helps keep Uganda clean. 
+                    Every booking, review, and piece of feedback contributes to a greener future for all.
+                  </p>
+                  <div style="margin-top: 1rem; padding: 1rem; background: var(--primary-pale); border-radius: 10px; border-left: 4px solid var(--primary);">
+                    <strong style="color: var(--primary-dark); display: block; margin-bottom: 0.35rem;">
+                      <i class="fas fa-leaf"></i> Environmental Impact
+                    </strong>
+                    <span style="font-size: 0.88rem; color: var(--gray-700);">
+                      You've helped divert approximately <strong id="impactWeight">0 kg</strong> of waste from landfills.
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB: Personal Info -->
+          <div class="tab-panel" id="tab-personal">
+            <div class="info-section">
+              <h3><i class="fas fa-user-edit"></i> Personal Information</h3>
+              <form id="personalForm">
+                <div class="info-grid" style="gap: 1.25rem;">
+                  <div class="form-group">
+                    <label class="form-label">First Name <span class="required">*</span></label>
+                    <input type="text" id="pFirstName" class="form-control" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Last Name <span class="required">*</span></label>
+                    <input type="text" id="pLastName" class="form-control" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Email <span class="required">*</span></label>
+                    <input type="email" id="pEmail" class="form-control" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Phone <span class="required">*</span></label>
+                    <input type="tel" id="pPhone" class="form-control" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Date of Birth</label>
+                    <input type="date" id="pDob" class="form-control">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Gender</label>
+                    <select id="pGender" class="form-select">
+                      <option value="">Prefer not to say</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Account Type</label>
+                    <select id="pAccountType" class="form-select">
+                      <option value="Household">Household</option>
+                      <option value="Business">Business</option>
+                      <option value="Institution">Institution / School</option>
+                      <option value="Industrial">Industrial</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Occupation</label>
+                    <input type="text" id="pOccupation" class="form-control" placeholder="e.g. Teacher, Engineer">
+                  </div>
+                </div>
+                <div class="form-group" style="margin-top: 1rem;">
+                  <label class="form-label">Bio / About You</label>
+                  <textarea id="pBio" class="form-textarea" rows="3" placeholder="Tell us a bit about yourself..."></textarea>
+                </div>
+                <button type="submit" class="btn" style="margin-top: 1rem;"><i class="fas fa-save"></i> Save Changes</button>
+              </form>
+            </div>
+          </div>
+
+          <!-- TAB: Address -->
+          <div class="tab-panel" id="tab-address">
+            <div class="info-section">
+              <h3><i class="fas fa-home"></i> Address Information</h3>
+              <form id="addressForm">
+                <div class="info-grid" style="gap: 1.25rem;">
+                  <div class="form-group">
+                    <label class="form-label">Region <span class="required">*</span></label>
+                    <select id="aRegion" class="form-select" required>
+                      <option value="">Select Region</option>
+                      <option value="Central">Central</option>
+                      <option value="Eastern">Eastern</option>
+                      <option value="Northern">Northern</option>
+                      <option value="Western">Western</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">District <span class="required">*</span></label>
+                    <select id="aDistrict" class="form-select" required>
+                      <option value="">Select District</option>
+                      <option value="Kampala">Kampala</option>
+                      <option value="Gulu">Gulu</option>
+                      <option value="Mbarara">Mbarara</option>
+                      <option value="Jinja">Jinja</option>
+                      <option value="Mbale">Mbale</option>
+                      <option value="Arua">Arua</option>
+                      <option value="Masaka">Masaka</option>
+                      <option value="Fort Portal">Fort Portal</option>
+                      <option value="Lira">Lira</option>
+                      <option value="Soroti">Soroti</option>
+                      <option value="Kabale">Kabale</option>
+                      <option value="Hoima">Hoima</option>
+                      <option value="Mukono">Mukono</option>
+                      <option value="Entebbe">Entebbe</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">City / Town / Village <span class="required">*</span></label>
+                    <input type="text" id="aCity" class="form-control" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Area / Zone / Ward</label>
+                    <input type="text" id="aArea" class="form-control" placeholder="e.g. Kisenyi, Zone 3">
+                  </div>
+                </div>
+                <div class="form-group" style="margin-top: 0.5rem;">
+                  <label class="form-label">Street Address / Plot Number</label>
+                  <input type="text" id="aStreet" class="form-control" placeholder="e.g. Plot 45, Kampala Road">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Nearest Landmark</label>
+                  <input type="text" id="aLandmark" class="form-control" placeholder="e.g. Opposite Shell Station">
+                </div>
+                <div class="info-grid" style="gap: 1.25rem;">
+                  <div class="form-group">
+                    <label class="form-label">Postal Code</label>
+                    <input type="text" id="aPostal" class="form-control" placeholder="e.g. 00256">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Country</label>
+                    <input type="text" id="aCountry" class="form-control" value="Uganda" readonly style="background: var(--gray-50);">
+                  </div>
+                </div>
+                <button type="submit" class="btn" style="margin-top: 1rem;"><i class="fas fa-save"></i> Save Address</button>
+              </form>
+            </div>
+          </div>
+
+          <!-- TAB: Security -->
+          <div class="tab-panel" id="tab-security">
+            <div class="info-section">
+              <h3><i class="fas fa-lock"></i> Change Password</h3>
+              <form id="passwordForm">
+                <div class="form-group">
+                  <label class="form-label">Current Password <span class="required">*</span></label>
+                  <input type="password" id="secCurrent" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">New Password <span class="required">*</span></label>
+                  <input type="password" id="secNew" class="form-control" required>
+                  <span class="form-hint">At least 8 characters with letters, numbers, and symbols.</span>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Confirm New Password <span class="required">*</span></label>
+                  <input type="password" id="secConfirm" class="form-control" required>
+                </div>
+                <button type="submit" class="btn"><i class="fas fa-key"></i> Update Password</button>
+              </form>
+            </div>
+
+            <div class="info-section">
+              <h3><i class="fas fa-shield-alt"></i> Account Security</h3>
+              <div class="setting-row" style="border-bottom: 1px solid var(--gray-100); padding: 1rem 0; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <h4 style="margin:0 0 0.25rem; font-size:0.95rem;">Two-Factor Authentication</h4>
+                  <p style="margin:0; font-size:0.82rem; color:var(--gray-500);">Add an extra layer of security.</p>
+                </div>
+                <button class="btn btn-outline btn-sm" onclick="showProfileToast('2FA setup coming soon!')">Enable</button>
+              </div>
+              <div class="setting-row" style="padding: 1rem 0; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <h4 style="margin:0 0 0.25rem; font-size:0.95rem;">Delete Account</h4>
+                  <p style="margin:0; font-size:0.82rem; color:var(--gray-500);">Permanently delete your account and data.</p>
+                </div>
+                <button class="btn btn-danger btn-sm" onclick="deleteAccount()">Delete</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB: Activity -->
+          <div class="tab-panel" id="tab-activity">
+            <div class="info-section">
+              <h3><i class="fas fa-history"></i> Recent Activity</h3>
+              <div id="activityList">
+                <div class="empty-state" style="padding: 2rem;">
+                  <i class="fas fa-inbox" style="font-size:2rem; opacity:0.4;"></i>
+                  <p>No recent activity to display.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- ========== AVATAR MODAL ========== -->
+  <div class="avatar-modal-overlay" id="avatarModal">
+    <div class="avatar-modal">
+      <h3><i class="fas fa-camera" style="color: var(--primary);"></i> Update Profile Photo</h3>
+      <p>Upload your own photo or choose a color avatar</p>
+
+      <div class="avatar-preview-large" id="avatarPreviewLarge">J</div>
+
+      <div class="avatar-options" id="avatarColorOptions">
+        <div class="avatar-option" style="background: #1e6b3b;" onclick="selectColorAvatar('#1e6b3b', this)">A</div>
+        <div class="avatar-option" style="background: #2980b9;" onclick="selectColorAvatar('#2980b9', this)">B</div>
+        <div class="avatar-option" style="background: #f5a623;" onclick="selectColorAvatar('#f5a623', this)">C</div>
+        <div class="avatar-option" style="background: #c0392b;" onclick="selectColorAvatar('#c0392b', this)">D</div>
+        <div class="avatar-option" style="background: #8e44ad;" onclick="selectColorAvatar('#8e44ad', this)">E</div>
+        <div class="avatar-option" style="background: #16a085;" onclick="selectColorAvatar('#16a085', this)">F</div>
+      </div>
+
+      <input type="file" id="avatarFileInput" class="file-input-hidden" accept="image/*" onchange="handleAvatarUpload(event)">
+
+      <div class="upload-progress" id="uploadProgress">
+        <div class="upload-progress-bar" id="uploadProgressBar"></div>
+      </div>
+
+      <div class="avatar-actions">
+        <button class="btn btn-outline" onclick="triggerFileUpload()"><i class="fas fa-upload"></i> Upload Photo</button>
+        <button class="btn" onclick="saveAvatar()"><i class="fas fa-check"></i> Save</button>
+      </div>
+
+      <button class="btn btn-outline btn-block" style="margin-top: 0.75rem;" onclick="closeAvatarModal()">
+        <i class="fas fa-times"></i> Cancel
+      </button>
+    </div>
+  </div>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <div class="footer-brand">
+          <div class="footer-brand-icon"><img src="../assets/logo.svg" alt="UNWM Logo" width="44" height="44"></div>
+          <div class="footer-brand-title">Uganda National<br>Waste Management</div>
+        </div>
+        <p>Committed to a clean, green Uganda through innovation, community participation, and responsible waste management.</p>
+                <div class="footer-social">
+          <a href="https://x.com/unwm_uganda" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="https://youtube.com/@unwmuganda" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+          <a href="https://instagram.com/unwm_uganda" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://linkedin.com/company/unwm-uganda" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+          <a href="https://facebook.com/unwmuganda" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        </div>
+      </div>
+      <div class="footer-col"><h4>Quick Links</h4><a href="../index.html">Home</a><a href="services.html">Services</a><a href="districts.html">Districts</a><a href="booking.html">Book Pickup</a><a href="learn.html">Learn</a></div>
+      <div class="footer-col"><h4>Support</h4><a href="feedback.html">Feedback</a><a href="contact.html">Contact Us</a><a href="login.html">Login</a><a href="register.html">Register</a></div>
+      <div class="footer-col"><h4>Contact Info</h4><p><i class="fas fa-phone"></i> +256 800 100 200</p><p><i class="fas fa-envelope"></i> info@unwm.ug</p><p><i class="fas fa-map-marker-alt"></i> Plot 12, Kampala Road</p></div>
+    </div>
+    <div class="footer-bottom"><div class="container">© <span id="currentYear">2025</span> UNWM. All rights reserved.</div></div>
+  </footer>
+
+  <!-- ========== TOAST ========== -->
+  <div class="profile-toast" id="profileToast">
+    <i class="fas fa-check-circle"></i>
+    <span id="profileToastText">Saved</span>
+  </div>
+
+  <script src="../js/script.js"></script>
+  <script>
+    /* ============================================================
+       PROFILE PAGE JAVASCRIPT
+       ============================================================ */
+
+    let currentUser = null;
+    let pendingAvatarData = null;
+
+    // ---------- INIT ----------
+    document.addEventListener('DOMContentLoaded', function () {
+      loadUser();
+      setupTabs();
+      setupForms();
+      setupAvatarModal();
+    });
+
+    function loadUser() {
+      const stored = localStorage.getItem('unwm_user');
+      const sessionLogged = sessionStorage.getItem('unwm_user_logged');
+      const localLogged = localStorage.getItem('unwm_user_logged');
+
+      if (stored && (sessionLogged === 'true' || localLogged === 'true')) {
+        try {
+          currentUser = JSON.parse(stored);
+          showProfile();
+        } catch (e) {
+          showLoginPrompt();
+        }
+      } else {
+        showLoginPrompt();
+      }
+    }
+
+    function showLoginPrompt() {
+      document.getElementById('loginPrompt').style.display = 'block';
+      document.getElementById('profileContent').style.display = 'none';
+    }
+
+    function showProfile() {
+      document.getElementById('loginPrompt').style.display = 'none';
+      document.getElementById('profileContent').style.display = 'block';
+
+      // Populate profile
+      const firstName = currentUser.firstName || '';
+      const lastName = currentUser.lastName || '';
+      const fullName = (firstName + ' ' + lastName).trim() || 'User';
+      const initial = firstName ? firstName.charAt(0).toUpperCase() : (currentUser.email ? currentUser.email.charAt(0).toUpperCase() : 'U');
+
+      // Header
+      document.getElementById('profileHeaderName').textContent = fullName;
+      document.getElementById('profileHeaderEmail').textContent = currentUser.email || 'no-email@unwm.ug';
+      document.getElementById('profileBadgeType').innerHTML = '<i class="fas fa-home"></i> ' + (currentUser.accountType || 'Household');
+      document.getElementById('profileBadgeDistrict').innerHTML = '<i class="fas fa-map-marker-alt"></i> ' + (currentUser.district || 'Not set');
+
+      // Avatar
+      renderAvatar(initial);
+
+      // Stats
+      const bookings = JSON.parse(localStorage.getItem('unwm_reports') || '[]').filter(b => b.email === currentUser.email || b.phone === currentUser.phone);
+      const reviews = JSON.parse(localStorage.getItem('unwm_reviews') || '[]').filter(r => r.email === currentUser.email);
+
+      document.getElementById('statBookings').textContent = bookings.length;
+      document.getElementById('statReviews').textContent = reviews.length;
+
+      const regDate = currentUser.registeredAt ? new Date(currentUser.registeredAt) : new Date();
+      const daysSince = Math.max(0, Math.floor((Date.now() - regDate.getTime()) / 86400000));
+      document.getElementById('statDays').textContent = daysSince;
+
+      // Overview
+      document.getElementById('ovName').textContent = fullName;
+      document.getElementById('ovAccountType').textContent = currentUser.accountType || 'Household';
+      document.getElementById('ovEmail').textContent = currentUser.email || '-';
+      document.getElementById('ovPhone').textContent = currentUser.phone || '-';
+      document.getElementById('ovDistrict').textContent = currentUser.district || '-';
+      document.getElementById('ovMemberSince').textContent = regDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+
+      document.getElementById('impactWeight').textContent = (bookings.length * 12) + ' kg';
+
+      // Personal tab
+      document.getElementById('pFirstName').value = currentUser.firstName || '';
+      document.getElementById('pLastName').value = currentUser.lastName || '';
+      document.getElementById('pEmail').value = currentUser.email || '';
+      document.getElementById('pPhone').value = currentUser.phone || '';
+      document.getElementById('pDob').value = currentUser.dob || '';
+      document.getElementById('pGender').value = currentUser.gender || '';
+      document.getElementById('pAccountType').value = currentUser.accountType || 'Household';
+      document.getElementById('pOccupation').value = currentUser.occupation || '';
+      document.getElementById('pBio').value = currentUser.bio || '';
+
+      // Address tab
+      document.getElementById('aRegion').value = currentUser.region || '';
+      document.getElementById('aDistrict').value = currentUser.district || '';
+      document.getElementById('aCity').value = currentUser.city || '';
+      document.getElementById('aArea').value = currentUser.area || '';
+      document.getElementById('aStreet').value = currentUser.street || '';
+      document.getElementById('aLandmark').value = currentUser.landmark || '';
+      document.getElementById('aPostal').value = currentUser.postal || '';
+      document.getElementById('aCountry').value = 'Uganda';
+
+      // Activity
+      renderActivity(bookings, reviews);
+    }
+
+    function renderAvatar(initial) {
+      const avatarEl = document.getElementById('profileAvatarDisplay');
+      if (currentUser.avatar && currentUser.avatar.startsWith('data:image')) {
+        avatarEl.innerHTML = `<img src="${currentUser.avatar}" alt="Profile" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`;
+      } else if (currentUser.avatarColor) {
+        avatarEl.style.background = currentUser.avatarColor;
+        avatarEl.style.color = 'white';
+        avatarEl.textContent = initial;
+      } else {
+        avatarEl.style.background = '';
+        avatarEl.style.color = '';
+        avatarEl.textContent = initial;
+      }
+    }
+
+    function renderActivity(bookings, reviews) {
+      const list = document.getElementById('activityList');
+      const items = [];
+
+      bookings.forEach(b => {
+        items.push({
+          icon: 'fa-truck',
+          color: 'var(--primary)',
+          text: `Booked a pickup for ${b.wasteType || 'waste'} in ${b.district || 'your area'}`,
+          date: b.date ? new Date(b.date) : new Date()
+        });
+      });
+
+      reviews.forEach(r => {
+        items.push({
+          icon: 'fa-star',
+          color: 'var(--accent)',
+          text: `Submitted a ${r.rating}-star review`,
+          date: r.date ? new Date(r.date) : new Date()
+        });
+      });
+
+      items.sort((a, b) => b.date - a.date);
+
+      if (!items.length) {
+        list.innerHTML = '<div class="empty-state" style="padding: 2rem;"><i class="fas fa-inbox" style="font-size:2rem; opacity:0.4;"></i><p>No recent activity to display.</p></div>';
+        return;
+      }
+
+      list.innerHTML = items.slice(0, 10).map(item => `
+        <div style="display:flex; gap:1rem; padding:0.85rem 0; border-bottom:1px solid var(--gray-100);">
+          <div style="width:38px; height:38px; border-radius:50%; background: var(--primary-pale); display:flex; align-items:center; justify-content:center; color:${item.color}; flex-shrink:0;">
+            <i class="fas ${item.icon}"></i>
+          </div>
+          <div>
+            <p style="margin:0; font-size:0.9rem; color:var(--gray-700);">${item.text}</p>
+            <small style="color:var(--gray-400); font-size:0.78rem;">${item.date.toLocaleDateString()}</small>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ---------- TABS ----------
+    function setupTabs() {
+      document.querySelectorAll('.profile-tab').forEach(tab => {
+        tab.addEventListener('click', function () {
+          const tabName = this.dataset.tab;
+          document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+          document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+          this.classList.add('active');
+          document.getElementById('tab-' + tabName).classList.add('active');
+        });
+      });
+    }
+
+    // ---------- FORMS ----------
+    function setupForms() {
+      document.getElementById('personalForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        currentUser.firstName = document.getElementById('pFirstName').value.trim();
+        currentUser.lastName = document.getElementById('pLastName').value.trim();
+        currentUser.email = document.getElementById('pEmail').value.trim();
+        currentUser.phone = document.getElementById('pPhone').value.trim();
+        currentUser.dob = document.getElementById('pDob').value;
+        currentUser.gender = document.getElementById('pGender').value;
+        currentUser.accountType = document.getElementById('pAccountType').value;
+        currentUser.occupation = document.getElementById('pOccupation').value.trim();
+        currentUser.bio = document.getElementById('pBio').value.trim();
+
+        saveUser();
+        showProfile();
+        showProfileToast('Personal information updated!');
+      });
+
+      document.getElementById('addressForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        currentUser.region = document.getElementById('aRegion').value;
+        currentUser.district = document.getElementById('aDistrict').value;
+        currentUser.city = document.getElementById('aCity').value.trim();
+        currentUser.area = document.getElementById('aArea').value.trim();
+        currentUser.street = document.getElementById('aStreet').value.trim();
+        currentUser.landmark = document.getElementById('aLandmark').value.trim();
+        currentUser.postal = document.getElementById('aPostal').value.trim();
+
+        saveUser();
+        showProfile();
+        showProfileToast('Address updated!');
+      });
+
+      document.getElementById('passwordForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const current = document.getElementById('secCurrent').value;
+        const newPwd = document.getElementById('secNew').value;
+        const confirm = document.getElementById('secConfirm').value;
+
+        if (!currentUser.password) {
+          showProfileToast('No password set on account.', 'error');
+          return;
+        }
+        if (current !== currentUser.password) {
+          showProfileToast('Current password is incorrect.', 'error');
+          return;
+        }
+        if (newPwd.length < 8) {
+          showProfileToast('New password must be at least 8 characters.', 'error');
+          return;
+        }
+        if (newPwd !== confirm) {
+          showProfileToast('New passwords do not match.', 'error');
+          return;
+        }
+
+        currentUser.password = newPwd;
+        saveUser();
+        this.reset();
+        showProfileToast('Password updated successfully!');
+      });
+    }
+
+    function saveUser() {
+      localStorage.setItem('unwm_user', JSON.stringify(currentUser));
+
+      // Also update in users list (used by admin panel)
+      const users = JSON.parse(localStorage.getItem('unwm_users') || '[]');
+      const idx = users.findIndex(u => u.email === currentUser.email);
+      if (idx > -1) {
+        users[idx] = { ...users[idx], ...currentUser };
+      } else {
+        users.push(currentUser);
+      }
+      localStorage.setItem('unwm_users', JSON.stringify(users));
+    }
+
+    // ---------- AVATAR MODAL ----------
+    function setupAvatarModal() {
+      const modal = document.getElementById('avatarModal');
+      modal.addEventListener('click', function (e) {
+        if (e.target === this) closeAvatarModal();
+      });
+    }
+
+    function openAvatarModal() {
+      pendingAvatarData = null;
+      const initial = (currentUser.firstName || 'U').charAt(0).toUpperCase();
+
+      const preview = document.getElementById('avatarPreviewLarge');
+      if (currentUser.avatar && currentUser.avatar.startsWith('data:image')) {
+        preview.innerHTML = `<img src="${currentUser.avatar}" alt="Profile">`;
+      } else if (currentUser.avatarColor) {
+        preview.style.background = currentUser.avatarColor;
+        preview.style.color = 'white';
+        preview.textContent = initial;
+      } else {
+        preview.style.background = 'var(--primary-pale)';
+        preview.style.color = 'var(--primary)';
+        preview.textContent = initial;
+      }
+
+      // Highlight selected color
+      document.querySelectorAll('.avatar-option').forEach(o => o.classList.remove('selected'));
+      if (currentUser.avatarColor) {
+        document.querySelectorAll('.avatar-option').forEach(o => {
+          if (o.style.background === currentUser.avatarColor || 
+              rgbToHex(o.style.background) === currentUser.avatarColor.toLowerCase()) {
+            o.classList.add('selected');
+          }
+        });
+      }
+
+      document.getElementById('avatarModal').classList.add('active');
+    }
+
+    function closeAvatarModal() {
+      document.getElementById('avatarModal').classList.remove('active');
+      pendingAvatarData = null;
+    }
+
+    function triggerFileUpload() {
+      document.getElementById('avatarFileInput').click();
+    }
+
+    function handleAvatarUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      if (file.size > 2 * 1024 * 1024) {
+        showProfileToast('Image too large. Please use an image under 2MB.', 'error');
+        return;
+      }
+
+      if (!file.type.startsWith('image/')) {
+        showProfileToast('Please select a valid image file.', 'error');
+        return;
+      }
+
+      const reader = new FileReader();
+
+      // Show progress
+      const progress = document.getElementById('uploadProgress');
+      const progressBar = document.getElementById('uploadProgressBar');
+      progress.classList.add('active');
+      progressBar.style.width = '0%';
+
+      reader.onprogress = function (e) {
+        if (e.lengthComputable) {
+          const pct = (e.loaded / e.total) * 100;
+          progressBar.style.width = pct + '%';
+        }
+      };
+
+      reader.onload = function (e) {
+        progressBar.style.width = '100%';
+        setTimeout(() => progress.classList.remove('active'), 400);
+
+        pendingAvatarData = e.target.result;
+        const preview = document.getElementById('avatarPreviewLarge');
+        preview.innerHTML = `<img src="${e.target.result}" alt="Profile">`;
+        preview.style.background = '';
+        document.querySelectorAll('.avatar-option').forEach(o => o.classList.remove('selected'));
+      };
+
+      reader.readAsDataURL(file);
+    }
+
+    function selectColorAvatar(color, el) {
+      pendingAvatarData = 'color:' + color;
+      const initial = (currentUser.firstName || 'U').charAt(0).toUpperCase();
+      const preview = document.getElementById('avatarPreviewLarge');
+      preview.innerHTML = initial;
+      preview.style.background = color;
+      preview.style.color = 'white';
+
+      document.querySelectorAll('.avatar-option').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+
+    function saveAvatar() {
+      if (pendingAvatarData === null) {
+        showProfileToast('No changes made.', 'error');
+        return;
+      }
+
+      if (pendingAvatarData.startsWith('color:')) {
+        currentUser.avatarColor = pendingAvatarData.replace('color:', '');
+        currentUser.avatar = null;
+      } else {
+        currentUser.avatar = pendingAvatarData;
+        currentUser.avatarColor = null;
+      }
+
+      saveUser();
+      const initial = (currentUser.firstName || 'U').charAt(0).toUpperCase();
+      renderAvatar(initial);
+      closeAvatarModal();
+      showProfileToast('Profile photo updated!');
+    }
+
+    function rgbToHex(rgb) {
+      if (rgb.startsWith('#')) return rgb;
+      const match = rgb.match(/\d+/g);
+      if (!match) return rgb;
+      return '#' + match.slice(0, 3).map(n => parseInt(n).toString(16).padStart(2, '0')).join('');
+    }
+
+    // ---------- DELETE ACCOUNT ----------
+    function deleteAccount() {
+      if (!confirm('Are you sure you want to delete your account? This cannot be undone.')) return;
+      if (!confirm('This will remove all your data. Confirm deletion?')) return;
+
+      // Remove from users list
+      const users = JSON.parse(localStorage.getItem('unwm_users') || '[]');
+      const filtered = users.filter(u => u.email !== currentUser.email);
+      localStorage.setItem('unwm_users', JSON.stringify(filtered));
+
+      // Clear session
+      localStorage.removeItem('unwm_user');
+      sessionStorage.removeItem('unwm_user');
+      sessionStorage.removeItem('unwm_user_logged');
+      localStorage.removeItem('unwm_user_logged');
+
+      alert('Your account has been deleted. Redirecting to home page...');
+      window.location.href = 'index.html';
+    }
+
+    // ---------- TOAST ----------
+    function showProfileToast(message, type = 'success') {
+      const toast = document.getElementById('profileToast');
+      const text = document.getElementById('profileToastText');
+      text.textContent = message;
+      toast.classList.toggle('error', type === 'error');
+      toast.querySelector('i').className = type === 'error' ? 'fas fa-exclamation-circle' : 'fas fa-check-circle';
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    // ---------- ESC to close modal ----------
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeAvatarModal();
+    });
+  </script>
+
+  <!-- ===== Service Worker Registration ===== -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((reg) => console.log('[PWA] Service Worker registered:', reg.scope))
+          .catch((err) => console.warn('[PWA] Service Worker registration failed:', err));
+      });
+    }
+  </script>
+</body>
+</html>

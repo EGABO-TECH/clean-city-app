@@ -1,0 +1,66 @@
+﻿{
+  "name": "Uganda National Waste Management",
+  "short_name": "UNWM",
+  "description": "Clean Uganda, Green Future - Report waste, schedule pickups, and track collection across all districts of Uganda.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#0f381f",
+  "theme_color": "#1e6b3b",
+  "orientation": "any",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["utilities", "lifestyle"],
+  "icons": [
+    {
+      "src": "assets/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/logo-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/logo-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/logo-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "assets/logo-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Book a Pickup",
+      "short_name": "Book Pickup",
+      "url": "/html/booking.html",
+      "description": "Schedule a waste pickup in your area"
+    },
+    {
+      "name": "Track Collection",
+      "short_name": "Track",
+      "url": "/html/track.html",
+      "description": "Track your waste collection status"
+    },
+    {
+      "name": "Find Your District",
+      "short_name": "Districts",
+      "url": "/html/districts.html",
+      "description": "Find waste management services in your district"
+    }
+  ]
+}
